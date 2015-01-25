@@ -1,4 +1,4 @@
-package eu.telecomnancy.amio_2015_hcmm.model;
+package model;
 
 /**
  * Created by Mathieu on 23/01/2015.

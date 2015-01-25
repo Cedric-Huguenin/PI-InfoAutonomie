@@ -1,4 +1,4 @@
-package eu.telecomnancy.amio_2015_hcmm.model;
+package model;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package controllers;
 
-import play.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import model.Motes;
 import play.mvc.*;
 
 import views.html.*;
@@ -12,7 +13,10 @@ public class Application extends Controller {
     }
 
     public static Result data() {
-        return TODO;
+        // url to parse: http://iotlab.telecomnancy.eu/rest/data/1/light1/1
+        ObjectMapper mapper = new ObjectMapper();
+        // Motes motesNode = mapper.readValue(in, Motes.class);
+        return ok(raw_values.render("Your new application is ready."));
     }
 
 }
