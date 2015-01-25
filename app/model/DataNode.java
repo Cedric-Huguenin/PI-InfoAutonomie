@@ -6,13 +6,13 @@ import java.util.List;
  * Created by Mathieu on 23/01/2015.
  */
 public class DataNode {
-    private List<DataNode> data;
+    public List<Data> data;
 
-    public List<DataNode> getData() {
+    public List<Data> getData() {
         return data;
     }
 
-    public void setData(List<DataNode> data) {
+    public void setData(List<Data> data) {
         this.data = data;
     }
 }

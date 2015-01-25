@@ -4,10 +4,10 @@ package model;
  * Created by Mathieu on 23/01/2015.
  */
 public class Data {
-    private int timestamp;
-    private String label;
-    private double value;
-    private String mote;
+    public int timestamp;
+    public String label;
+    public double value;
+    public String mote;
 
     public int getTimestamp() {
         return timestamp;
