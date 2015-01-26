@@ -1,7 +1,9 @@
-@import model.Data
 @import model.Event
 
-@(message: String, dataNode: List[Data], events: List[Event])
+@(message: String, eventsList:List[Event])
+
+@import helper._
+@import java.math.BigInteger; var i=1; var j=eventsList.length;
 
 @main("Raw data") {
 
@@ -189,65 +191,28 @@
                                 <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Valeurs brutes</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>timestamp</th>
-                                                <th>label</th>
-                                                <th>value</th>
-                                                <th>mote</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @for(data <- dataNode) {
-                                                <tr>
-                                                    <td>@data.timestamp</td>
-                                                    <td>@data.label</td>
-                                                    <td>@data.value</td>
-                                                    <td>@data.mote</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="panel panel-default">
-
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-money fa-fw"></i>Évènements</h3>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>timestamp</th>
-                                                <th>date</th>
-                                                <th>value</th>
-                                                <th>description</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @for(event <- events) {
-                                            <tr>
-                                                <td>@event.timestamp</td>
-                                                <td>@event.verboseDate</td>
-                                                <td>@event.value</td>
-                                                <td>@event.description</td>
-                                            </tr>
-                                        }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="text-right">
-                                    <a href="#">View All Transactions <i class="fa fa-arrow-circle-right"></i></a>
-                                </div>
-
-
+                                <div id="myfirstchart" style="height: 250px;"></div>
+                                <script>
+                                    new Morris.Line({
+                                    // ID of the element in which to draw the chart.
+                                    element: 'myfirstchart',
+                                    // Chart data records -- each entry in this array corresponds to a point on
+                                    // the chart.
+                                    data: [
+                                    @for(event <- eventsList) {
+                                        { time: '@event.verboseDate', value: @event.value},
+                                    }
+                                    ],
+                                    // The name of the data record attribute that contains x-values.
+                                    xkey: 'time',
+                                    // A list of names of data record attributes that contain y-values.
+                                    ykeys: ['value'],
+                                    ymax : 250, ymin : 150,
+                                    // Labels for the ykeys -- will be displayed when you hover over the
+                                    // chart.
+                                    labels: ['Value']
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
