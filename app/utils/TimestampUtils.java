@@ -1,5 +1,6 @@
 package utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -11,6 +12,7 @@ public class TimestampUtils {
 		Calendar cal= GregorianCalendar.getInstance();
 		timestamp *= 1000;
 		cal.setTimeInMillis(timestamp);
-		return cal.get(GregorianCalendar.YEAR) + "/" + (cal.get(GregorianCalendar.MONTH)+1) + "/" + cal.get(GregorianCalendar.DAY_OF_MONTH) + " " + cal.get(GregorianCalendar.HOUR) + ":" + cal.get(GregorianCalendar.MINUTE) + ":" + cal.get(GregorianCalendar.SECOND);
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		return cal.get(GregorianCalendar.YEAR) + "-" + (cal.get(GregorianCalendar.MONTH)+1) + "-" + cal.get(GregorianCalendar.DAY_OF_MONTH) + " " + sdf.format(cal.getTime());
 	}
 }
