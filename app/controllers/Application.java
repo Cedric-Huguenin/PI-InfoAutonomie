@@ -1,14 +1,15 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import model.Event;
 import model.json.Data;
 import model.json.DataNode;
-import model.Event;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.TimestampUtils;
 import views.html.events;
 import views.html.index;
+import views.html.liveStream;
 import views.html.raw_values;
 
 import java.io.BufferedReader;
@@ -155,4 +156,11 @@ public class Application extends Controller {
         return ok(events.render("Your new application is ready.", eventsList));
     }
 
+    public static Result liveStream() {
+        return ok(liveStream.render("Live Stream"));
+    }
+
+    public static Result liveStreamJS() {
+        return ok(views.js.liveStream.render());
+    }
 }

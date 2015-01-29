@@ -1,0 +1,57 @@
+@import model.Event
+
+@(message: String)
+
+@import helper._
+@import java.math.BigInteger; var i=1;
+
+@main("Raw data") {
+
+<div id="wrapper">
+
+        @nav()
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Dashboard <small>Statistics Overview</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-dashboard"></i> Dashboard <div id="#socket-input"></div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Live</h3>
+                            </div>
+                            <div class="panel-body"> <div id="socket-messages"></div>
+                                <div id="myfirstchart" style="height: 250px;"></div>
+                                <script type="text/javascript" charset="utf-8" src="@routes.Application.liveStreamJS()"></script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+}
