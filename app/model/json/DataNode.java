@@ -1,4 +1,4 @@
-package model;
+package model.json;
 
 import java.util.List;
 

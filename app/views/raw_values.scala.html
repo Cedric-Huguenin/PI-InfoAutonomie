@@ -1,7 +1,7 @@
-@import model.Data
+@import model.json.Data
 @import model.Event
 
-@(message: String, dataNode: List[Data], events: List[Event])
+@(message: String, dataNode: List[Data], eventsList: List[Event])
 
 @main("Raw data") {
 
@@ -81,7 +81,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @for(event <- events) {
+                                        @for(event <- eventsList) {
                                             <tr>
                                                 <td>@event.timestamp</td>
                                                 <td>@event.verboseDate</td>

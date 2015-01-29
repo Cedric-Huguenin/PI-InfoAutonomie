@@ -1,8 +1,8 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.Data;
-import model.DataNode;
+import model.json.Data;
+import model.json.DataNode;
 import model.Event;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -29,7 +29,7 @@ public class Application extends Controller {
         // url to parse: http://iotlab.telecomnancy.eu/rest/data/1/light1/1
 
         // fetch the json data
-        String url = "http://iotlab.telecomnancy.eu/rest/data/1/light1/24/153.111/1421920258/1422006659";
+        String url = "http://iotlab.telecomnancy.eu/rest/data/1/light1/24/153.111";
         StringBuffer result = new StringBuffer();
         DataNode dataNode = new DataNode();
         ArrayList<Event> events = null;
@@ -93,7 +93,7 @@ public class Application extends Controller {
     }
 
     public static Result events() {
-        String url = "http://iotlab.telecomnancy.eu/rest/data/1/light1/24/153.111/1421920258/1422006659";
+        String url = "http://iotlab.telecomnancy.eu/rest/data/1/light1/24/153.111";
         StringBuffer result = new StringBuffer();
         DataNode dataNode = new DataNode();
         ArrayList<Event> eventsList = null;

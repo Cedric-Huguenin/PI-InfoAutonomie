@@ -1,23 +1,14 @@
-package model;
+package model.json;
 
 /**
  * Created by Mathieu on 23/01/2015.
  */
-public class Sink {
-    private int dodagVersionNumber;
+public class Sender {
     private int id;
     private String ipv6;
     private String mac;
     private double lat;
     private double lon;
-
-    public int getDodagVersionNumber() {
-        return dodagVersionNumber;
-    }
-
-    public void setDodagVersionNumber(int dodagVersionNumber) {
-        this.dodagVersionNumber = dodagVersionNumber;
-    }
 
     public int getId() {
         return id;

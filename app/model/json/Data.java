@@ -1,4 +1,4 @@
-package model;
+package model.json;
 
 /**
  * Created by Mathieu on 23/01/2015.
