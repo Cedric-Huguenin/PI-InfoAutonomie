@@ -9,11 +9,12 @@ var graph = new Morris.Line({
     // The name of the data record attribute that contains x-values.
     xkey: 'time',
     // A list of names of data record attributes that contain y-values.
-    ykeys: ['value'],
+    ykeys: ['81.77', '9.138', '153.111'],
     ymax : 250, ymin : 150,
+    hideHover: true,
     // Labels for the ykeys -- will be displayed when you hover over the
     // chart.
-    labels: ['Value']
+    labels: ['81.77', '9.138', '153.111']
 });
 
 $(function(){
@@ -27,10 +28,11 @@ $(function(){
     var writeMessages = function(event){
         console.log(event.data);
         var obj = JSON.parse(event.data);
-        graph_data.push({
-            time: obj.timestamp,
-            value: obj.light1
-        });
+        var ykey = obj.mote;
+        var dict = {};
+        dict[ykey] = obj.light1;
+        dict['time'] = obj.timestamp;
+        graph_data.push(dict);
 
 
         graph.setData(graph_data);
