@@ -5,10 +5,13 @@
 # Home page
 GET        /                               controllers.Application.index()
 
-# Tasks
+# pages
 GET        /data                           controllers.Application.data()
 GET        /events                         controllers.Application.events()
 GET        /live                           controllers.Application.liveStream()
+
+# JS
+GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS()
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                   controllers.Assets.at(path="/public", file)

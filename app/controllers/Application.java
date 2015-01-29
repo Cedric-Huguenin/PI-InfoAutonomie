@@ -160,4 +160,7 @@ public class Application extends Controller {
         return ok(liveStream.render("Live Stream"));
     }
 
+    public static Result liveStreamJS() {
+        return ok(views.js.liveStream.render());
+    }
 }
