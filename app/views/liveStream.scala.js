@@ -10,7 +10,7 @@ var graph = new Morris.Line({
     xkey: 'time',
     // A list of names of data record attributes that contain y-values.
     ykeys: ['81.77', '9.138', '153.111'],
-    ymax : 250, ymin : 150,
+    ymin: 'auto', ymax: 'auto',
     hideHover: true,
     // Labels for the ykeys -- will be displayed when you hover over the
     // chart.
