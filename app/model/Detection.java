@@ -1,13 +1,29 @@
 package model;
 
+import play.db.ebean.Model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Created by Mathieu on 31/01/2015.
  */
-public class Detection {
+
+@Entity
+public class Detection extends Model {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public String id;
+
     public double simpleThreshold;
     public double minValue;
     public double maxValue;
     public double delta;
+
+    public static Model.Finder<String,Detection> find = new Model.Finder(String.class, Detection.class);
 
     public double getSimpleThreshold() {
         return simpleThreshold;
@@ -39,5 +55,16 @@ public class Detection {
 
     public void setDelta(double delta) {
         this.delta = delta;
+    }
+
+    @Override
+    public String toString() {
+        return "Detection{" +
+                "id='" + id + '\'' +
+                ", simpleThreshold=" + simpleThreshold +
+                ", minValue=" + minValue +
+                ", maxValue=" + maxValue +
+                ", delta=" + delta +
+                '}';
     }
 }
