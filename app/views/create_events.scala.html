@@ -2,6 +2,21 @@
 
 @main("Create an event") {
 
+<script>
+$(document).ready(function(){
+    $('.multi-field-wrapper').each(function() {
+        var $wrapper = $('.multi-fields', this);
+        $(".add-field", $(this)).click(function(e) {
+            $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper);
+        });
+        $('.multi-field .remove-field', $wrapper).click(function() {
+            if ($('.multi-field', $wrapper).length > 1)
+                $(this).parent('.multi-field').remove();
+        });
+    });
+});
+</script>
+
 <div id="wrapper">
 
         @nav()
@@ -22,6 +37,10 @@
 
                 <div class="row">
                     <div class="col-lg-12">
+
+                        <div class="multi-field-wrapper">
+                            <div class="multi-fields">
+                                <div class="multi-field">
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -58,6 +77,13 @@
                             <!-- /.panel-body -->
                         </div>
                         <!-- /.panel -->
+
+                        <button type="button" class="btn btn-warning btn-circle remove-field"><i class="fa fa-times"></i></button>
+
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-primary btn-lg btn-block add-field">Ajouter un basicEvent</button>
+                        </div>
 
                         <button type="button" class="btn btn-primary btn-lg btn-block">Créer l'évènement</button>
 
