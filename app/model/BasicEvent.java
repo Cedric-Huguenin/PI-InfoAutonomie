@@ -20,7 +20,14 @@ public class BasicEvent extends Model {
     @OneToOne
     public Detection detectionMethod;
 
-    public static Model.Finder<String,BasicEvent> find = new Model.Finder(String.class, BasicEvent.class);
+    public static BasicEvent create(BasicEvent basicEvent, String timeInterval, String detectionMethod) {
+        basicEvent.basicEventInterval = TimeInterval.find.ref(timeInterval);
+        basicEvent.detectionMethod = Detection.find.ref(detectionMethod);
+        basicEvent.save();
+        return basicEvent;
+    }
+
+    public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
 
     @Override
     public String toString() {

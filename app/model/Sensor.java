@@ -19,7 +19,12 @@ public class Sensor extends Model {
     public String location;
     public String description;
 
-    public static Model.Finder<String,Sensor> find = new Model.Finder(String.class, Sensor.class);
+    public static Sensor create(Sensor sensor) {
+        sensor.save();
+        return sensor;
+    }
+
+    public static Model.Finder<String,Sensor> find = new Model.Finder<>(String.class, Sensor.class);
 
     public String getName() {
         return name;

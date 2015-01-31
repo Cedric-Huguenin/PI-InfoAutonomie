@@ -23,7 +23,12 @@ public class Detection extends Model {
     public double maxValue;
     public double delta;
 
-    public static Model.Finder<String,Detection> find = new Model.Finder(String.class, Detection.class);
+    public static Detection create(Detection detection) {
+        detection.save();
+        return detection;
+    }
+
+    public static Model.Finder<String,Detection> find = new Model.Finder<>(String.class, Detection.class);
 
     public double getSimpleThreshold() {
         return simpleThreshold;

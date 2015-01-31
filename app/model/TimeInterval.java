@@ -21,7 +21,12 @@ public class TimeInterval extends Model {
     public long timestampStart;
     public long timestampEnd;
 
-    public static Model.Finder<String,TimeInterval> find = new Model.Finder(String.class, TimeInterval.class);
+    public static TimeInterval create(TimeInterval timeInterval) {
+        timeInterval.save();
+        return timeInterval;
+    }
+
+    public static Model.Finder<String,TimeInterval> find = new Model.Finder<>(String.class, TimeInterval.class);
 
     public long getTimestampStart() {
         return timestampStart;

@@ -21,7 +21,14 @@ public class Event extends Model {
     @OneToOne
     public  TimeInterval timeInterval;
 
-    public static Model.Finder<String,Event> find = new Model.Finder(String.class, Event.class);
+    public static Event create(Event event, String timeInterval) {
+        event.timeInterval = TimeInterval.find.ref(timeInterval);
+        event.saveManyToManyAssociations("basicEvents");
+        event.save();
+        return event;
+    }
+
+    public static Model.Finder<String,Event> find = new Model.Finder<>(String.class, Event.class);
 
     @Override
     public String toString() {
