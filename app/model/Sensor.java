@@ -5,7 +5,7 @@ package model;
  */
 public class Sensor {
     public String name;
-    public String type;
+    public SensorType type;
     public String location;
     public String description;
 
@@ -17,11 +17,11 @@ public class Sensor {
         this.name = name;
     }
 
-    public String getType() {
+    public SensorType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(SensorType type) {
         this.type = type;
     }
 
