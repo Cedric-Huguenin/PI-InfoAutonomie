@@ -7,10 +7,7 @@ import model.json.DataNode;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.TimestampUtils;
-import views.html.events;
-import views.html.index;
-import views.html.liveStream;
-import views.html.raw_values;
+import views.html.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -162,5 +159,9 @@ public class Application extends Controller {
 
     public static Result liveStreamJS() {
         return ok(views.js.liveStream.render());
+    }
+
+    public static Result createEvent() {
+        return ok(create_events.render("Your new application is ready."));
     }
 }
