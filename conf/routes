@@ -9,6 +9,7 @@ GET        /                               controllers.Application.index()
 GET        /data                           controllers.Application.data()
 GET        /oldEvents                      controllers.Application.oldEvents()
 GET        /live                           controllers.Application.liveStream()
+GET        /createEvent                    controllers.Application.createEvent()
 
 GET        /blank                          controllers.EventController.index()
 # JS
