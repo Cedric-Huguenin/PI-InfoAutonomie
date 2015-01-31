@@ -7,7 +7,7 @@ GET        /                               controllers.Application.index()
 
 # pages
 GET        /data                           controllers.Application.data()
-GET        /events                         controllers.Application.events()
+GET        /oldEvents                         controllers.Application.oldEvents()
 GET        /live                           controllers.Application.liveStream()
 
 # JS

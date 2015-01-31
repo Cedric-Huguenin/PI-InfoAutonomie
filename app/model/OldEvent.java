@@ -3,14 +3,14 @@ package model;
 /**
  * Created by Ced on 26/01/2015.
  */
-public class Event {
+public class OldEvent {
 
     public long timestamp;
     public double value;
     public String description;
     public String verboseDate;
 
-    public Event(long timestamp, String description, String verboseDate, double value) {
+    public OldEvent(long timestamp, String description, String verboseDate, double value) {
         this.timestamp = timestamp;
         this.description = description;
         this.verboseDate = verboseDate;
