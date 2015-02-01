@@ -1,0 +1,6 @@
+02-01 16:45:29 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "PLAY_EVOLUTIONS" not found; SQL statement:
+select id, hash, apply_script, revert_script, state, last_problem from play_evolutions where state like 'applying_%' [42102-175]
+02-01 16:48:17 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Syntax error in SQL statement "BASIC_EVENT[*] SELECT * FROM DETECTION"; expected "BACKUP, BEGIN, {"; SQL statement:
+BASIC_EVENT SELECT * FROM DETECTION [42001-175]

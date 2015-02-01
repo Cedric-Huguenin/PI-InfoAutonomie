@@ -1,0 +1,33 @@
+# Sensor
+
+- &sensor1 !!model.Sensor
+    name: 161.24
+    type: HUMIDITY
+    location: Salle de bain
+    description: Humidité SdB
+
+# Detection
+
+- &detection1 !!model.Detection
+    id:              detection1
+    simpleThreshold: 0
+    minValue:        0
+    maxValue:        0
+    delta:           45
+
+# TimeInterval
+
+- &timeInterval1 !!model.TimeInterval
+    id:              timeInterval1
+    timestampStart:  123456
+    timestampEnd:    123789
+
+
+# BasicEvent
+
+- &basicEvent1 !!model.BasicEvent
+    id:                 basicEvent1
+    sensor:             *sensor1
+    basicEventInterval: *timeInterval1
+    duration:           0
+    detectionMethod:    *detection1

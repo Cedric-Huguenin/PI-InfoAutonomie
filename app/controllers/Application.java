@@ -1,9 +1,11 @@
 package controllers;
 
+import com.avaje.ebean.Ebean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.OldEvent;
 import model.json.Data;
 import model.json.DataNode;
+import play.libs.Yaml;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.TimestampUtils;
@@ -16,8 +18,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Application extends Controller {
+
+    public static Result init() {
+        Ebean.save((List) Yaml.load("test-data.yml"));
+        
+        return index();
+    }
 
     public static Result index() {
         return ok(index.render("Your new application is ready."));
