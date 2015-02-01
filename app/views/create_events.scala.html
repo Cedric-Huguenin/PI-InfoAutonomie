@@ -16,6 +16,24 @@ $(document).ready(function(){
         });
     });
 });
+
+// Bootstrap 3 Timepicker
+$(function () {
+    $('#datetimepicker1').datetimepicker({
+        defaultDate: "01/01/2015 00:00:00",
+        format: 'HH:mm:ss',
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-bullseye',
+            clear: 'fa fa-trash'
+        }
+    });
+});
 </script>
 
 <div id="wrapper">
@@ -92,7 +110,12 @@ $(document).ready(function(){
                                                                     <div class="col-lg-6">
                                                                         <div class="form-group">
                                                                             <label>Durée</label>
-                                                                            <input class="form-control">
+                                                                            <div class='input-group date' id='datetimepicker1'>
+                                                                                <input type='text' class="form-control" placeholder="HH:mm:ss" />
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="fa fa-calendar"></span>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
