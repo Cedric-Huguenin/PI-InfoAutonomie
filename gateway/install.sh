@@ -31,3 +31,6 @@ then
     fi
 fi
 
+echo 'Installing tools to run EnOcean softwares'
+apt-get install gcc
+apt-get install g++
