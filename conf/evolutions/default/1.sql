@@ -5,6 +5,7 @@
 
 create table basic_event (
   id                        varchar(255) not null,
+  sensor_name               varchar(255),
   basic_event_interval_id   varchar(255),
   duration                  bigint,
   detection_method_id       varchar(255),
@@ -59,12 +60,14 @@ create sequence sensor_seq;
 
 create sequence time_interval_seq;
 
-alter table basic_event add constraint fk_basic_event_basicEventInter_1 foreign key (basic_event_interval_id) references time_interval (id) on delete restrict on update restrict;
-create index ix_basic_event_basicEventInter_1 on basic_event (basic_event_interval_id);
-alter table basic_event add constraint fk_basic_event_detectionMethod_2 foreign key (detection_method_id) references detection (id) on delete restrict on update restrict;
-create index ix_basic_event_detectionMethod_2 on basic_event (detection_method_id);
-alter table event add constraint fk_event_timeInterval_3 foreign key (time_interval_id) references time_interval (id) on delete restrict on update restrict;
-create index ix_event_timeInterval_3 on event (time_interval_id);
+alter table basic_event add constraint fk_basic_event_sensor_1 foreign key (sensor_name) references sensor (name) on delete restrict on update restrict;
+create index ix_basic_event_sensor_1 on basic_event (sensor_name);
+alter table basic_event add constraint fk_basic_event_basicEventInter_2 foreign key (basic_event_interval_id) references time_interval (id) on delete restrict on update restrict;
+create index ix_basic_event_basicEventInter_2 on basic_event (basic_event_interval_id);
+alter table basic_event add constraint fk_basic_event_detectionMethod_3 foreign key (detection_method_id) references detection (id) on delete restrict on update restrict;
+create index ix_basic_event_detectionMethod_3 on basic_event (detection_method_id);
+alter table event add constraint fk_event_timeInterval_4 foreign key (time_interval_id) references time_interval (id) on delete restrict on update restrict;
+create index ix_event_timeInterval_4 on event (time_interval_id);
 
 
 

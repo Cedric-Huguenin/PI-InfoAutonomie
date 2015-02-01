@@ -35,7 +35,7 @@ public class Detection extends Model {
     }
 
     public void setSimpleThreshold(double simpleThreshold) {
-        this.simpleThreshold = simpleThreshold;
+        setSimpleThreshold(simpleThreshold);
     }
 
     public double getMinValue() {
@@ -62,14 +62,22 @@ public class Detection extends Model {
         this.delta = delta;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        setId(id);
+    }
+
     @Override
     public String toString() {
         return "Detection{" +
-                "id='" + id + '\'' +
-                ", simpleThreshold=" + simpleThreshold +
-                ", minValue=" + minValue +
-                ", maxValue=" + maxValue +
-                ", delta=" + delta +
+                "id='" + getId() + '\'' +
+                ", simpleThreshold=" + getSimpleThreshold() +
+                ", minValue=" + getMinValue() +
+                ", maxValue=" + getMaxValue() +
+                ", delta=" + getDelta() +
                 '}';
     }
 }

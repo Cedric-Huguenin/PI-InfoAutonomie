@@ -44,12 +44,20 @@ public class TimeInterval extends Model {
         this.timestampEnd = timestampEnd;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "TimeInterval{" +
-                "id='" + id + '\'' +
-                ", timestampStart=" + timestampStart +
-                ", timestampEnd=" + timestampEnd +
+                "id='" + getId() + '\'' +
+                ", timestampStart=" + getTimestampStart() +
+                ", timestampEnd=" + getTimestampEnd() +
                 '}';
     }
 }
