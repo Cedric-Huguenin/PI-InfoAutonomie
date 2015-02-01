@@ -248,15 +248,34 @@
 					<a href="@routes.Application.createEvent"><i class="fa fa-fw fa-file"></i> Créer un évènement</a>
 				</li>
 				<li>
-					<a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
-					<ul id="demo" class="collapse">
+					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+					<ul style="height: 0px;" aria-expanded="false" class="nav nav-second-level collapse">
 						<li>
-							<a href="#">Dropdown Item</a>
+							<a href="#">Second Level Item</a>
 						</li>
 						<li>
-							<a href="#">Dropdown Item</a>
+							<a href="#">Second Level Item</a>
+						</li>
+						<li class="">
+							<a href="#">Third Level <span class="fa arrow"></span></a>
+							<ul style="height: 0px;" aria-expanded="false" class="nav nav-third-level collapse">
+								<li>
+									<a href="#">Third Level Item</a>
+								</li>
+								<li>
+									<a href="#">Third Level Item</a>
+								</li>
+								<li>
+									<a href="#">Third Level Item</a>
+								</li>
+								<li>
+									<a href="#">Third Level Item</a>
+								</li>
+							</ul>
+							<!-- /.nav-third-level -->
 						</li>
 					</ul>
+					<!-- /.nav-second-level -->
 				</li>
 			</ul>
 		</div>
