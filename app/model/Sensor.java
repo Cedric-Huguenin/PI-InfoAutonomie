@@ -1,13 +1,29 @@
 package model;
 
+import play.db.ebean.Model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Created by Mathieu on 31/01/2015.
  */
-public class Sensor {
+
+@Entity
+public class Sensor extends Model {
+
+    @Id
     public String name;
     public SensorType type;
     public String location;
     public String description;
+
+    public static Sensor create(Sensor sensor) {
+        sensor.save();
+        return sensor;
+    }
+
+    public static Model.Finder<String,Sensor> find = new Model.Finder<>(String.class, Sensor.class);
 
     public String getName() {
         return name;
@@ -39,5 +55,15 @@ public class Sensor {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Sensor{" +
+                "name='" + getName() + '\'' +
+                ", type=" + getType() +
+                ", location='" + getLocation() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                '}';
     }
 }

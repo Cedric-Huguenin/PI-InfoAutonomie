@@ -11,10 +11,11 @@ var graph = new Morris.Line({
     // A list of names of data record attributes that contain y-values.
     ykeys: ['81.77', '9.138', '153.111'],
     ymin: 'auto', ymax: 'auto',
+    //yLabelFormat: function (y) { return y.toString() + ' lux'; },
     hideHover: true,
     // Labels for the ykeys -- will be displayed when you hover over the
     // chart.
-    labels: ['81.77', '9.138', '153.111']
+    labels: ['Lumière 81.77', 'Lumière 9.138', 'Lumière 153.111']
 });
 
 $(function(){

@@ -6,9 +6,14 @@
 GET        /                               controllers.Application.index()
 
 # pages
+GET        /init                           controllers.Application.init()
 GET        /data                           controllers.Application.data()
-GET        /events                         controllers.Application.events()
+GET        /oldEvents                      controllers.Application.oldEvents()
 GET        /live                           controllers.Application.liveStream()
+GET        /createEvent                    controllers.Application.createEvent()
+
+GET        /computeEvent                   controllers.EventController.index()
+GET        /testEvent                      controllers.EventController.test()
 
 # JS
 GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS()

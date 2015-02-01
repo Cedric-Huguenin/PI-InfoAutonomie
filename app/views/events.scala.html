@@ -1,11 +1,6 @@
-@import model.Event
+@(message: String, eventsList:List[model.OldEvent])
 
-@(message: String, eventsList:List[Event])
-
-@import helper._
-@import java.math.BigInteger; var i=1; var j=eventsList.length;
-
-@main("Raw data") {
+@main("Events") {
 
 <div id="wrapper">
 
@@ -57,7 +52,7 @@
 								//goals: [190.0, 170.0],
 								// Labels for the ykeys -- will be displayed when you hover over the
 								// chart.
-								labels: ['Value']
+                                labels: ['Lumière 153.111']
 								});
 							</script>
 						</div>

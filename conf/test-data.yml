@@ -1,0 +1,33 @@
+# Sensor
+
+- &sensor1 !!model.Sensor
+    name: 161.24
+    type: LIGHT
+    location: Bureau TN
+    description: Sur la commode
+
+# Detection
+
+- &detection1 !!model.Detection
+    id:              detection1
+    simpleThreshold: 0
+    minValue:        0
+    maxValue:        0
+    delta:           15
+
+# TimeInterval
+
+- &timeInterval1 !!model.TimeInterval
+    id:              timeInterval1
+    timestampStart:  1422763200 # 5h00
+    timestampEnd:    1422788400 # 12h00
+
+
+# BasicEvent
+
+- &basicEvent1 !!model.BasicEvent
+    id:                 Saut de luminosité
+    sensor:             *sensor1
+    basicEventInterval: *timeInterval1
+    duration:           0
+    detectionMethod:    *detection1

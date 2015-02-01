@@ -1,51 +1,87 @@
 package model;
 
+import play.db.ebean.Model;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by Ced on 26/01/2015.
+ * Created by Ced on 31/01/2015.
  */
-public class Event {
 
-    public long timestamp;
-    public double value;
-    public String description;
-    public String verboseDate;
+@Entity
+public class Event extends Model {
 
-    public Event(long timestamp, String description, String verboseDate, double value) {
-        this.timestamp = timestamp;
-        this.description = description;
-        this.verboseDate = verboseDate;
-        this.value = value;
+    @Id
+    public String name;
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    public List<BasicEvent> basicEvents = new ArrayList<>();
+    public int duration;
+    @OneToOne
+    public  TimeInterval timeInterval;
+
+    public static Event create(Event event, String timeInterval) {
+        event.timeInterval = TimeInterval.find.byId(timeInterval);
+        event.save();
+        event.saveManyToManyAssociations("basicEvents");
+        event.save();
+        return event;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public static Model.Finder<String,Event> find = new Model.Finder<>(String.class, Event.class);
+
+    public String getName() {
+        return name;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public List<BasicEvent> getBasicEvents() {
+        return basicEvents;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setBasicEvents(List<BasicEvent> basicEvents) {
+        this.basicEvents = basicEvents;
     }
 
-    public String getVerboseDate() {
-        return verboseDate;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setVerboseDate(String verboseDate) {
-        this.verboseDate = verboseDate;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
-    public double getValue() {
-        return value;
+    public TimeInterval getTimeInterval() {
+        return timeInterval;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setTimeInterval(TimeInterval timeInterval) {
+        this.timeInterval = timeInterval;
+    }
+
+    public static Finder<String, Event> getFind() {
+        return find;
+    }
+
+    public static void setFind(Finder<String, Event> find) {
+        Event.find = find;
+    }
+
+    @Override
+    public String toString() {
+        String basicEventsStr = "";
+        for(BasicEvent b : basicEvents) {
+            basicEventsStr += b.toString() + " --- ";
+        }
+        return "Event{" +
+                "name='" + name + '\'' +
+                ", basicEvents=" + basicEventsStr +
+                ", duration=" + duration +
+                ", timeInterval=" + timeInterval +
+                '}';
     }
 }
