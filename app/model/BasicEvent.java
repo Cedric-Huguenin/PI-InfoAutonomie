@@ -3,6 +3,7 @@ package model;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Mathieu on 31/01/2015.
@@ -21,6 +22,8 @@ public class BasicEvent extends Model {
     @ManyToOne
     public Detection detectionMethod;
 
+    public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
+
     public static BasicEvent create(BasicEvent basicEvent, String timeInterval, String detectionMethod, String sensor) {
         basicEvent.setBasicEventInterval(TimeInterval.find.byId(timeInterval));
         basicEvent.setDetectionMethod(Detection.find.byId(detectionMethod));
@@ -29,8 +32,9 @@ public class BasicEvent extends Model {
         return basicEvent;
     }
 
-    public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
-
+    public static List<BasicEvent> all() {
+        return find.all();
+    }
 
     @Override
     public String toString() {

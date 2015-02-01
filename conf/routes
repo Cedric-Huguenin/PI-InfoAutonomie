@@ -12,7 +12,9 @@ GET        /oldEvents                      controllers.Application.oldEvents()
 GET        /live                           controllers.Application.liveStream()
 GET        /createEvent                    controllers.Application.createEvent()
 
-GET        /blank                          controllers.EventController.index()
+GET        /computeEvent                   controllers.EventController.index()
+GET        /testEvent                      controllers.EventController.test()
+
 # JS
 GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS()
 

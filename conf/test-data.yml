@@ -26,7 +26,7 @@
 # BasicEvent
 
 - &basicEvent1 !!model.BasicEvent
-    id:                 basicEvent1
+    id:                 Saut de luminosité
     sensor:             *sensor1
     basicEventInterval: *timeInterval1
     duration:           0
