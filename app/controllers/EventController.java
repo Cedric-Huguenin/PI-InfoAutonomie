@@ -79,6 +79,9 @@ public class EventController {
     }
 
 
+    public static Result listEvents() {
+        return ok(views.html.definedEvents.render("Évènement", BasicEvent.all()));
+    }
     public static Result index() {
         List<BasicEvent> basics = BasicEvent.all();
         BasicEvent basic = basics.get(0);
@@ -114,6 +117,6 @@ public class EventController {
         }
 
         System.out.println(basic);
-        return ok(views.html.timeline.render("Your new application is ready.", events, basic.getId()));
+        return ok(views.html.timeline.render("Évènement", events, basic.getId()));
     }
 }
