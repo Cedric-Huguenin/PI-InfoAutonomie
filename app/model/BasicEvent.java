@@ -13,11 +13,12 @@ public class BasicEvent extends Model {
 
     @Id
     public String id;
+    @ManyToOne
     public Sensor sensor;
-    @OneToOne
+    @ManyToOne
     public TimeInterval basicEventInterval;
     public long duration;
-    @OneToOne
+    @ManyToOne
     public Detection detectionMethod;
 
     public static BasicEvent create(BasicEvent basicEvent, String timeInterval, String detectionMethod, String sensor) {
