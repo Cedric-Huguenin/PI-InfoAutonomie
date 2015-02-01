@@ -20,23 +20,65 @@ public class BasicEvent extends Model {
     @OneToOne
     public Detection detectionMethod;
 
-    public static BasicEvent create(BasicEvent basicEvent, String timeInterval, String detectionMethod) {
-        basicEvent.basicEventInterval = TimeInterval.find.ref(timeInterval);
-        basicEvent.detectionMethod = Detection.find.ref(detectionMethod);
+    public static BasicEvent create(BasicEvent basicEvent, String timeInterval, String detectionMethod, String sensor) {
+        basicEvent.setBasicEventInterval(TimeInterval.find.byId(timeInterval));
+        basicEvent.setDetectionMethod(Detection.find.byId(detectionMethod));
+        basicEvent.setSensor(Sensor.find.byId(sensor));
         basicEvent.save();
         return basicEvent;
     }
 
     public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
 
+
     @Override
     public String toString() {
         return "BasicEvent{" +
-                "id='" + id + '\'' +
-                ", sensor=" + sensor +
-                ", basicEventInterval=" + basicEventInterval +
-                ", duration=" + duration +
-                ", detectionMethod=" + detectionMethod +
+                "id='" + getId() + '\'' +
+                ", sensor=" + getSensor() +
+                ", basicEventInterval=" + getBasicEventInterval() +
+                ", duration=" + getDuration() +
+                ", detectionMethod=" + getDetectionMethod() +
                 '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
+
+    public TimeInterval getBasicEventInterval() {
+        return basicEventInterval;
+    }
+
+    public void setBasicEventInterval(TimeInterval basicEventInterval) {
+        this.basicEventInterval = basicEventInterval;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public Detection getDetectionMethod() {
+        return detectionMethod;
+    }
+
+    public void setDetectionMethod(Detection detectionMethod) {
+        this.detectionMethod = detectionMethod;
     }
 }
