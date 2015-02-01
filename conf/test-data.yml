@@ -2,9 +2,9 @@
 
 - &sensor1 !!model.Sensor
     name: 161.24
-    type: HUMIDITY
-    location: Salle de bain
-    description: Humidité SdB
+    type: LIGHT
+    location: Bureau TN
+    description: Sur la commode
 
 # Detection
 
@@ -13,14 +13,14 @@
     simpleThreshold: 0
     minValue:        0
     maxValue:        0
-    delta:           45
+    delta:           15
 
 # TimeInterval
 
 - &timeInterval1 !!model.TimeInterval
     id:              timeInterval1
-    timestampStart:  123456
-    timestampEnd:    123789
+    timestampStart:  1422763200 # 5h00
+    timestampEnd:    1422788400 # 12h00
 
 
 # BasicEvent
