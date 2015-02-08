@@ -29,6 +29,10 @@ public class Event extends Model {
         return event;
     }
 
+    public static List<Event> all() {
+        return find.all();
+    }
+
     public static Model.Finder<String,Event> find = new Model.Finder<>(String.class, Event.class);
 
     public String getName() {

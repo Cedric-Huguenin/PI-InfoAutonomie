@@ -5,15 +5,22 @@
 # Home page
 GET        /                               controllers.Application.index()
 
-# pages
+# Pages
 GET        /init                           controllers.Application.init()
-GET        /data                           controllers.Application.data()
-GET        /oldEvents                      controllers.Application.oldEvents()
-GET        /live                           controllers.Application.liveStream()
 GET        /createEvent                    controllers.Application.createEvent()
 
+# Raw values
+GET        /raw/data                       controllers.Application.data()
+GET        /raw/graph                      controllers.Application.oldEvents()
+GET        /raw/live                       controllers.Application.liveStream()
+
+# Basic events
+GET        /basic/data                     controllers.BasicEventController.data()
+
+# Events
 GET        /computeEvent                   controllers.EventController.index()
 GET        /testEvent                      controllers.EventController.test()
+GET        /listEvents                     controllers.EventController.listEvents()
 
 # JS
 GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS()

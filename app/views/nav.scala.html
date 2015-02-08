@@ -224,25 +224,20 @@
 	<div class="navbar-default sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse">
 			<ul class="nav" id="side-menu">
-				<li class="sidebar-search">
-					<div class="input-group custom-search-form">
-						<input type="text" class="form-control" placeholder="Search...">
-						<span class="input-group-btn">
-						<button class="btn btn-default" type="button">
-							<i class="fa fa-search"></i>
-						</button>
-					</span>
-					</div>
-					<!-- /input-group -->
-				</li>
 				<li>
-				  <a href="@routes.Application.data"><i class="fa fa-fw fa-file"></i> Valeurs brutes</a>
-				</li>
-				<li>
-					<a href="@routes.Application.oldEvents"><i class="fa fa-fw fa-file"></i> Graphiques</a>
-				</li>
-				<li>
-					<a href="@routes.Application.liveStream"><i class="fa fa-fw fa-file"></i> Flux temps réel</a>
+					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Valeurs brutes<span class="fa arrow"></span></a>
+					<ul aria-expanded="false" class="nav nav-second-level collapse">
+						<li>
+							<a href="@routes.Application.data">Données</a>
+						</li>
+						<li>
+							<a href="@routes.Application.oldEvents">Graphiques</a>
+						</li>
+						<li>
+							<a href="@routes.Application.liveStream">Flux temps réel</a>
+						</li>
+					</ul>
+					<!-- /.nav-second-level -->
 				</li>
 				<li>
 					<a href="@routes.Application.createEvent"><i class="fa fa-fw fa-file"></i> Créer un évènement</a>
@@ -250,36 +245,6 @@
                 <li>
                     <a href="@routes.EventController.index()"><i class="fa fa-fw fa-file"></i> Timeline</a>
                 </li>
-				<li>
-					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-					<ul style="height: 0px;" aria-expanded="false" class="nav nav-second-level collapse">
-						<li>
-							<a href="#">Second Level Item</a>
-						</li>
-						<li>
-							<a href="#">Second Level Item</a>
-						</li>
-						<li class="">
-							<a href="#">Third Level <span class="fa arrow"></span></a>
-							<ul style="height: 0px;" aria-expanded="false" class="nav nav-third-level collapse">
-								<li>
-									<a href="#">Third Level Item</a>
-								</li>
-								<li>
-									<a href="#">Third Level Item</a>
-								</li>
-								<li>
-									<a href="#">Third Level Item</a>
-								</li>
-								<li>
-									<a href="#">Third Level Item</a>
-								</li>
-							</ul>
-							<!-- /.nav-third-level -->
-						</li>
-					</ul>
-					<!-- /.nav-second-level -->
-				</li>
 			</ul>
 		</div>
 		<!-- /.sidebar-collapse -->
