@@ -15,10 +15,15 @@ import java.util.*;
 import static play.mvc.Results.ok;
 
 /**
+ * Controller to handle and display BasicEvent objects.
  * Created by Mathieu on 07/02/2015.
  */
 public class BasicEventController {
 
+    /**
+     * Displays data about the basic events that occurred.
+     * @return the basic events page result.
+     */
     public static Result data() {
         DataNode rawDataNode = null;
         String response = "";

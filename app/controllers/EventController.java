@@ -15,10 +15,15 @@ import java.util.List;
 import static play.mvc.Results.ok;
 
 /**
+ * Controller to manage and display more complex events.
  * Created by Ced on 31/01/2015.
  */
 public class EventController {
 
+    /**
+     * Performs tests about sensors and events. TODO ? Place this in the unit tests
+     * @return the test results.
+     */
     public static Result test() {
         TimeInterval timeInterval = new TimeInterval();
         timeInterval.setTimestampStart(123456);
@@ -78,10 +83,18 @@ public class EventController {
         return ok(views.html.blank.render("Your new application is ready.", event.toString() +"   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   "+ retrieveEvent.toString()));
     }
 
-
+    /**
+     * Displays a list of more complex events (based on basic events) that occurred.
+     * @return the result of the events occurred.
+     */
     public static Result listEvents() {
         return ok(views.html.definedEvents.render("Évènement", BasicEvent.all()));
     }
+
+    /**
+     * Computes the basic events to determine if a more complex event occurred.
+     * @return the result of the occurrences in a timeline.
+     */
     public static Result index() {
         List<BasicEvent> basics = BasicEvent.all();
         BasicEvent basic = basics.get(0);

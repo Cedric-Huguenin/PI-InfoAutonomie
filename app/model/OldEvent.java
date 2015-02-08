@@ -1,6 +1,7 @@
 package model;
 
 /**
+ * TODO document
  * Created by Ced on 26/01/2015.
  */
 public class OldEvent {

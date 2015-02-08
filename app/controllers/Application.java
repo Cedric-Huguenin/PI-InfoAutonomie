@@ -20,18 +20,33 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The main controller of the Play application.
+ */
 public class Application extends Controller {
 
+    /**
+     * Initializes the controller with test data.
+     * @return the index result.
+     */
     public static Result init() {
         Ebean.save((List) Yaml.load("test-data.yml"));
 
         return index();
     }
 
+    /**
+     * Loads the home page of the application.
+     * @return the index result.
+     */
     public static Result index() {
         return ok(index.render("Your new application is ready."));
     }
 
+    /**
+     * Loads the raw data page, displaying all the raw data from the sensors (light, humidity...).
+     * @return the raw data result.
+     */
     public static Result data() {
         // url to parse: http://iotlab.telecomnancy.eu/rest/data/1/light1/1
 
@@ -99,6 +114,10 @@ public class Application extends Controller {
         return ok(raw_values.render("Your new application is ready.", dataNode.getData(), oldEvents));
     }
 
+    /**
+     * Loads the page to display events.
+     * @return events results.
+     */
     public static Result oldEvents() {
         String url = "http://iotlab.telecomnancy.eu/rest/data/1/light1/24/153.111";
         StringBuffer result = new StringBuffer();
@@ -162,14 +181,26 @@ public class Application extends Controller {
         return ok(events.render("Your new application is ready.", eventsList));
     }
 
+    /**
+     * Displays the live stream page with the raw data from the sensors in live.
+     * @return the live stream results.
+     */
     public static Result liveStream() {
         return ok(liveStream.render("Live Stream"));
     }
 
+    /**
+     * Loads the JavaScript for the LiveStream.
+     * @return the JavaScript code to run the LiveStream.
+     */
     public static Result liveStreamJS() {
         return ok(views.js.liveStream.render());
     }
 
+    /**
+     * Loads the create event page.
+     * @return the result of the event page.
+     */
     public static Result createEvent() {
         return ok(create_events.render("Your new application is ready."));
     }

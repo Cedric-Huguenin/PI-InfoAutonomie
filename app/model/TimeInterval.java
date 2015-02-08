@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
+ * TODO document
  * Created by Mathieu on 31/01/2015.
  */
 

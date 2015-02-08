@@ -12,10 +12,17 @@ import java.net.URL;
 import java.util.Collections;
 
 /**
+ * Utility class to retrieve data from an URL.
  * Created by Ced on 01/02/2015.
  */
 public class GetDataFromUrl {
 
+    /**
+     * Returns a DataNode retrieved from the URL given in parameter. The given URL must point to a JSON file.
+     * @param url the URL from which the data must be retrieved
+     * @return the DataNode corresponding to the JSON value.
+     * @throws IOException if something happened with the connection.
+     */
     public static DataNode getFromUrl(String url) throws IOException {
         StringBuffer result = new StringBuffer();
         DataNode dataNode = new DataNode();

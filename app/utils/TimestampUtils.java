@@ -8,10 +8,16 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
+ * This is an utility class to handle timestamps.
  * Created by Ced on 26/01/2015.
  */
 public class TimestampUtils {
 
+	/**
+	 * Convert a timestamp in a readable format for a human in the format : YYYY/mm/dd HH:mm:ss
+	 * @param timestamp the timestamp to be converted.
+	 * @return the human friendly date as mentioned in the description.
+	 */
 	public static String timestampToString(long timestamp) {
 		Calendar cal= GregorianCalendar.getInstance();
 		timestamp *= 1000;
