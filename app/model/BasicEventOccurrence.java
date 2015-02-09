@@ -1,21 +1,26 @@
 package model;
 
-import java.util.GregorianCalendar;
-
 /**
  * Created by Ced on 09/02/2015.
  */
 public class BasicEventOccurrence {
 
     public BasicEvent basicEvent;
-    public GregorianCalendar date;
+    public String date;
     public double fromValue, toValue;
 
-    public GregorianCalendar getDate() {
+    public BasicEventOccurrence(BasicEvent basicEvent, String date, double fromValue, double toValue) {
+        this.basicEvent = basicEvent;
+        this.date = date;
+        this.fromValue = fromValue;
+        this.toValue = toValue;
+    }
+
+    public String getDate() {
         return date;
     }
 
-    public void setDate(GregorianCalendar date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -1,4 +1,4 @@
-@(message: String, basicEventList: List[String])
+@(message: String, basicEventList: List[model.BasicEventOccurrence])
 
 @main("Raw data") {
 
@@ -36,13 +36,21 @@
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Liste des évènements de base</th>
+                                                <th>ID</th>
+                                                <th>Delta</th>
+                                                <th>Date</th>
+                                                <th>Valeur initiale</th>
+                                                <th>Nouvelle valeur</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @for(basicEvent <- basicEventList) {
                                                 <tr>
-                                                    <td>@basicEvent</td>
+                                                    <td>@basicEvent.basicEvent.id</td>
+                                                    <td>@basicEvent.basicEvent.detectionMethod.delta</td>
+                                                    <td>@basicEvent.date</td>
+                                                    <td>@basicEvent.fromValue</td>
+                                                    <td>@basicEvent.toValue</td>
                                                 </tr>
                                             }
                                         </tbody>

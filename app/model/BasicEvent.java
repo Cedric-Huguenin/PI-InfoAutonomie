@@ -59,6 +59,14 @@ public class BasicEvent extends Model {
     }
 
     /**
+     * Returns the BasicEvent with the given id.
+     * @return the list of all the BasicEvent created.
+     */
+    public static BasicEvent byId(String id) {
+        return find.byId(id);
+    }
+
+    /**
      * Returns the characteristics of the BasicEvent in JSON.
      * @return a string in JSON representing the object.
      */
