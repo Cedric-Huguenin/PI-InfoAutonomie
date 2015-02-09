@@ -16,7 +16,7 @@ import java.util.List;
 public class BasicEvent extends Model {
 
     /**
-     * The ID identifying the Event.
+     * The ID identifying the BasicEvent.
      */
     @Id
     public String id;
@@ -25,15 +25,6 @@ public class BasicEvent extends Model {
      */
     @ManyToOne
     public Sensor sensor;
-    /**
-     * The time interval which should be necessary to identify a whole new Event.
-     */
-    @ManyToOne
-    public TimeInterval basicEventInterval;
-    /**
-     * The duration of the Event in seconds.
-     */
-    public long duration;
     /**
      * The method and criteria chosen to detect the event.
      */
@@ -48,13 +39,11 @@ public class BasicEvent extends Model {
     /**
      * Creates a new BasicEvent and saves it in the database.
      * @param basicEvent the BasicEvent that must be initialized.
-     * @param timeInterval the TimeInterval that must be set.
      * @param detectionMethod the method of detection of the event.
      * @param sensor the identifier of the sensor used.
      * @return the BasicEvent given updated and saved.
      */
-    public static BasicEvent create(BasicEvent basicEvent, String timeInterval, String detectionMethod, String sensor) {
-        basicEvent.setBasicEventInterval(TimeInterval.find.byId(timeInterval));
+    public static BasicEvent create(BasicEvent basicEvent, String detectionMethod, String sensor) {
         basicEvent.setDetectionMethod(Detection.find.byId(detectionMethod));
         basicEvent.setSensor(Sensor.find.byId(sensor));
         basicEvent.save();
@@ -78,8 +67,6 @@ public class BasicEvent extends Model {
         return "BasicEvent{" +
                 "id='" + getId() + '\'' +
                 ", sensor=" + getSensor() +
-                ", basicEventInterval=" + getBasicEventInterval() +
-                ", duration=" + getDuration() +
                 ", detectionMethod=" + getDetectionMethod() +
                 '}';
     }
@@ -114,38 +101,6 @@ public class BasicEvent extends Model {
      */
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
-    }
-
-    /**
-     * Returns the TimeInterval defined for the BasicEvent.
-     * @return the TimeInterval defined for the BasicEvent.
-     */
-    public TimeInterval getBasicEventInterval() {
-        return basicEventInterval;
-    }
-
-    /**
-     * Sets the TimeInterval for the BasicEvent.
-     * @param basicEventInterval the new TimeInterval.
-     */
-    public void setBasicEventInterval(TimeInterval basicEventInterval) {
-        this.basicEventInterval = basicEventInterval;
-    }
-
-    /**
-     * Returns the duration of the BasicEvent.
-     * @return the duration of the BasicEvent.
-     */
-    public long getDuration() {
-        return duration;
-    }
-
-    /**
-     * Sets the duration of the BasicEvent.
-     * @param duration the new duration of the BasicEvent.
-     */
-    public void setDuration(long duration) {
-        this.duration = duration;
     }
 
     /**

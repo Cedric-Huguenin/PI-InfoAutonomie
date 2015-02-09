@@ -63,7 +63,7 @@ public class EventController {
 //
         BasicEvent basicEvent = new BasicEvent();
         basicEvent.setId("My first Basic Event");
-        BasicEvent.create(basicEvent, retrieveTimeInterval.getId(), retrieveDetection.getId(), retrieveSensor.getName());
+        BasicEvent.create(basicEvent, retrieveDetection.getId(), retrieveSensor.getName());
 //
         System.out.println(basicEvent.toString());
         BasicEvent retrieveBasicEvent = BasicEvent.find.byId("My first Basic Event");
@@ -99,14 +99,14 @@ public class EventController {
         List<BasicEvent> basics = BasicEvent.all();
         BasicEvent basic = basics.get(0);
 
-        GregorianCalendar begin = new GregorianCalendar();
-        long beginTsp = basic.getBasicEventInterval().getTimestampStart()*1000;
-        long endTsp = basic.getBasicEventInterval().getTimestampEnd()*1000;
-        begin.setTimeInMillis(beginTsp);
-        GregorianCalendar end = new GregorianCalendar();
-        end.setTimeInMillis(endTsp);
+//        GregorianCalendar begin = new GregorianCalendar();
+//        long beginTsp = basic.getBasicEventInterval().getTimestampStart()*1000;
+//        long endTsp = basic.getBasicEventInterval().getTimestampEnd()*1000;
+//        begin.setTimeInMillis(beginTsp);
+//        GregorianCalendar end = new GregorianCalendar();
+//        end.setTimeInMillis(endTsp);
 
-        String lightUrl = "http://iotlab.telecomnancy.eu/rest/data/1/light1/10/153.111/"+basic.getBasicEventInterval().getTimestampStart()+"/"+basic.getBasicEventInterval().getTimestampEnd();
+        String lightUrl = "http://iotlab.telecomnancy.eu/rest/data/1/light1/10/153.111/1423454400/1423479600";
 
         DataNode dataNode = null;
         try {
@@ -121,7 +121,7 @@ public class EventController {
         List<OldEvent> events = new ArrayList<>();
         for(Data data : dataNode.getData()) {
             if(oldData != null) {
-                if(Math.abs(oldData.getValue() - data.getValue()) >= 10) {
+                if(Math.abs(oldData.getValue() - data.getValue()) >= 5) {
                     msg += "Event at " + data.getTimestamp() + " . . . . . . . ";
                     events.add(new OldEvent(data.getTimestamp(), "Delta dépassé : occurence de l'évènement", TimestampUtils.timestampToString(data.getTimestamp()), data.getValue()));
                 }
@@ -130,6 +130,7 @@ public class EventController {
         }
 
         System.out.println(basic);
+        System.out.println(events.size());
         return ok(views.html.timeline.render("Évènement", events, basic.getId()));
     }
 }
