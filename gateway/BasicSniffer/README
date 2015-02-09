@@ -1,0 +1,9 @@
+
+This directory contains source code for a serial port to TCP/IP gateway for EnOcean USB serial dongle. The gateway name is serv.c and is built using "make -f serv.mak".
+
+To use the server, assumes a device name of /dev/ttyUSB0
+1. assign permissions to USB serial device: sudo chmod 0777 /dev/ttyUSB0
+2. start server using: ./serv /dev/ttyUSB0
+3. view server working using: telnet <ip-addr> 2002
+4. clicking an EnOcean Radio device will display hex digits of message.
+
