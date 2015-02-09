@@ -41,6 +41,7 @@ var width = 960,
 
 var day = d3.time.format("%w"),
     week = d3.time.format("%U"),
+    percent = d3.format(".1%"),
     format = d3.time.format("%Y-%m-%d");
 
 var color = d3.scale.quantize()
@@ -80,7 +81,7 @@ svg.selectAll(".month")
     .attr("class", "month")
     .attr("d", monthPath);
 
-d3.csv("dji2.csv", function(error, csv) {
+d3.csv("http://localhost:9000/basic/data", function(error, csv) {
     var data = d3.nest()
     .key(function(d) { return d.Date;})
     .rollup(function(d) {
@@ -88,7 +89,7 @@ d3.csv("dji2.csv", function(error, csv) {
     }).map(csv);
 
     rect.filter(function(d) { return d in data; })
-        .attr("class", function(d) { return "day " + color(data[d]); })
+        .attr("class", function(d) { return "day " + color(data[d] * 0.01); }) // TODO: remove 0.01 when the color is ok
       .select("title")
         .text(function(d) { return d + ": " + data[d]; });
 });

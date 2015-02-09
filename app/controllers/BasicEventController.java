@@ -5,9 +5,13 @@ import model.BasicEvent;
 import model.BasicEventOccurrence;
 import model.json.Data;
 import model.json.DataNode;
+import play.api.mvc.AcceptExtractors;
+import play.api.mvc.Accepting;
+import play.mvc.Http;
 import play.mvc.Result;
 import utils.TimestampUtils;
 
+import javax.activation.MimeType;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -76,12 +80,11 @@ public class BasicEventController {
             response = "Aucun évènement n'a pu être généré car aucune donnée brute n'a été reçue.";
         }
 
-        if (request().accepts("text/html")) {
-            return ok(views.html.basic.data.render("Your new application is ready.", basicEventList));
-        } else {
+        if (request().getHeader("Accept").contains("text/csv")) {
             return ok(response);
+        } else {
+            return ok(views.html.basic.data.render("Your new application is ready.", basicEventList));
         }
-//        return ok(views.html.basic.data.render("Your new application is ready.", basicEventList));
     }
 
     public static Result graph() {
