@@ -50,7 +50,6 @@ public class BasicEventController {
             Collections.reverse(rawDataList);
 
             for (Data rawData : rawDataList) {
-                double maxDifference = 30.0; // max 30 lux of difference for example
                 double delta = basicEvent.getDetectionMethod().getDelta();
                 int actualIndex = rawDataList.indexOf(rawData);
                 timestamp = (long) rawData.getTimestamp();
@@ -61,7 +60,7 @@ public class BasicEventController {
                     double actualDifference = Math.abs(value - nextData.getValue());
 
 
-                    if (actualDifference > maxDifference) {
+                    if (actualDifference > delta) {
                         date = TimestampUtils.formatToString(nextData.getTimestamp(), "dd-MM-yyyy HH:mm:ss");
                         response = "BasicEvent occured at " + date + " (from " + value + " to " + nextData.getValue() + ")";
                         BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence(basicEvent, date, value, nextData.getValue());
