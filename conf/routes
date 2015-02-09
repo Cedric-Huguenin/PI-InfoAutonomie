@@ -16,6 +16,7 @@ GET        /raw/live                       controllers.Application.liveStream()
 
 # Basic events
 GET        /basic/data                     controllers.BasicEventController.data()
+GET        /basic/graph                    controllers.BasicEventController.graph()
 
 # Events
 GET        /computeEvent                   controllers.EventController.index()

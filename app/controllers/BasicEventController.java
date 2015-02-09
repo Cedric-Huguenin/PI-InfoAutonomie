@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import static play.mvc.Controller.request;
 import static play.mvc.Results.ok;
 
 /**
@@ -29,7 +30,7 @@ public class BasicEventController {
         List<BasicEventOccurrence> basicEventList = new ArrayList<>();
 
         DataNode rawDataNode = null;
-        String response = "";
+        String response = "Date,Occurrences\n";
         String date = "";
         long timestamp = 0;
         double value = 0.0;
@@ -62,7 +63,8 @@ public class BasicEventController {
 
                     if (actualDifference > delta) {
                         date = TimestampUtils.formatToString(nextData.getTimestamp(), "dd-MM-yyyy HH:mm:ss");
-                        response = "BasicEvent occured at " + date + " (from " + value + " to " + nextData.getValue() + ")";
+                        String simpleDate = TimestampUtils.formatToString(nextData.getTimestamp(), "yyyy-MM-dd");
+                        response += simpleDate + ",1\n";
                         BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence(basicEvent, date, value, nextData.getValue());
 
                         basicEventList.add(basicEventOccurrence);
@@ -74,7 +76,15 @@ public class BasicEventController {
             response = "Aucun évènement n'a pu être généré car aucune donnée brute n'a été reçue.";
         }
 
-        return ok(views.html.basic.data.render("Your new application is ready.", basicEventList));
+        if (request().accepts("text/html")) {
+            return ok(views.html.basic.data.render("Your new application is ready.", basicEventList));
+        } else {
+            return ok(response);
+        }
+//        return ok(views.html.basic.data.render("Your new application is ready.", basicEventList));
     }
 
+    public static Result graph() {
+        return ok(views.html.basic.graph.render());
+    }
 }
