@@ -1,8 +1,16 @@
 # Sensor
 
 - &sensor1 !!model.Sensor
-    name: 161.24
+    name: Light Sensor
+    address: 153.111
     type: LIGHT
+    location: Bureau TN
+    description: Sur la commode
+
+- &tempSensor !!model.Sensor
+    name: Temp Sensor
+    address: 153.111
+    type: TEMP
     location: Bureau TN
     description: Sur la commode
 
@@ -14,6 +22,13 @@
     minValue:        0
     maxValue:        0
     delta:           15
+
+- &detection2 !!model.Detection
+    id:              detection2
+    simpleThreshold: 0
+    minValue:        0
+    maxValue:        0
+    delta:           0.11
 
 # TimeInterval
 
@@ -29,3 +44,10 @@
     id:                 Saut de luminosité
     sensor:             *sensor1
     detectionMethod:    *detection1
+    icon:               fa-lightbulb-o
+
+- &basicEvent2 !!model.BasicEvent
+    id:                 Changement de température
+    sensor:             *tempSensor
+    detectionMethod:    *detection2
+    icon:               fa-fire-extinguisher

@@ -33,7 +33,7 @@ public class GetDataFromUrl {
         String inputLine;
         while ((inputLine = in.readLine()) != null)
             result.append(inputLine);
-        System.out.println(inputLine);
+//        System.out.println(inputLine);
         in.close();
 
         // map the json data in a DataNode

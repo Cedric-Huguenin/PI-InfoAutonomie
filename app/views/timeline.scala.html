@@ -1,4 +1,6 @@
-@(message: String, eventList:List[model.OldEvent], eventName: String)
+@(message: String, eventList:List[model.BasicEventOccurrence])
+
+@import java.math.BigInteger; var i=1
 
 @main(message) {
 
@@ -25,20 +27,24 @@
                     <div class="panel-body">
                         <ul class="timeline">
                         @for(event <- eventList) {
-                            <li>
-                                <div class="timeline-badge warning"><i class="fa fa-sun-o"></i>
+                            @if(i%2 == 0) {
+                                <li>
+                            } else {
+                                <li class="timeline-inverted">
+                            }
+                                <div class="timeline-badge warning"><i class="fa @event.getBasicEvent.getIcon"></i>
                                 </div>
                                 <div class="timeline-panel">
                                     <div class="timeline-heading">
-                                        <h4 class="timeline-title">@eventName</h4>
-                                        <p><small class="text-muted"><i class="fa fa-clock-o"></i> @event.verboseDate </small>
+                                        <h4 class="timeline-title">@event.getBasicEvent.getId</h4>
+                                        <p><small class="text-muted"><i class="fa fa-clock-o"></i> @event.getDate </small>
                                     </div>
                                     <div class="timeline-body">
-                                        <p>@event.description</p>
-                                        <p>@event.value lux</p>
+                                        <p>@event.fromValue to @event.toValue lux</p>
                                     </div>
                                 </div>
                             </li>
+                            @{i=i+1}
                         }
                         </ul>
                     </div>

@@ -15,6 +15,7 @@ public class Sensor extends Model {
 
     @Id
     public String name;
+    public String address;
     public SensorType type;
     public String location;
     public String description;
@@ -58,13 +59,22 @@ public class Sensor extends Model {
         this.description = description;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "Sensor{" +
-                "name='" + getName() + '\'' +
-                ", type=" + getType() +
-                ", location='" + getLocation() + '\'' +
-                ", description='" + getDescription() + '\'' +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", type=" + type +
+                ", location='" + location + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

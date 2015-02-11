@@ -32,6 +32,11 @@ public class BasicEvent extends Model {
     public Detection detectionMethod;
 
     /**
+     * Icon name to display the correct icon
+     */
+    public String icon;
+
+    /**
      * The list of the different BasicEvent.
      */
     public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
@@ -125,5 +130,13 @@ public class BasicEvent extends Model {
      */
     public void setDetectionMethod(Detection detectionMethod) {
         this.detectionMethod = detectionMethod;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

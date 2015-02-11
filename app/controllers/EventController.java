@@ -97,40 +97,40 @@ public class EventController {
      */
     public static Result index() {
         List<BasicEvent> basics = BasicEvent.all();
-        BasicEvent basic = basics.get(0);
+        List<BasicEventOccurrence> events = new ArrayList<>();
 
-//        GregorianCalendar begin = new GregorianCalendar();
-//        long beginTsp = basic.getBasicEventInterval().getTimestampStart()*1000;
-//        long endTsp = basic.getBasicEventInterval().getTimestampEnd()*1000;
-//        begin.setTimeInMillis(beginTsp);
-//        GregorianCalendar end = new GregorianCalendar();
-//        end.setTimeInMillis(endTsp);
+        for(BasicEvent basic : basics) {
 
-        String lightUrl = "http://iotlab.telecomnancy.eu/rest/data/1/light1/10/153.111/1423454400/1423479600";
-
-        DataNode dataNode = null;
-        try {
-            dataNode = GetDataFromUrl.getFromUrl(lightUrl);
-        } catch (IOException e) { // TODO: return error on web page
-            e.printStackTrace();
-        }
-
-        String msg = "";
-
-        Data oldData = null;
-        List<OldEvent> events = new ArrayList<>();
-        for(Data data : dataNode.getData()) {
-            if(oldData != null) {
-                if(Math.abs(oldData.getValue() - data.getValue()) >= 5) {
-                    msg += "Event at " + data.getTimestamp() + " . . . . . . . ";
-                    events.add(new OldEvent(data.getTimestamp(), "Delta dépassé : occurence de l'évènement", TimestampUtils.timestampToString(data.getTimestamp()), data.getValue()));
-                }
+            String typeStr = "";
+            if (basic.getSensor().getType() == SensorType.LIGHT) {
+                typeStr = "light1";
+            } else if (basic.getSensor().getType() == SensorType.TEMP) {
+                typeStr = "temperature";
             }
-            oldData = data;
-        }
+            String lightUrl = "http://iotlab.telecomnancy.eu/rest/data/1/" + typeStr + "/100/" + basic.getSensor().getAddress();
+            System.out.println(lightUrl);
 
-        System.out.println(basic);
-        System.out.println(events.size());
-        return ok(views.html.timeline.render("Évènement", events, basic.getId()));
+            DataNode dataNode = null;
+            try {
+                dataNode = GetDataFromUrl.getFromUrl(lightUrl);
+            } catch (IOException e) { // TODO: return error on web page
+                e.printStackTrace();
+            }
+
+            Data oldData = null;
+            System.out.println(dataNode.getData().size());
+            for (Data data : dataNode.getData()) {
+                if (oldData != null) {
+                    if (Math.abs(oldData.getValue() - data.getValue()) >= basic.getDetectionMethod().getDelta()) {
+                        events.add(new BasicEventOccurrence(basic, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"), oldData.getValue(), data.getValue()));
+                    }
+                }
+                oldData = data;
+            }
+
+//        System.out.println(basic);
+//        System.out.println(events.size());
+        }
+        return ok(views.html.timeline.render("Évènement", events));
     }
 }

@@ -7,6 +7,7 @@ create table basic_event (
   id                        varchar(255) not null,
   sensor_name               varchar(255),
   detection_method_id       varchar(255),
+  icon                      varchar(255),
   constraint pk_basic_event primary key (id))
 ;
 
@@ -28,6 +29,7 @@ create table event (
 
 create table sensor (
   name                      varchar(255) not null,
+  address                   varchar(255),
   type                      integer,
   location                  varchar(255),
   description               varchar(255),
