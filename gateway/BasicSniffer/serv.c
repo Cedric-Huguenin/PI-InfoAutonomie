@@ -12,36 +12,26 @@
 
 */
 
-
-#include <sys/socket.h>       /*  socket definitions        */
-#include <sys/types.h>        /*  socket types              */
-#include <arpa/inet.h>        /*  inet (3) funtions         */
-#include <unistd.h>           /*  misc. UNIX functions      */
-
 #include "helper.h"           /*  our own helper functions  */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include <inttypes.h>
 
 #include "serial.h"
 
 /*  Global constants  */
 
-#define TIME_PORT          (2002)
+/* This must at least be set to 21 (less seems to be not working) */
 #define MAX_LINE           (21)
-
 
 int main(int argc, char *argv[])
 {
-    int       list_s;                /*  listening socket          */
-    int       conn_s;                /*  connection socket         */
-    short int port;                  /*  port number               */
-    struct    sockaddr_in servaddr;  /*  socket address structure  */
     char      buffer[MAX_LINE];      /*  character buffer          */
-    char     *endptr;                /*  for strtol()              */
-
+	EspPacket packet;
+	
     int fd;
     struct termios oldt, newt;
     if (argc < 2)
@@ -51,79 +41,52 @@ int main(int argc, char *argv[])
         return(-1);
     set_tty(fd, &oldt, &newt);
 
-    /*  Get port number from the command line, and
-        set to default port if no arguments were supplied  */
-
-    if ( argc == 3 )
-    {
-	port = strtol(argv[2], &endptr, 0);
-	if ( *endptr ) {
-	    fprintf(stderr, "ECHOSERV: Invalid port number.\n");
-	    exit(EXIT_FAILURE);
-	}
-    }
-    else if (argc == 2)
-	port = TIME_PORT;
-    else {
-	fprintf(stderr, "ECHOSERV: Invalid arguments.\n");
-	exit(EXIT_FAILURE);
-    }
-
-    /*  Create the listening socket  */
-    printf("creating socket\n");
-    if ( (list_s = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
-	fprintf(stderr, "ECHOSERV: Error creating listening socket.\n");
-	exit(EXIT_FAILURE);
-    }
-
-    /*  Set all bytes in socket address structure to
-        zero, and fill in the relevant data members   */
-    memset(&servaddr, 0, sizeof(servaddr));
-    servaddr.sin_family      = AF_INET;
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port        = htons(port);
-
-    /*  Bind our socket addresss to the 
-	listening socket, and call listen()  */
-    printf("binding to socket on port %d\n",port);
-    if ( bind(list_s, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0 )
-    {
-	fprintf(stderr, "ECHOSERV: Error calling bind()\n");
-	exit(EXIT_FAILURE);
-    }
-
-    printf("create listener\n");
-    if ( listen(list_s, LISTENQ) < 0 )
-    {
-	fprintf(stderr, "ECHOSERV: Error calling listen()\n");
-	exit(EXIT_FAILURE);
-    }
-
-    /*  Wait for a connection, then accept() it  */
-    printf("waiting for connection\n");
-    if ( (conn_s = accept(list_s, NULL, NULL) ) < 0 )
-    {
-        fprintf(stderr, "ECHOSERV: Error calling accept()\n");
-        exit(EXIT_FAILURE);
-    }
-
+	/*
+	typedef struct packet_tag {
+		uint16 dataLength;
+		uint8 optionalDataLength;
+		uint8 packetType;
+		uint8 hcrc;
+		void *data;
+		void *optionalData;
+		uint8 dcrc;
+	};
+	*/
+	
+	memset(&packet, 0, sizeof(packet));
     /* enter infinite loop reading tty and outputing until ^C */
-    printf("entering serial read, tcpip write loop\n");
+    printf("entering serial read, write loop. Press CTRL+C to quit.\n");
     while ( 1 )
     {
         int ret;
-	ret = read_tty(fd, buffer, sizeof(buffer));
-	if (ret == -1)
-	    break;
-	Writeline(conn_s, buffer, sizeof(buffer));
-    }
-
-    /*  Close the connected socket  */
-    printf("closing connection\n");
-    if ( close(conn_s) < 0 )
-    {
-        fprintf(stderr, "ECHOSERV: Error calling close()\n");
-        exit(EXIT_FAILURE);
+		ret = read_tty(fd, buffer, sizeof(buffer));
+		
+		readEsp(&packet, buffer, ret);
+		if(isValid(&packet)) {
+			int i;
+			printf("\n--- ESP 3 Packet ---\n");
+			printf("Packet type:%s\n", typeToString(packet.packetType));
+			printf("Data Length:%d Bytes\n", packet.dataLength);
+			printf("Optional Data Length:%d Bytes\n", packet.optionalDataLength);
+			printf("Data:\n");
+			
+			for(i = 0; i < packet.dataLength; i++) {
+				printf("%02x ", packet.data[i]);
+				if((i != 0 && i % MAX_LINE == 0) || i == packet.dataLength-1)
+					printf("\n");
+			}
+			printf("Optional Data:\n");
+			for(i = 0; i < packet.optionalDataLength; i++)
+			{
+				printf("%02x ", packet.optionalData[i]);
+				if(i != 0 && i % MAX_LINE == 0)
+					printf("\n");
+			}
+			printf("\n\n");
+			free(packet.data);
+			free(packet.optionalData);
+			memset(&packet, 0, sizeof(packet));
+		}
     }
 
     printf("restoring previous tty settings\n");
