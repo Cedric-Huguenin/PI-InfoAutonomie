@@ -7,6 +7,7 @@ import javax.persistence.*;
 /**
  * Created by Ced on 09/02/2015.
  */
+@Entity
 public class BasicEventOccurrence extends Model {
 
     @Id

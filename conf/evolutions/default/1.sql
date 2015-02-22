@@ -11,6 +11,16 @@ create table basic_event (
   constraint pk_basic_event primary key (id))
 ;
 
+create table basic_event_occurrence (
+  id                        varchar(255) not null,
+  basic_event_id            varchar(255),
+  timestamp                 bigint,
+  date                      varchar(255),
+  from_value                double,
+  to_value                  double,
+  constraint pk_basic_event_occurrence primary key (id))
+;
+
 create table detection (
   id                        varchar(255) not null,
   simple_threshold          double,
@@ -54,6 +64,8 @@ create table event_basic_event (
 ;
 create sequence basic_event_seq;
 
+create sequence basic_event_occurrence_seq;
+
 create sequence detection_seq;
 
 create sequence event_seq;
@@ -66,8 +78,10 @@ alter table basic_event add constraint fk_basic_event_sensor_1 foreign key (sens
 create index ix_basic_event_sensor_1 on basic_event (sensor_id);
 alter table basic_event add constraint fk_basic_event_detectionMethod_2 foreign key (detection_method_id) references detection (id) on delete restrict on update restrict;
 create index ix_basic_event_detectionMethod_2 on basic_event (detection_method_id);
-alter table event add constraint fk_event_timeInterval_3 foreign key (time_interval_id) references time_interval (id) on delete restrict on update restrict;
-create index ix_event_timeInterval_3 on event (time_interval_id);
+alter table basic_event_occurrence add constraint fk_basic_event_occurrence_basi_3 foreign key (basic_event_id) references basic_event (id) on delete restrict on update restrict;
+create index ix_basic_event_occurrence_basi_3 on basic_event_occurrence (basic_event_id);
+alter table event add constraint fk_event_timeInterval_4 foreign key (time_interval_id) references time_interval (id) on delete restrict on update restrict;
+create index ix_event_timeInterval_4 on event (time_interval_id);
 
 
 
@@ -80,6 +94,8 @@ alter table event_basic_event add constraint fk_event_basic_event_basic_ev_02 fo
 SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists basic_event;
+
+drop table if exists basic_event_occurrence;
 
 drop table if exists detection;
 
@@ -94,6 +110,8 @@ drop table if exists time_interval;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists basic_event_seq;
+
+drop sequence if exists basic_event_occurrence_seq;
 
 drop sequence if exists detection_seq;
 
