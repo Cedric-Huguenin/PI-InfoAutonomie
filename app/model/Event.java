@@ -37,6 +37,11 @@ public class Event extends Model {
      */
     @OneToOne
     public  TimeInterval timeInterval;
+
+    /**
+     * The expression combining BasicEvent ids
+     */
+    public String expression;
     /**
      * The list of all the existing Event.
      */
@@ -134,6 +139,14 @@ public class Event extends Model {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
     }
 
     /**

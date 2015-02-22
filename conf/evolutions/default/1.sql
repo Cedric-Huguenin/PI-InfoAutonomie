@@ -35,6 +35,7 @@ create table event (
   name                      varchar(255),
   duration                  integer,
   time_interval_id          varchar(255),
+  expression                varchar(255),
   constraint pk_event primary key (id))
 ;
 
