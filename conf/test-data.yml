@@ -53,3 +53,14 @@
     sensor:             *tempSensor
     detectionMethod:    *detection2
     icon:               fa-fire-extinguisher
+
+
+# BasicEventOccurrence
+
+- &basicEventOccurrence1 !!model.BasicEventOccurrence
+    id:
+    basicEvent: *basicEvent1
+    timestamp: 1424197435
+    date: 17/2/2015 19:23:55
+    fromValue: 150.05
+    toValue: 162.63

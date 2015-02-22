@@ -123,7 +123,7 @@ public class EventController {
             for (Data data : dataNode.getData()) {
                 if (oldData != null) {
                     if (Math.abs(oldData.getValue() - data.getValue()) >= basic.getDetectionMethod().getDelta()) {
-                        events.add(new BasicEventOccurrence(basic, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"), oldData.getValue(), data.getValue()));
+                        events.add(new BasicEventOccurrence(basic, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"), data.getTimestamp(), oldData.getValue(), data.getValue()));
                     }
                 }
                 oldData = data;

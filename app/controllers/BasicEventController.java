@@ -65,7 +65,7 @@ public class BasicEventController {
                         date = TimestampUtils.formatToString(nextData.getTimestamp(), "dd-MM-yyyy HH:mm:ss");
                         String simpleDate = TimestampUtils.formatToString(nextData.getTimestamp(), "yyyy-MM-dd");
                         response += simpleDate + ",1\n";
-                        BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence(basicEvent, date, value, nextData.getValue());
+                        BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence(basicEvent, date, nextData.getTimestamp(), value, nextData.getValue());
 
                         basicEventList.add(basicEventOccurrence);
                         System.out.println(response);
