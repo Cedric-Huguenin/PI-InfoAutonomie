@@ -3,6 +3,8 @@ package model;
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -14,6 +16,8 @@ import javax.persistence.Id;
 public class Sensor extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public String id;
     public String name;
     public String address;
     public SensorType type;
@@ -65,6 +69,14 @@ public class Sensor extends Model {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

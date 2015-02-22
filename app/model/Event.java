@@ -14,10 +14,14 @@ import java.util.List;
 @Entity
 public class Event extends Model {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public String id;
+
     /**
      * The name of the event.
      */
-    @Id
     public String name;
     /**
      * List of the basic events composing the event.
@@ -124,20 +128,12 @@ public class Event extends Model {
         this.timeInterval = timeInterval;
     }
 
-    /**
-     * Returns the finder of the different events.
-     * @return the finder of the different events.
-     */
-    public static Finder<String, Event> getFind() {
-        return find;
+    public String getId() {
+        return id;
     }
 
-    /**
-     * Sets the finder of the events.
-     * @param find the new finder.
-     */
-    public static void setFind(Finder<String, Event> find) {
-        Event.find = find;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

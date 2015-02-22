@@ -1,6 +1,7 @@
 # Sensor
 
 - &sensor1 !!model.Sensor
+    id: 1
     name: Light Sensor
     address: 153.111
     type: LIGHT
@@ -8,6 +9,7 @@
     description: Sur la commode
 
 - &tempSensor !!model.Sensor
+    id: 2
     name: Temp Sensor
     address: 153.111
     type: TEMP

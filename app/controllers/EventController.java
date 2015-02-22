@@ -50,6 +50,7 @@ public class EventController {
         sensor.setDescription("Ma description de capteur");
         sensor.setLocation("Salle de bain");
         sensor.setName("TelosB");
+        sensor.setId("TelosB");
         sensor.setType(SensorType.HUMIDITY);
         Sensor.create(sensor);
 //
