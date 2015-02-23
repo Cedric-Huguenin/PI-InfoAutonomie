@@ -21,7 +21,7 @@ public class Detection extends Model {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
-
+    public DetectionType detectionType;
     /**
      * The threshold which triggers the event.
      */
@@ -133,6 +133,14 @@ public class Detection extends Model {
         setId(id);
     }
 
+    public DetectionType getDetectionType() {
+        return detectionType;
+    }
+
+    public void setDetectionType(DetectionType detectionType) {
+        this.detectionType = detectionType;
+    }
+
     /**
      * Returns the description of this object in JSON.
      * @return the description of this object in JSON.
@@ -140,11 +148,12 @@ public class Detection extends Model {
     @Override
     public String toString() {
         return "Detection{" +
-                "id='" + getId() + '\'' +
-                ", simpleThreshold=" + getSimpleThreshold() +
-                ", minValue=" + getMinValue() +
-                ", maxValue=" + getMaxValue() +
-                ", delta=" + getDelta() +
+                "id='" + id + '\'' +
+                ", detectionType=" + detectionType +
+                ", simpleThreshold=" + simpleThreshold +
+                ", minValue=" + minValue +
+                ", maxValue=" + maxValue +
+                ", delta=" + delta +
                 '}';
     }
 }

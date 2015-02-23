@@ -36,7 +36,7 @@ public class Event extends Model {
      * The time interval in which the event can happen.
      */
     @OneToOne
-    public  TimeInterval timeInterval;
+    public TimeInterval timeInterval;
 
     /**
      * The expression combining BasicEvent ids

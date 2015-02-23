@@ -20,6 +20,7 @@
 
 - &detection1 !!model.Detection
     id:              detection1
+    detectionType:   DELTA
     simpleThreshold: 0
     minValue:        0
     maxValue:        0
@@ -27,6 +28,7 @@
 
 - &detection2 !!model.Detection
     id:              detection2
+    detectionType:   DELTA
     simpleThreshold: 0
     minValue:        0
     maxValue:        0

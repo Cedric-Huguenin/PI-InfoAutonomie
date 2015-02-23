@@ -23,10 +23,12 @@ create table basic_event_occurrence (
 
 create table detection (
   id                        varchar(255) not null,
+  detection_type            integer,
   simple_threshold          double,
   min_value                 double,
   max_value                 double,
   delta                     double,
+  constraint ck_detection_detection_type check (detection_type in (0,1,2)),
   constraint pk_detection primary key (id))
 ;
 
