@@ -5,6 +5,7 @@
 
 create table basic_event (
   id                        varchar(255) not null,
+  name                      varchar(255),
   sensor_id                 varchar(255),
   detection_method_id       varchar(255),
   icon                      varchar(255),

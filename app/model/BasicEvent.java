@@ -20,6 +20,9 @@ public class BasicEvent extends Model {
      */
     @Id
     public String id;
+
+    public String name;
+
     /**
      * The sensor providing the data used to recognize this event.
      */
@@ -78,9 +81,11 @@ public class BasicEvent extends Model {
     @Override
     public String toString() {
         return "BasicEvent{" +
-                "id='" + getId() + '\'' +
-                ", sensor=" + getSensor() +
-                ", detectionMethod=" + getDetectionMethod() +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", sensor=" + sensor +
+                ", detectionMethod=" + detectionMethod +
+                ", icon='" + icon + '\'' +
                 '}';
     }
 
@@ -138,5 +143,13 @@ public class BasicEvent extends Model {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -37,7 +37,7 @@
 # TimeInterval
 
 - &timeInterval1 !!model.TimeInterval
-    id:              timeInterval1
+    id:            timeInterval1
     timestampStart:  1423454400 # 5h00
     timestampEnd:    1423479600 # 12h00
 
@@ -45,13 +45,15 @@
 # BasicEvent
 
 - &basicEvent1 !!model.BasicEvent
-    id:                 Saut de luminosité
+    id:                 1
+    name:               Saut de luminosité
     sensor:             *sensor1
     detectionMethod:    *detection1
     icon:               fa-lightbulb-o
 
 - &basicEvent2 !!model.BasicEvent
-    id:                 Changement de température
+    id:                 2
+    name:               Changement de température
     sensor:             *tempSensor
     detectionMethod:    *detection2
     icon:               fa-fire-extinguisher
@@ -66,3 +68,11 @@
     date:       17/2/2015 19:23:55
     fromValue:  150.05
     toValue:    162.63
+
+# Event
+
+- &event !!model.Event
+    id:           1
+    name:         Petit dej
+    timeInterval: *timeInterval1
+    expression:   1 || 2
