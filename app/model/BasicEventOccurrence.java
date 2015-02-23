@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Created by Ced on 09/02/2015.
  */
 @Entity
-public class BasicEventOccurrence extends Model {
+public class BasicEventOccurrence extends Model implements Comparable<BasicEventOccurrence> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -81,5 +81,10 @@ public class BasicEventOccurrence extends Model {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public int compareTo(BasicEventOccurrence o) {
+        return (int) (timestamp - o.getTimestamp());
     }
 }

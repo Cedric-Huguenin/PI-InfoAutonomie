@@ -8,9 +8,7 @@ import utils.GetDataFromUrl;
 import utils.TimestampUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static play.mvc.Results.ok;
 
@@ -131,6 +129,8 @@ public class EventController {
 
 //        System.out.println(basic);
 //        System.out.println(events.size());
+            Collections.sort(events);
+            Collections.reverse(events);
         }
         return ok(views.html.timeline.render("Évènement", events));
     }
