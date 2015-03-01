@@ -4,7 +4,7 @@
   "Unix Network Programming", W Richard Stevens (Prentice Hall).
   
   Adapted to EnOcean ESP3 by Cédric Huguenin <cedric.huguenin@telecomnancy.eu>,
-  Matthieu Morainville <matthieu.morainville@telecomnancy.eu>
+  Mathieu Morainville <mathieu.morainville@telecomnancy.eu>
   and Mickaël Walter <mickael.walter@telecomnancy.eu> for TELECOM Nancy and 
   Institut Mines Télécom.
 
@@ -160,7 +160,7 @@ int readEsp(EspPacket *packet, char *buffer, size_t buf_len) {
 	
 	static char msb = 1;
 	
-	int i;
+	int i = 0;
 	
 	char header[4];
 		
@@ -261,6 +261,8 @@ int readEsp(EspPacket *packet, char *buffer, size_t buf_len) {
 			break;
 		}
 	}
+	
+	return i;
 }
 
 /**

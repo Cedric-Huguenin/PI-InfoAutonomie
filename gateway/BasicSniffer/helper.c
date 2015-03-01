@@ -4,7 +4,7 @@
   "Unix Network Programming", W Richard Stevens (Prentice Hall).
   
   Adapted to EnOcean ESP3 by Cédric Huguenin <cedric.huguenin@telecomnancy.eu>,
-  Matthieu Morainville <matthieu.morainville@telecomnancy.eu>
+  Mathieu Morainville <mathieu.morainville@telecomnancy.eu>
   and Mickaël Walter <mickael.walter@telecomnancy.eu> for TELECOM Nancy and 
   Institut Mines Télécom.
 

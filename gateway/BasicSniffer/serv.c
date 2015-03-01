@@ -5,13 +5,14 @@
   Very Simple EnOcean  serial port to stdout
   
   Adapted to EnOcean ESP3 by Cédric Huguenin <cedric.huguenin@telecomnancy.eu>,
-  Matthieu Morainville <matthieu.morainville@telecomnancy.eu>
+  Mathieu Morainville <mathieu.morainville@telecomnancy.eu>
   and Mickaël Walter <mickael.walter@telecomnancy.eu> for TELECOM Nancy and 
   Institut Mines Télécom.
 
 */
 
 #include "helper.h"
+#include "erp1.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,7 +31,6 @@ int main(int argc, char *argv[])
 {
     char      buffer[MAX_LINE];
 	EspPacket packet;
-	int sizeEsp = 0;
 	int lastReadBufferSize = 0;
 	
     int fd;
@@ -47,13 +47,14 @@ int main(int argc, char *argv[])
     printf("entering serial read, write loop. Press CTRL+C to quit.\n");
     while ( 1 )
     {
-        int ret;
-		if(lastReadBufferSize == sizeEsp)
+        int ret = 0;
+		if(lastReadBufferSize == ret)
 			ret = read_tty(fd, buffer, sizeof(buffer));
 		
-		sizeEsp = readEsp(&packet, buffer, ret);
+		ret = readEsp(&packet, buffer, ret);
 		if(isValid(&packet)) {
 			int i;
+			Erp1Packet* erpPacket = NULL;
 			
 			printf("\n--- ESP 3 Packet ---\n");
 			printf("Packet type:%s\n", typeToString(packet.packetType));
@@ -72,6 +73,11 @@ int main(int argc, char *argv[])
 				printf("%02x ", packet.optionalData[i]);
 				if(i != 0 && i % MAX_LINE == 0)
 					printf("\n");
+			}
+			erpPacket = makeErp1Packet(&packet);
+			if(erpPacket != NULL) {
+				interpretErp1Packet(*erpPacket);
+				free(erpPacket);
 			}
 			printf("\n\n");
 			free(packet.data);
