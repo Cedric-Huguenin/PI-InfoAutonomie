@@ -123,7 +123,7 @@ int set_tty(int fd, struct termios *oldt, struct termios *newt);
 int restore_tty(int fd, struct termios *oldt);
 int open_tty(char *devname);
 int read_tty(int fd, char *buf, size_t lbuf);
-void readEsp(EspPacket *packet, char* buffer, size_t buf_len);
+int readEsp(EspPacket *packet, char* buffer, size_t buf_len);
 char isValid(EspPacket *packet);
 char* typeToString(PacketType type);
 

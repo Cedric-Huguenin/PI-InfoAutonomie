@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
 {
     char      buffer[MAX_LINE];
 	EspPacket packet;
+	int sizeEsp = 0;
+	int lastReadBufferSize = 0;
 	
     int fd;
     struct termios oldt, newt;
@@ -46,11 +48,13 @@ int main(int argc, char *argv[])
     while ( 1 )
     {
         int ret;
-		ret = read_tty(fd, buffer, sizeof(buffer));
+		if(lastReadBufferSize == sizeEsp)
+			ret = read_tty(fd, buffer, sizeof(buffer));
 		
-		readEsp(&packet, buffer, ret);
+		sizeEsp = readEsp(&packet, buffer, ret);
 		if(isValid(&packet)) {
 			int i;
+			
 			printf("\n--- ESP 3 Packet ---\n");
 			printf("Packet type:%s\n", typeToString(packet.packetType));
 			printf("Data Length:%d Bytes\n", packet.dataLength);

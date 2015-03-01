@@ -134,8 +134,9 @@ int read_tty(int fd, char *buf, size_t lbuf)
  * @param packet the EspPacket structure to be filled.
  * @param buffer the buffer in which the data is stored.
  * @param buf_len the length of the buffer.
+ * @return the length read from the buffer
 */
-void readEsp(EspPacket *packet, char *buffer, size_t buf_len) {
+int readEsp(EspPacket *packet, char *buffer, size_t buf_len) {
 	/*
 	ESP3 packet structure through the serial port.
 	Protocol bytes are generated and sent by the application
@@ -171,93 +172,93 @@ void readEsp(EspPacket *packet, char *buffer, size_t buf_len) {
 	
 	for(i = 0; i < buf_len; i++) {
 		switch(getPacketState) {
-			case GET_SYNC_STATE:
-				if(buffer[i] == 0x55) {
-					getPacketState = GET_DATA_LENGTH_STATE;
-					readingState = SYNC_RECEIVED;
-				} else {
-					readingState = WAITING_SYNC;
-				}
-				break;
-			case GET_DATA_LENGTH_STATE:
-				if(msb == 1) {
-					packet->dataLength = buffer[i] * 0x100;
-					msb = 0;
-				} else {
-					packet->dataLength += buffer[i];
-					msb = 1;
-					getPacketState = GET_OPTIONAL_DATA_LENGTH_STATE;
-				}
-				break;
-			case GET_OPTIONAL_DATA_LENGTH_STATE:
-				packet->optionalDataLength = buffer[i];
-				getPacketState = GET_PACKET_TYPE;
-				break;
-			case GET_PACKET_TYPE:
-				packet->packetType = buffer[i];
-				getPacketState = CHECK_CRC8H_STATE;
-				break;
-			case CHECK_CRC8H_STATE:
-				packet->hcrc = buffer[i];
-				
-				header[0] = (packet->dataLength & 0xff00)/0x100;
-				header[1] = packet->dataLength & 0x00ff;
-				header[2] = packet->optionalDataLength;
-				header[3] = packet->packetType;
-				if(crc8check(header, sizeof(header)) != packet->hcrc) {
-					memset(packet, 0, sizeof(packet));
-					getPacketState = GET_SYNC_STATE;
-					readingState = WAITING_SYNC;
-					printf("\nBad CRC8 for header\n");
-				} else {
-					getPacketState = GET_DATA_STATE;
-				}
-				break;
-			case GET_DATA_STATE:
-				if(dataOffset == 0) {
-					packet->data = malloc(packet->dataLength*sizeof(char));
-				}
-				packet->data[dataOffset] = buffer[i];
-				if(dataOffset < packet->dataLength-1) {
-					dataOffset++;
-				} else {
-					dataOffset = 0;
-					getPacketState = GET_OPTIONAL_DATA_STATE;
-				}
-				break;
-			case GET_OPTIONAL_DATA_STATE:
-				if(dataOffset == 0) {
-					packet->optionalData = malloc(packet->optionalDataLength*sizeof(char));
-				}
-				packet->optionalData[dataOffset] = buffer[i];
-				if(dataOffset < packet->optionalDataLength-1) {
-					dataOffset++;
-				} else {
-					dataOffset = 0;
-					getPacketState = CHECK_CRC8D_STATE;
-				}
-				break;
-			case CHECK_CRC8D_STATE: ;
-				char* data = malloc((packet->dataLength+packet->optionalDataLength)*sizeof(char));
-				packet->dcrc = buffer[i];
-				memcpy(data, packet->data, packet->dataLength);
-				if(packet->optionalDataLength != 0)
-					memcpy(data+packet->dataLength, packet->optionalData, packet->optionalDataLength);
+		case GET_SYNC_STATE:
+			if(buffer[i] == 0x55) {
+				getPacketState = GET_DATA_LENGTH_STATE;
+				readingState = SYNC_RECEIVED;
+			} else {
+				readingState = WAITING_SYNC;
+			}
+			break;
+		case GET_DATA_LENGTH_STATE:
+			if(msb == 1) {
+				packet->dataLength = buffer[i] * 0x100;
+				msb = 0;
+			} else {
+				packet->dataLength += buffer[i];
+				msb = 1;
+				getPacketState = GET_OPTIONAL_DATA_LENGTH_STATE;
+			}
+			break;
+		case GET_OPTIONAL_DATA_LENGTH_STATE:
+			packet->optionalDataLength = buffer[i];
+			getPacketState = GET_PACKET_TYPE;
+			break;
+		case GET_PACKET_TYPE:
+			packet->packetType = buffer[i];
+			getPacketState = CHECK_CRC8H_STATE;
+			break;
+		case CHECK_CRC8H_STATE:
+			packet->hcrc = buffer[i];
+			
+			header[0] = (packet->dataLength & 0xff00)/0x100;
+			header[1] = packet->dataLength & 0x00ff;
+			header[2] = packet->optionalDataLength;
+			header[3] = packet->packetType;
+			if(crc8check(header, sizeof(header)) != packet->hcrc) {
+				memset(packet, 0, sizeof(packet));
 				getPacketState = GET_SYNC_STATE;
 				readingState = WAITING_SYNC;
-				
-				if(crc8check(data, packet->dataLength+packet->optionalDataLength) != packet->dcrc) {
-					memset(packet, 0, sizeof(packet));
-					free(data);
-					printf("\nBad CRC8 for data\n");
-				} else {
-					free(data);
-					return;
-				}
-				break;
-			default:
-				return;
-				break;
+				printf("\nBad CRC8 for header\n");
+			} else {
+				getPacketState = GET_DATA_STATE;
+			}
+			break;
+		case GET_DATA_STATE:
+			if(dataOffset == 0) {
+				packet->data = malloc(packet->dataLength*sizeof(char));
+			}
+			packet->data[dataOffset] = buffer[i];
+			if(dataOffset < packet->dataLength-1) {
+				dataOffset++;
+			} else {
+				dataOffset = 0;
+				getPacketState = GET_OPTIONAL_DATA_STATE;
+			}
+			break;
+		case GET_OPTIONAL_DATA_STATE:
+			if(dataOffset == 0) {
+				packet->optionalData = malloc(packet->optionalDataLength*sizeof(char));
+			}
+			packet->optionalData[dataOffset] = buffer[i];
+			if(dataOffset < packet->optionalDataLength-1) {
+				dataOffset++;
+			} else {
+				dataOffset = 0;
+				getPacketState = CHECK_CRC8D_STATE;
+			}
+			break;
+		case CHECK_CRC8D_STATE: ;
+			char* data = malloc((packet->dataLength+packet->optionalDataLength)*sizeof(char));
+			packet->dcrc = buffer[i];
+			memcpy(data, packet->data, packet->dataLength);
+			if(packet->optionalDataLength != 0)
+				memcpy(data+packet->dataLength, packet->optionalData, packet->optionalDataLength);
+			getPacketState = GET_SYNC_STATE;
+			readingState = WAITING_SYNC;
+			
+			if(crc8check(data, packet->dataLength+packet->optionalDataLength) != packet->dcrc) {
+				memset(packet, 0, sizeof(packet));
+				free(data);
+				printf("\nBad CRC8 for data\n");
+			} else {
+				free(data);
+				return i;
+			}
+			break;
+		default:
+			return i;
+			break;
 		}
 	}
 }
