@@ -2,6 +2,11 @@
 
   Adapted from Paul Griffiths example who in turn adapted from
   "Unix Network Programming", W Richard Stevens (Prentice Hall).
+  
+  Adapted to EnOcean ESP3 by Cédric Huguenin <cedric.huguenin@telecomnancy.eu>,
+  Matthieu Morainville <matthieu.morainville@telecomnancy.eu>
+  and Mickaël Walter <mickael.walter@telecomnancy.eu> for TELECOM Nancy and 
+  Institut Mines Télécom.
 
 */
 
@@ -14,8 +19,13 @@
 #endif
 
 
-/*  Read a line from a socket  */
-
+/**
+	Reads a line from a socket.
+	@param sockd the input socket descriptor.
+	@param vptr the buffer to be filled.
+	@param maxlen the length of the given buffer.
+	@return the length read.
+*/
 ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
     ssize_t n, rc;
     char    c, *buffer;
@@ -47,8 +57,13 @@ ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
 }
 
 
-/*  Write a line to a socket  */
-
+/**
+	Write a line to a socket.
+	@param the socked descriptor.
+	@param vptr the buffer to de written.
+	@param n the size of the buffer.
+	@return the size written.
+*/
 ssize_t Writeline(int sockd, const void *vptr, size_t n) {
     size_t      nleft;
     ssize_t     nwritten;
@@ -83,7 +98,7 @@ ssize_t Writeline(int sockd, const void *vptr, size_t n) {
 }
 
 /**
- * Check the CRC8 sequence to check the integrity of data.
+ * Checks the CRC8 sequence to check the integrity of data.
  * @param table the data to check.
  * @param length the length of the data (in bytes).
  * @return the CRC8 computation of the data.

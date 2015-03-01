@@ -1,3 +1,10 @@
+/*
+  Adapted to EnOcean ESP3 by Cédric Huguenin <cedric.huguenin@telecomnancy.eu>,
+  Matthieu Morainville <matthieu.morainville@telecomnancy.eu>
+  and Mickaël Walter <mickael.walter@telecomnancy.eu> for TELECOM Nancy and 
+  Institut Mines Télécom.
+*/
+
 #ifndef SERIAL_H_INCLUDED
 #define SERIAL_H_INCLUDED
 
@@ -9,18 +16,46 @@
 #include <poll.h>
 #include <string.h>
 
+/**
+	States of the input decoding.
+*/
 typedef enum {
+	/**
+		Waiting for a sync byte.
+	*/
 	GET_SYNC_STATE=0,
+	/**
+		State where we wait the data length.
+	*/
 	GET_DATA_LENGTH_STATE,
+	/**
+		State where we wait the optional data length.
+	*/
 	GET_OPTIONAL_DATA_LENGTH_STATE,
+	/**
+		State where we wait the packet type.
+	*/
 	GET_PACKET_TYPE,
+	/**
+		State where we check the header integrity.
+	*/
 	CHECK_CRC8H_STATE,
+	/**
+		State where we read the data.
+	*/
 	GET_DATA_STATE,
+	/**
+		State where we read the optional data.
+	*/
 	GET_OPTIONAL_DATA_STATE,
+	/**
+		State where we check the data integrity.
+	*/
 	CHECK_CRC8D_STATE
 } StateGetPacket;
 
-/*
+/**
+Enum to describe the packet type following the ESP3 specification below :
 ------------------------------------------------------------------------------
 Type No.  | Value hex | Name               | Description 
 0         | 0x00      | ----               | Reserved
@@ -49,16 +84,37 @@ typedef enum {
 	RADIO_ERP2=0x0A
 } PacketType;
 
-/*
-ESP3 packet
+/**
+	ESP3 packet structure.
 */
 typedef struct packet_tag {
+	/**
+		Length of the data.
+	*/
 	unsigned short int dataLength;
+	/**
+		Length of the optional data.
+	*/
 	unsigned char optionalDataLength;
+	/**
+		Type of the packet.
+	*/
 	unsigned char packetType;
+	/**
+		CRC8 of the header fileds.
+	*/
 	unsigned char hcrc;
+	/**
+		Pointer to the data.
+	*/
 	unsigned char *data;
+	/**
+		Pointer to the optional data.
+	*/
 	unsigned char *optionalData;
+	/**
+		CRC8 of the data.
+	*/
 	unsigned char dcrc;
 } EspPacket;
 

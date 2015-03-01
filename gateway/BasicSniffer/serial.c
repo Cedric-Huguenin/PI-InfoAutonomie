@@ -1,7 +1,22 @@
+/*
+
+  Adapted from Paul Griffiths example who in turn adapted from
+  "Unix Network Programming", W Richard Stevens (Prentice Hall).
+  
+  Adapted to EnOcean ESP3 by Cédric Huguenin <cedric.huguenin@telecomnancy.eu>,
+  Matthieu Morainville <matthieu.morainville@telecomnancy.eu>
+  and Mickaël Walter <mickael.walter@telecomnancy.eu> for TELECOM Nancy and 
+  Institut Mines Télécom.
+
+*/
+
 
 #include "serial.h"
 #include "helper.h"
 
+/**
+	A small enum to know in the input reading if we have a sync byte already encoutered.
+*/
 typedef enum {
 	WAITING_SYNC=0,
 	SYNC_RECEIVED
@@ -9,6 +24,12 @@ typedef enum {
 
 static ReadingState readingState = WAITING_SYNC;
 
+/**
+	Gets a Byte from the given input.
+	@param fd the file descriptor to the input.
+	@param ms the timeout of the read in milliseconds.
+	@return the Byte read.
+*/
 int getch(int fd, int ms)
 {
 	int ret;
@@ -27,6 +48,13 @@ int getch(int fd, int ms)
 	return ret;
 }
 
+/**
+	Initializes the given serial input.
+	@param fd a file descriptor to the input.
+	@param oldt the old terminal to be replaced.
+	@param newt the new terminal to be given.
+	@return always 0.
+*/
 int set_tty(int fd, struct termios *oldt, struct termios *newt)
 {
 	tcgetattr(fd, oldt);
@@ -45,11 +73,22 @@ int set_tty(int fd, struct termios *oldt, struct termios *newt)
 	return(0);
 }
 
+/**
+	Restores the old terminal.
+	@param fd the file descriptor to the input.
+	@param oldt the old terminal.
+	@return the return value of tcsetattr.
+*/
 int restore_tty(int fd, struct termios *oldt)
 {
 	return(tcsetattr(fd, TCSANOW, oldt));
 }
 
+/**
+	Opens a new terminal found with the given name.
+	@param devname the name of the terminal.
+	@return a file descriptor if the device is found.
+*/
 int open_tty(char *devname)
 {
 	int fd;
@@ -59,6 +98,13 @@ int open_tty(char *devname)
 	return(fd);
 }
 
+/**
+	Reads bytes from a device and put them in a buffer.
+	@param fd the file descriptor to the input.
+	@param buf the buffer to be filled.
+	@param lbuf size of the buffer in bytes.
+	@return the length of the new buffer filled.
+*/
 int read_tty(int fd, char *buf, size_t lbuf)
 {
 	int c;
@@ -246,6 +292,11 @@ char isValid(EspPacket *packet) {
 	return 1;
 }
 
+/**
+	Converts the enum PacketType in a human readable form.
+	@param the type of packet.
+	@return the type of packet in string.
+*/
 char* typeToString(PacketType type) {
 	static char* radioErp1 = "RADIO ERP1";
 	static char* response = "RESPONSE";

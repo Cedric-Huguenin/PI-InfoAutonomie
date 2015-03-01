@@ -1,18 +1,17 @@
-
-/* todo:
-1. trap ^C signal to properly exit with cleanup
-2. Decoding of EnOcean packets is very simplistic. Only supports Radio packet.
-*/
-
 /*
 
   Adapted from Paul Griffiths TIMESERV.C
   
-  Very Simple EnOcean  serial port to TCP/IP gateway
+  Very Simple EnOcean  serial port to stdout
+  
+  Adapted to EnOcean ESP3 by Cédric Huguenin <cedric.huguenin@telecomnancy.eu>,
+  Matthieu Morainville <matthieu.morainville@telecomnancy.eu>
+  and Mickaël Walter <mickael.walter@telecomnancy.eu> for TELECOM Nancy and 
+  Institut Mines Télécom.
 
 */
 
-#include "helper.h"           /*  our own helper functions  */
+#include "helper.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,7 +28,7 @@
 
 int main(int argc, char *argv[])
 {
-    char      buffer[MAX_LINE];      /*  character buffer          */
+    char      buffer[MAX_LINE];
 	EspPacket packet;
 	
     int fd;
@@ -40,18 +39,6 @@ int main(int argc, char *argv[])
     if (fd == -1)
         return(-1);
     set_tty(fd, &oldt, &newt);
-
-	/*
-	typedef struct packet_tag {
-		uint16 dataLength;
-		uint8 optionalDataLength;
-		uint8 packetType;
-		uint8 hcrc;
-		void *data;
-		void *optionalData;
-		uint8 dcrc;
-	};
-	*/
 	
 	memset(&packet, 0, sizeof(packet));
     /* enter infinite loop reading tty and outputing until ^C */
