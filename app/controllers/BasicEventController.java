@@ -26,7 +26,7 @@ public class BasicEventController {
      * @return the basic events page result.
      */
     public static Result data() {
-        BasicEvent basicEvent = BasicEvent.byId("Saut de luminosité");
+        BasicEvent basicEvent = BasicEvent.byId("1"); // Saut de luminosité TODO: better id in the database (light_delta_15 ?)
         List<BasicEventOccurrence> basicEventList = new ArrayList<>();
 
         DataNode rawDataNode = null;
