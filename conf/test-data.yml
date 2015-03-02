@@ -18,16 +18,16 @@
 
 # Detection
 
-- &detection1 !!model.Detection
-    id:              detection1
+- &delta_15 !!model.Detection
+    id:              delta_15
     detectionType:   DELTA
     simpleThreshold: 0
     minValue:        0
     maxValue:        0
     delta:           15
 
-- &detection2 !!model.Detection
-    id:              detection2
+- &delta_0_11 !!model.Detection
+    id:              delta_0_11
     detectionType:   DELTA
     simpleThreshold: 0
     minValue:        0
@@ -45,17 +45,17 @@
 # BasicEvent
 
 - &basicEvent1 !!model.BasicEvent
-    id:                 1
+    id:                 light_delta_15
     name:               Saut de luminosité
     sensor:             *sensor1
-    detectionMethod:    *detection1
+    detectionMethod:    *delta_15
     icon:               fa-lightbulb-o
 
 - &basicEvent2 !!model.BasicEvent
-    id:                 2
+    id:                 temp_delta_0_11
     name:               Changement de température
     sensor:             *tempSensor
-    detectionMethod:    *detection2
+    detectionMethod:    *delta_0_11
     icon:               fa-fire-extinguisher
 
 
