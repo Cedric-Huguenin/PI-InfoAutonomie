@@ -1,6 +1,8 @@
 package model;
 
 import controllers.BasicEventOccurrenceController;
+import jboolexpr.BooleanExpression;
+import jboolexpr.MalformedBooleanException;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
@@ -92,6 +94,17 @@ public class Event extends Model {
         }
 
         System.out.println("STRING : " + toEval);
+
+        BooleanExpression boolExpr = null;
+        try {
+            boolExpr = BooleanExpression.readLeftToRight(toEval);
+            boolean bool = boolExpr.booleanValue();
+            // bool == true
+            System.out.println(boolExpr.toString() + " == " + bool);
+            // (((!true)&&false)||true) == true
+        } catch (MalformedBooleanException e) {
+            e.printStackTrace();
+        }
 
         // TODO: evaluate
     }
