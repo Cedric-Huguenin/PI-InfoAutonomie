@@ -24,7 +24,7 @@
     simpleThreshold: 0
     minValue:        0
     maxValue:        0
-    delta:           15
+    delta:           10
 
 - &delta_0_11 !!model.Detection
     id:              delta_0_11
@@ -75,4 +75,4 @@
     id:           1
     name:         Petit dej
     timeInterval: *timeInterval1
-    expression:   1 || 2
+    expression:   light_delta_15 || temp_delta_0_11

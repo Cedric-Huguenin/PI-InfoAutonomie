@@ -1,8 +1,12 @@
 package model;
 
+import controllers.BasicEventOccurrenceController;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +71,29 @@ public class Event extends Model {
      */
     public static List<Event> all() {
         return find.all();
+    }
+
+
+    public void check() {
+        BasicEventOccurrenceController basicEventOccurrenceController = new BasicEventOccurrenceController();
+
+        String toEval = new String(expression);
+
+        System.out.println("STRING : " + toEval);
+
+        String[] basicEventIds = toEval.split("(\\|\\||&&)");
+        for(String id : basicEventIds) {
+            id = id.trim();
+            BasicEvent basicEvent = BasicEvent.find.ref(id);
+//            System.out.println("Current BasicEventID  : !" + basicEvent.getId());
+            boolean occur = basicEventOccurrenceController.occur(timeInterval, basicEvent);
+            toEval = toEval.replace(id, occur+"");
+
+        }
+
+        System.out.println("STRING : " + toEval);
+
+        // TODO: evaluate
     }
 
     /**

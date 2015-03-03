@@ -87,4 +87,16 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
     public int compareTo(BasicEventOccurrence o) {
         return (int) (timestamp - o.getTimestamp());
     }
+
+    @Override
+    public String toString() {
+        return "BasicEventOccurrence{" +
+                "id='" + id + '\'' +
+                ", basicEvent=" + basicEvent +
+                ", timestamp=" + timestamp +
+                ", date='" + date + '\'' +
+                ", fromValue=" + fromValue +
+                ", toValue=" + toValue +
+                '}';
+    }
 }

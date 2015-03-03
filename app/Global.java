@@ -37,14 +37,10 @@ public class Global extends GlobalSettings {
                 () -> { // Runnable
 
                     // check for new BasicEvent occurrences
-                    for(BasicEvent basicEvent : BasicEvent.all()) {
-                        // TODO: use data to determine if a basic event occur
-                    }
+                    BasicEvent.all().forEach(model.BasicEvent::check);
 
-                    // TODO: based on BasicEventOccurrences, check if Event occurs
-                    for(Event event : Event.all()) {
-
-                    }
+                    // based on BasicEventOccurrences, check if Event occurs
+                    Event.all().forEach(model.Event::check);
 
                 },
                 Akka.system().dispatcher()

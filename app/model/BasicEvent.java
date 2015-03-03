@@ -1,8 +1,14 @@
 package model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import model.json.Data;
+import model.json.DataNode;
 import play.db.ebean.Model;
+import utils.TimestampUtils;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -72,6 +78,66 @@ public class BasicEvent extends Model {
      */
     public static BasicEvent byId(String id) {
         return find.byId(id);
+    }
+
+    public void check() {
+        DataNode rawDataNode = null;
+        String label = "light1";
+        switch(sensor.getType()) {
+            case LIGHT:
+                label = "light1";
+                break;
+            case TEMP:
+                label = "temperature";
+                break;
+        }
+        try {
+            URL url = new URL("http://iotlab.telecomnancy.eu/rest/data/1/"+ label +"/24");
+            ObjectMapper mapper = new ObjectMapper();
+            rawDataNode = mapper.readValue(url, DataNode.class);
+
+            Data old = null;
+            switch(detectionMethod.getDetectionType()) {
+                case DELTA:
+                    for (Data data : rawDataNode.getData()) {
+                        if(old != null) {
+                            if(Math.abs(data.getValue() - old.getValue()) > detectionMethod.getDelta()) {
+                                BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
+                                        data.getTimestamp(), old.getValue(), data.getValue());
+                                try {
+                                    if(BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
+                                        occurrence.save();
+                                        System.out.println(occurrence);
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Error: " + e);
+                                }
+                            }
+                        }
+                        old = data;
+                    }
+                    break;
+                case SIMPLE_THRESHOLD:
+                    for(Data data : rawDataNode.getData()) {
+                        if(data.getValue() > detectionMethod.getSimpleThreshold()) {
+                            BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
+                                    data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
+                            try {
+                                if(BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
+                                    occurrence.save();
+                                    System.out.println(occurrence);
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Error: " + e);
+                            }
+                        }
+                        old = data;
+                    }
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

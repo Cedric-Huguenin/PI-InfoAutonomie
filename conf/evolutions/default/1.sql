@@ -42,6 +42,14 @@ create table event (
   constraint pk_event primary key (id))
 ;
 
+create table event_occurrence (
+  id                        varchar(255) not null,
+  event_id                  varchar(255),
+  timestamp                 bigint,
+  date                      varchar(255),
+  constraint pk_event_occurrence primary key (id))
+;
+
 create table sensor (
   id                        varchar(255) not null,
   name                      varchar(255),
@@ -74,6 +82,8 @@ create sequence detection_seq;
 
 create sequence event_seq;
 
+create sequence event_occurrence_seq;
+
 create sequence sensor_seq;
 
 create sequence time_interval_seq;
@@ -86,6 +96,8 @@ alter table basic_event_occurrence add constraint fk_basic_event_occurrence_basi
 create index ix_basic_event_occurrence_basi_3 on basic_event_occurrence (basic_event_id);
 alter table event add constraint fk_event_timeInterval_4 foreign key (time_interval_id) references time_interval (id) on delete restrict on update restrict;
 create index ix_event_timeInterval_4 on event (time_interval_id);
+alter table event_occurrence add constraint fk_event_occurrence_event_5 foreign key (event_id) references event (id) on delete restrict on update restrict;
+create index ix_event_occurrence_event_5 on event_occurrence (event_id);
 
 
 
@@ -107,6 +119,8 @@ drop table if exists event;
 
 drop table if exists event_basic_event;
 
+drop table if exists event_occurrence;
+
 drop table if exists sensor;
 
 drop table if exists time_interval;
@@ -120,6 +134,8 @@ drop sequence if exists basic_event_occurrence_seq;
 drop sequence if exists detection_seq;
 
 drop sequence if exists event_seq;
+
+drop sequence if exists event_occurrence_seq;
 
 drop sequence if exists sensor_seq;
 
