@@ -43,7 +43,7 @@ int getch(int fd, int ms)
 		read(fd, &ch, 1);
 		ret = ch;
 	} else {
-		ret = 0;
+		ret = 0xff00;
 	}
 	return ret;
 }
@@ -111,20 +111,21 @@ int read_tty(int fd, char *buf, size_t lbuf)
 	char *p = buf;
 	char *pe = buf+lbuf;
 	
-	/* TODO add something to avoid to have to wait having a full buffer */
 	if(readingState == WAITING_SYNC) {
 		do
 		{
 			c = getch(fd,500);
 		} while (c != 0x55);
 		readingState = SYNC_RECEIVED;
+		*p++ = c & 0x00ff;
 	}
 	
-	*p++ = c;
 	while(p<pe)
 	{
-        c = getch(fd,500);
-	    *p++ = c;
+        if(((c = getch(fd,500)) & 0xff00) == 0)
+			*p++ = c;
+		else
+			return p-buf;
     };
 	return(p-buf);
 }
@@ -301,15 +302,15 @@ char isValid(EspPacket *packet) {
 	@return the type of packet in string.
 */
 char* typeToString(PacketType type) {
-	static char* radioErp1 = "RADIO ERP1";
-	static char* response = "RESPONSE";
-	static char* radioSubTel = "RADIO SUB TEL";
-	static char* event = "EVENT";
-	static char* commonCommand = "COMMON COMMAND";
-	static char* smartAckCommand = "SMART ACK COMMAND";
-	static char* remoteManCommand = "REMOTE MAN COMMAND";
-	static char* radioMessage = "RADIO MESSAGE";
-	static char* radioErp2 = "RADIO ERP2";
+	static const char* radioErp1 = "RADIO ERP1";
+	static const char* response = "RESPONSE";
+	static const char* radioSubTel = "RADIO SUB TEL";
+	static const char* event = "EVENT";
+	static const char* commonCommand = "COMMON COMMAND";
+	static const char* smartAckCommand = "SMART ACK COMMAND";
+	static const char* remoteManCommand = "REMOTE MAN COMMAND";
+	static const char* radioMessage = "RADIO MESSAGE";
+	static const char* radioErp2 = "RADIO ERP2";
 	
 	switch(type) {
 	case RADIO_ERP1:

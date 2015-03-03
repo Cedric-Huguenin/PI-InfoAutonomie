@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
 			if(erpPacket != NULL) {
 				interpretErp1Packet(*erpPacket);
 				free(erpPacket);
+				erpPacket = NULL;
 			}
 			printf("\n\n");
 			free(packet.data);
