@@ -51,12 +51,12 @@ void interpretErp1Packet(Erp1Packet datagram) {
 		/* Contact sensor */
 		if(datagram.data[2] == 0x01 && (datagram.data[1] | 0x09) == 0x09) {
 			printf("Contact sensor\n");
-			if((datagram.data[2] & 0x08) == 0) {
+			if((datagram.data[1] & 0x08) == 0) {
 				printf("Learn button pressed\n");
 			} else {
 				printf("Learn button not pressed\n");
 			}
-			if((datagram.data[2] & 0x01) == 0) {
+			if((datagram.data[1] & 0x01) == 0) {
 				printf("Contact open\n");
 			} else {
 				printf("Contact closed\n");
