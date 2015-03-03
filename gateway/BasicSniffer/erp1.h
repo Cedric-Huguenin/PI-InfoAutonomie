@@ -11,32 +11,6 @@
 #include "serial.h"
 
 /**
-	RORG (types of radio packet).
-*/
-typedef enum rorg_tag {
-	/**
-		Repeated switch communication.
-	*/
-	RPS=0xf6,
-	/**
-		1 Byte communication.
-	*/
-	ONEBS=0xd5,
-	/**
-		4 Bytes communication.
-	*/
-	FOURBS=0xa5,
-	/**
-		Variable length data.
-	*/
-	VLD=0xD2,
-	/**
-		Unsupported RORG
-	*/
-	UNSUPPORTED=0xFF
-} Rorg;
-
-/**
 	An ERP1 radio packet
 */
 typedef struct erp1_tag {
@@ -66,8 +40,12 @@ typedef struct erp1_tag {
 	unsigned char securityLevel;
 } Erp1Packet;
 
+/*
+	Begin function definitions
+*/
+
 Erp1Packet* makeErp1Packet(EspPacket* packet);
-void interpretErp1Packet(Erp1Packet datagram);
+/* void interpretErp1Packet(Erp1Packet datagram); */
 
 
 #endif

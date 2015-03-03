@@ -11,9 +11,6 @@
 
 */
 
-#include "helper.h"
-#include "erp1.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -21,11 +18,16 @@
 #include <inttypes.h>
 
 #include "serial.h"
+#include "helper.h"
+#include "erp1.h"
+#include "sensors/sensors.h"
 
 /*  Global constants  */
 
 /* This must at least be set to 21 (less seems to be not working) */
 #define MAX_LINE           (21)
+
+void displayErp1Packet(Erp1Packet datagram);
 
 int main(int argc, char *argv[])
 {
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
 			}
 			erpPacket = makeErp1Packet(&packet);
 			if(erpPacket != NULL) {
-				interpretErp1Packet(*erpPacket);
+				displayErp1Packet(*erpPacket);
 				free(erpPacket);
 				erpPacket = NULL;
 			}
@@ -92,4 +94,55 @@ int main(int argc, char *argv[])
 
     printf("exiting\n");
     return(0);
+}
+
+void displayErp1Packet(Erp1Packet datagram) {
+	int i;
+	printf("\n--ERP1 datagram--\n");
+	printf("Datagram type: ");
+	switch(datagram.data[0]) {
+	case RPS:
+		printf("RPS\n");
+		break;
+	case ONEBS:
+		printf("1BS\n");
+		/* Contact sensor */
+		if(datagram.data[2] == 0x01 && (datagram.data[1] | 0x09) == 0x09) {
+			printf("Contact sensor\n");
+			if((datagram.data[1] & 0x08) == 0) {
+				printf("Learn button pressed\n");
+			} else {
+				printf("Learn button not pressed\n");
+			}
+			if((datagram.data[1] & 0x01) == 0) {
+				printf("Contact open\n");
+			} else {
+				printf("Contact closed\n");
+			}
+		}
+		break;
+	case FOURBS:
+		printf("4BS\n");
+		break;
+	case VLD:
+		printf("VLD\n");
+		break;
+	default:
+		printf("Unknown\n");
+		break;
+	}
+	
+	
+	/*printf("Sender ID: ");
+	for(i = 0; i < 4; i++)
+		printf("%02x ", datagram.data[i]);
+	printf("\n");*/
+	
+	printf("Destination ID: ");
+	for(i = 0; i < 4; i++)
+		printf("%02x ", datagram.destinationID[i]);
+	printf("\n");
+	printf("Security level: %02x\n", datagram.securityLevel);
+	printf("Best RSSI: %d dBm\n", datagram.dBm);
+
 }

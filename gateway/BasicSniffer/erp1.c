@@ -38,7 +38,7 @@ Erp1Packet* makeErp1Packet(EspPacket* packet) {
 	Displays a human readable string describing the content of the ERP1 packet.
 	@param datagram the ERP1 datagram;
 */
-void interpretErp1Packet(Erp1Packet datagram) {
+/*void interpretErp1Packet(Erp1Packet datagram) {
 	int i;
 	printf("\n--ERP1 datagram--\n");
 	printf("Datagram type: ");
@@ -48,7 +48,6 @@ void interpretErp1Packet(Erp1Packet datagram) {
 		break;
 	case ONEBS:
 		printf("1BS\n");
-		/* Contact sensor */
 		if(datagram.data[2] == 0x01 && (datagram.data[1] | 0x09) == 0x09) {
 			printf("Contact sensor\n");
 			if((datagram.data[1] & 0x08) == 0) {
@@ -78,7 +77,7 @@ void interpretErp1Packet(Erp1Packet datagram) {
 	/*printf("Sender ID: ");
 	for(i = 0; i < 4; i++)
 		printf("%02x ", datagram.data[i]);
-	printf("\n");*/
+	printf("\n");
 	
 	printf("Destination ID: ");
 	for(i = 0; i < 4; i++)
@@ -88,3 +87,4 @@ void interpretErp1Packet(Erp1Packet datagram) {
 	printf("Best RSSI: %d dBm\n", datagram.dBm);
 
 }
+*/

@@ -28,7 +28,7 @@ static ReadingState readingState = WAITING_SYNC;
 	Gets a Byte from the given input.
 	@param fd the file descriptor to the input.
 	@param ms the timeout of the read in milliseconds.
-	@return the Byte read.
+	@return the Byte read or 0xff00 if nothing to read.
 */
 int getch(int fd, int ms)
 {
@@ -99,7 +99,8 @@ int open_tty(char *devname)
 }
 
 /**
-	Reads bytes from a device and put them in a buffer.
+	Reads bytes from a device and put them in a buffer. If there is nothing more to read, this
+	function returns the current buffer.
 	@param fd the file descriptor to the input.
 	@param buf the buffer to be filled.
 	@param lbuf size of the buffer in bytes.
@@ -302,15 +303,15 @@ char isValid(EspPacket *packet) {
 	@return the type of packet in string.
 */
 char* typeToString(PacketType type) {
-	static const char* radioErp1 = "RADIO ERP1";
-	static const char* response = "RESPONSE";
-	static const char* radioSubTel = "RADIO SUB TEL";
-	static const char* event = "EVENT";
-	static const char* commonCommand = "COMMON COMMAND";
-	static const char* smartAckCommand = "SMART ACK COMMAND";
-	static const char* remoteManCommand = "REMOTE MAN COMMAND";
-	static const char* radioMessage = "RADIO MESSAGE";
-	static const char* radioErp2 = "RADIO ERP2";
+	static char* radioErp1 = "RADIO ERP1";
+	static char* response = "RESPONSE";
+	static char* radioSubTel = "RADIO SUB TEL";
+	static char* event = "EVENT";
+	static char* commonCommand = "COMMON COMMAND";
+	static char* smartAckCommand = "SMART ACK COMMAND";
+	static char* remoteManCommand = "REMOTE MAN COMMAND";
+	static char* radioMessage = "RADIO MESSAGE";
+	static char* radioErp2 = "RADIO ERP2";
 	
 	switch(type) {
 	case RADIO_ERP1:
