@@ -3,6 +3,7 @@ package model;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Ced on 03/03/2015.
@@ -25,6 +26,12 @@ public class EventOccurrence extends Model {
         this.event = event;
         this.timestamp = timestamp;
         this.date = date;
+    }
+
+    public static Model.Finder<String,EventOccurrence> find = new Model.Finder<>(String.class, EventOccurrence.class);
+
+    public static List<EventOccurrence> all() {
+        return find.all();
     }
 
     public String getId() {

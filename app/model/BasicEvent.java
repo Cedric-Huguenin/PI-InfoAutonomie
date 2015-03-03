@@ -45,9 +45,6 @@ public class BasicEvent extends Model {
      */
     public String icon;
 
-    /**
-     * The list of the different BasicEvent.
-     */
     public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
 
     /**

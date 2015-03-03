@@ -95,18 +95,22 @@ public class Event extends Model {
 
         System.out.println("STRING : " + toEval);
 
-        BooleanExpression boolExpr = null;
+        BooleanExpression boolExpr;
         try {
             boolExpr = BooleanExpression.readLeftToRight(toEval);
             boolean bool = boolExpr.booleanValue();
             // bool == true
             System.out.println(boolExpr.toString() + " == " + bool);
+
+            if(bool) {
+                EventOccurrence eventOccurrence = new EventOccurrence(this, 0, "");
+                eventOccurrence.save();
+                System.out.println("EVENT OCCURRENCE : persisted !");
+            }
             // (((!true)&&false)||true) == true
         } catch (MalformedBooleanException e) {
             e.printStackTrace();
         }
-
-        // TODO: evaluate
     }
 
     /**

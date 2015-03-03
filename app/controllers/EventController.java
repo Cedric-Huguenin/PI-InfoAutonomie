@@ -87,7 +87,7 @@ public class EventController {
      * @return the result of the events occurred.
      */
     public static Result listEvents() {
-        return ok(views.html.definedEvents.render("Évènement", BasicEvent.all()));
+        return ok(views.html.eventTimeline.render("Évènement", EventOccurrence.all()));
     }
 
     /**
