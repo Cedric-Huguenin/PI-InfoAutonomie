@@ -32,7 +32,7 @@
 							<h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Valeurs brutes</h3>
 						</div>
 						<div class="panel-body">
-							<div id="myfirstchart" style="height: 250px;"></div>
+							<div id="myfirstchart"></div>
 							<script>
 								new Morris.Line({
 								// ID of the element in which to draw the chart.
@@ -52,7 +52,8 @@
 								//goals: [190.0, 170.0],
 								// Labels for the ykeys -- will be displayed when you hover over the
 								// chart.
-                                labels: ['Lumière 153.111']
+                                labels: ['Lumière 153.111'],
+								resize: true
 								});
 							</script>
 						</div>

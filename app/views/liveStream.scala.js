@@ -15,7 +15,8 @@ var graph = new Morris.Line({
     hideHover: true,
     // Labels for the ykeys -- will be displayed when you hover over the
     // chart.
-    labels: ['Lumière 81.77', 'Lumière 9.138', 'Lumière 153.111']
+    labels: ['Lumière 81.77', 'Lumière 9.138', 'Lumière 153.111'],
+    resize: true
 });
 
 $(function(){
