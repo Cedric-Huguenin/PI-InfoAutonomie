@@ -28,3 +28,12 @@ GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS(
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                   controllers.Assets.at(path="/public", file)
+
+
+# API
+
+GET     /data                 controllers.DataController.getUsers
+GET     /data/:id             controllers.DataController.getUser(id: Long)
+POST    /data                 controllers.DataController.createUser
+PUT     /data/:id             controllers.DataController.updateUser(id: Long)
+DELETE  /data/:id             controllers.DataController.deleteUser(id: Long)

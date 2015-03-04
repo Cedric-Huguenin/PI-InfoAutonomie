@@ -11,6 +11,14 @@ create table basic_event (
   constraint pk_basic_event primary key (id))
 ;
 
+create table data (
+  timestamp                 integer,
+  mote                      varchar(255),
+  label                     varchar(255),
+  value                     double,
+  constraint pk_data primary key (timestamp, mote, label))
+;
+
 create table detection (
   id                        varchar(255) not null,
   simple_threshold          double,
@@ -54,6 +62,8 @@ create table event_basic_event (
 ;
 create sequence basic_event_seq;
 
+create sequence data_seq;
+
 create sequence detection_seq;
 
 create sequence event_seq;
@@ -81,6 +91,8 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists basic_event;
 
+drop table if exists data;
+
 drop table if exists detection;
 
 drop table if exists event;
@@ -94,6 +106,8 @@ drop table if exists time_interval;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists basic_event_seq;
+
+drop sequence if exists data_seq;
 
 drop sequence if exists detection_seq;
 
