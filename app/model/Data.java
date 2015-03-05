@@ -15,11 +15,25 @@ public class Data extends Model{
     @EmbeddedId
     public PrimKey primKey;
 
+    /**
+     * A numeric representation of the collected data.
+     */
+    public double value;
+
     @Embeddable
     public class PrimKey {
-        public int timestamp;
+        public long timestamp;
         public String mote;
         public String label;
+
+        public PrimKey() {
+        }
+
+        public PrimKey(int timestamp, String mote, String label) {
+            this.timestamp = timestamp;
+            this.mote = mote;
+            this.label = label;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -37,17 +51,20 @@ public class Data extends Model{
 
         @Override
         public int hashCode() {
-            int result = timestamp;
-            result = 31 * result + (mote != null ? mote.hashCode() : 0);
-            result = 31 * result + (label != null ? label.hashCode() : 0);
+            int result = (int) (timestamp ^ (timestamp >>> 32));
+            result = 31 * result + mote.hashCode();
+            result = 31 * result + label.hashCode();
             return result;
         }
     }
 
-    /**
-     * A numeric representation of the collected data.
-     */
-    public double value;
+    public Data() {
+    }
+
+    public Data(int timestamp, double value, String label, String mote) {
+        this.value = value;
+        this.primKey = new PrimKey(timestamp, mote, label);
+    }
 
     public static Model.Finder<PrimKey,Data> find = new Model.Finder<>(PrimKey.class, Data.class);
 
@@ -64,7 +81,7 @@ public class Data extends Model{
      * Returns the timestamp of the measure.
      * @return measure's timestamp.
      */
-    public int getTimestamp() {
+    public long getTimestamp() {
         return primKey.timestamp;
     }
 
@@ -72,7 +89,7 @@ public class Data extends Model{
      * Changes measure's timestamp.
      * @param timestamp the new timestamp.
      */
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(long timestamp) {
         primKey.timestamp = timestamp;
     }
 
@@ -122,5 +139,13 @@ public class Data extends Model{
      */
     public void setMote(String mote) {
         primKey.mote = mote;
+    }
+
+    public PrimKey getPrimKey() {
+        return primKey;
+    }
+
+    public void setPrimKey(PrimKey primKey) {
+        this.primKey = primKey;
     }
 }

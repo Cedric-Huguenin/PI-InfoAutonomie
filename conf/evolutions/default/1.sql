@@ -12,7 +12,7 @@ create table basic_event (
 ;
 
 create table data (
-  timestamp                 integer,
+  timestamp                 bigint,
   mote                      varchar(255),
   label                     varchar(255),
   value                     double,

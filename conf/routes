@@ -32,8 +32,8 @@ GET        /assets/*file                   controllers.Assets.at(path="/public",
 
 # API
 
-GET     /data                 controllers.DataController.getUsers
-GET     /data/:id             controllers.DataController.getUser(id: Long)
-POST    /data                 controllers.DataController.createUser
-PUT     /data/:id             controllers.DataController.updateUser(id: Long)
-DELETE  /data/:id             controllers.DataController.deleteUser(id: Long)
+GET           /data                                controllers.DataController.getUsers
+GET           /data/:id                            controllers.DataController.getUser(id: Long)
+POST          /data                                controllers.DataController.createData
+PUT           /data/:id                            controllers.DataController.updateUser(id: Long)
+DELETE        /data/:timestamp/:mote/:label        controllers.DataController.deleteData(timestamp: Long, mote: String, label: String)

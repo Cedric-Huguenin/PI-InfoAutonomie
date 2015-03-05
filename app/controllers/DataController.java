@@ -32,9 +32,11 @@ public class DataController extends Controller {
         return user == null ? null : ok(Json.toJson(user));
     }
 
-    public static Result createUser() {
-        Data newUser = Json.fromJson(request().body().asJson(), Data.class);
-        Data inserted = Data.create(newUser);
+    public static Result createData() {
+        // POST http://localhost:9000/data  {"timestamp":1411848808,"label":"temperature","value":24.0,"mote":"219.98"}
+        model.json.Data newData = Json.fromJson(request().body().asJson(), model.json.Data.class);
+        // transform to Database Data (with primary key)
+        Data inserted = Data.create(new Data(newData.getTimestamp(), newData.getValue(), newData.getLabel(), newData.getMote()));
         return created(Json.toJson(inserted));
     }
 
@@ -45,9 +47,11 @@ public class DataController extends Controller {
         // TODO !
     }
 
-    public static Result deleteUser(Long id) {
-        // TODO
-        //Database.deleteUser(id);
-        return noContent(); // http://stackoverflow.com/a/2342589/1415732
+    public static Result deleteData(Long timestamp, String mote, String label) {
+        // DELETE http://localhost:9000/data/1411848808/219.98/temperature
+        Data data = new Data(timestamp, 0, label, mote);
+        Data.find.ref(data.getPrimKey()).delete();
+        return ok();
+
     }
 }
