@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import model.*;
 import model.Data;
 import model.json.DataNode;
@@ -22,14 +23,31 @@ import static play.mvc.Results.ok;
  */
 public class DataController extends Controller {
 
-    public static Result getUsers() {
-        List<Data> users = Data.all();
-        return ok(Json.toJson(users));
+    public static Result getAllData() {
+        List<Data> dataList = Data.all();
+        return ok(Json.toJson(dataList));
     }
 
-    public static Result getUser(Long id) {
-        Data user = Data.find.ref(null);
-        return user == null ? null : ok(Json.toJson(user));
+    public static Result getData(Long timestamp, String mote, String label) {
+        // GET http://localhost:9000/data/1411848808/219.98/temperature
+        Data data = new Data(timestamp, 0, label, mote);
+        data = Data.find.byId(data.getPrimKey());
+
+        ObjectNode result = Json.newObject();
+        if(data != null) {
+            result.put("timestamp", data.getTimestamp());
+            result.put("mote", data.getMote());
+            result.put("label", data.getLabel());
+            result.put("value", data.getValue());
+        }
+        return ok(result);
+    }
+
+    public static Result getDataRange(Long begin, Long end, String mote, String label) {
+        // GET http://localhost:9000/data/1411848800/14118488010/219.98/temperature
+        List<Data> dataList = Data.find.where()
+                .between("timestamp", begin, end).eq("mote", mote).eq("label", label).findList();
+        return ok(Json.toJson(dataList));
     }
 
     public static Result createData() {
