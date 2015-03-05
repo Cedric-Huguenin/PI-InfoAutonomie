@@ -29,7 +29,7 @@ public class Data extends Model{
         public PrimKey() {
         }
 
-        public PrimKey(int timestamp, String mote, String label) {
+        public PrimKey(long timestamp, String mote, String label) {
             this.timestamp = timestamp;
             this.mote = mote;
             this.label = label;
@@ -61,7 +61,7 @@ public class Data extends Model{
     public Data() {
     }
 
-    public Data(int timestamp, double value, String label, String mote) {
+    public Data(long timestamp, double value, String label, String mote) {
         this.value = value;
         this.primKey = new PrimKey(timestamp, mote, label);
     }
