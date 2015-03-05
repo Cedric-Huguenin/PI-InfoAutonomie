@@ -6,25 +6,26 @@
 GET        /                               controllers.Application.index()
 
 # Pages
+# no link
 GET        /init                           controllers.Application.init()
-GET        /createEvent                    controllers.Application.createEvent()
 
 # Raw values
-GET        /raw/data                       controllers.Application.data()
-GET        /raw/graph                      controllers.Application.oldEvents()
-GET        /raw/live                       controllers.Application.liveStream()
+GET        /raw/data                       controllers.RawDataController.data()
+GET        /raw/graph                      controllers.RawDataController.graph()
+GET        /raw/live                       controllers.RawDataController.liveStream()
+# js
+GET        /assets.javascript.ws.js        controllers.RawDataController.liveStreamJS()
 
 # Basic events
 GET        /basic/data                     controllers.BasicEventController.data()
 GET        /basic/graph                    controllers.BasicEventController.graph()
+GET        /basic/timeline                 controllers.BasicEventController.timeline()
 
 # Events
-GET        /computeEvent                   controllers.EventController.index()
-GET        /testEvent                      controllers.EventController.test()
-GET        /listEvents                     controllers.EventController.listEvents()
-
-# JS
-GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS()
+GET        /event/create                   controllers.EventController.create()
+# no link
+GET        /event/test                     controllers.EventController.test()
+GET        /event/timeline                 controllers.EventController.timeline()
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                   controllers.Assets.at(path="/public", file)

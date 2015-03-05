@@ -19,6 +19,14 @@ import static play.mvc.Results.ok;
 public class EventController {
 
     /**
+     * Loads the create event page.
+     * @return the result of the event page.
+     */
+    public static Result create() {
+        return ok(views.html.event.create.render("Your new application is ready."));
+    }
+
+    /**
      * Performs tests about sensors and events. TODO ? Place this in the unit tests
      * @return the test results.
      */
@@ -86,52 +94,7 @@ public class EventController {
      * Displays a list of more complex events (based on basic events) that occurred.
      * @return the result of the events occurred.
      */
-    public static Result listEvents() {
-        return ok(views.html.eventTimeline.render("Évènement", EventOccurrence.all()));
-    }
-
-    /**
-     * Computes the basic events to determine if a more complex event occurred.
-     * @return the result of the occurrences in a timeline.
-     */
-    public static Result index() {
-        List<BasicEvent> basics = BasicEvent.all();
-        List<BasicEventOccurrence> events = new ArrayList<>();
-
-        for(BasicEvent basic : basics) {
-
-            String typeStr = "";
-            if (basic.getSensor().getType() == SensorType.LIGHT) {
-                typeStr = "light1";
-            } else if (basic.getSensor().getType() == SensorType.TEMP) {
-                typeStr = "temperature";
-            }
-            String lightUrl = "http://iotlab.telecomnancy.eu/rest/data/1/" + typeStr + "/100/" + basic.getSensor().getAddress();
-            System.out.println(lightUrl);
-
-            DataNode dataNode = null;
-            try {
-                dataNode = GetDataFromUrl.getFromUrl(lightUrl);
-            } catch (IOException e) { // TODO: return error on web page
-                e.printStackTrace();
-            }
-
-            Data oldData = null;
-            System.out.println(dataNode.getData().size());
-            for (Data data : dataNode.getData()) {
-                if (oldData != null) {
-                    if (Math.abs(oldData.getValue() - data.getValue()) >= basic.getDetectionMethod().getDelta()) {
-                        events.add(new BasicEventOccurrence(basic, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"), data.getTimestamp(), oldData.getValue(), data.getValue()));
-                    }
-                }
-                oldData = data;
-            }
-
-//        System.out.println(basic);
-//        System.out.println(events.size());
-            Collections.sort(events);
-            Collections.reverse(events);
-        }
-        return ok(views.html.timeline.render("Évènement", events));
+    public static Result timeline() {
+        return ok(views.html.event.timeline.render("Évènements", EventOccurrence.all()));
     }
 }

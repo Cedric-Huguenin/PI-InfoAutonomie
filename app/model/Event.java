@@ -1,6 +1,5 @@
 package model;
 
-import controllers.BasicEventOccurrenceController;
 import jboolexpr.BooleanExpression;
 import jboolexpr.MalformedBooleanException;
 import play.db.ebean.Model;
@@ -77,7 +76,7 @@ public class Event extends Model {
 
 
     public void check() {
-        BasicEventOccurrenceController basicEventOccurrenceController = new BasicEventOccurrenceController();
+        BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence();
 
         String toEval = new String(expression);
 
@@ -88,7 +87,7 @@ public class Event extends Model {
             id = id.trim();
             BasicEvent basicEvent = BasicEvent.find.ref(id);
 //            System.out.println("Current BasicEventID  : !" + basicEvent.getId());
-            boolean occur = basicEventOccurrenceController.occur(timeInterval, basicEvent);
+            boolean occur = basicEventOccurrence.occur(timeInterval, basicEvent);
             toEval = toEval.replace(id, occur+"");
 
         }

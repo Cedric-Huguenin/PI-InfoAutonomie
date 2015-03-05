@@ -228,13 +228,13 @@
 					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Valeurs brutes<span class="fa arrow"></span></a>
 					<ul aria-expanded="false" class="nav nav-second-level collapse">
 						<li>
-							<a href="@routes.Application.data">Données</a>
+							<a href="@routes.RawDataController.data">Données</a>
 						</li>
 						<li>
-							<a href="@routes.Application.oldEvents">Graphiques</a>
+							<a href="@routes.RawDataController.graph">Graphiques</a>
 						</li>
 						<li>
-							<a href="@routes.Application.liveStream">Flux temps réel</a>
+							<a href="@routes.RawDataController.liveStream">Flux temps réel</a>
 						</li>
 					</ul>
 					<!-- /.nav-second-level -->
@@ -248,15 +248,23 @@
 						<li>
 							<a href="@routes.BasicEventController.graph">Graphiques</a>
 						</li>
+						<li>
+							<a href="@routes.BasicEventController.timeline">Timeline</a>
+						</li>
 					</ul>
 					<!-- /.nav-second-level -->
 				</li>
 				<li>
-					<a href="@routes.Application.createEvent"><i class="fa fa-fw fa-file"></i> Créer un évènement</a>
-                </li>
-                <li>
-                    <a href="@routes.EventController.index()"><i class="fa fa-fw fa-file"></i> Timeline</a>
-                </li>
+					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Évènements<span class="fa arrow"></span></a>
+					<ul aria-expanded="false" class="nav nav-second-level collapse">
+						<li>
+							<a href="@routes.EventController.create"><i class="fa fa-fw fa-file"></i> Créer un évènement</a>
+		                </li>
+		                <li>
+		                    <a href="@routes.EventController.timeline"><i class="fa fa-fw fa-file"></i> Timeline</a>
+		                </li>
+					</ul>
+				</li>
 			</ul>
 		</div>
 		<!-- /.sidebar-collapse -->
