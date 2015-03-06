@@ -1,16 +1,17 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import model.Data;
 import model.Sensor;
+import static play.data.Form.*;
+
 import model.SensorType;
-import play.libs.Json;
-import play.mvc.BodyParser;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Security;
+import views.html.sensor.sensors;
+import views.html.sensor.editSensor;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,63 +20,61 @@ import java.util.List;
  */
 public class SensorController extends Controller {
 
-    public static Result getMotes() {
-        List<Sensor> dataList = Sensor.all();
-        return ok(Json.toJson(dataList));
-    }
+    public static Result sensors() {
 
-    public static Result getMote(String sensorId) {
-        // GET http://localhost:9000/api/sensor/sensorId
-        Sensor sensor = Sensor.find.byId(sensorId);
+        List<Sensor> allSensors = Sensor.all();
+        List<Sensor> oldSensors = new ArrayList<>();
+        List<Sensor> newSensors = new ArrayList<>();
 
-        return ok(Json.toJson(sensor));
-    }
-
-    @Security.Authenticated(Secured.class)
-    public static Result createSensor() {
-        // POST http://localhost:9000/api/sensor  {"address":"153.111","type":"LIGHT"}
-        JsonNode json = request().body().asJson();
-        if(json == null) {
-            return badRequest("Expecting Json data");
-        } else {
-            String address = json.findPath("address").asText();
-            String type = json.findPath("type").asText();
-            if(address == null || type == null) {
-                return badRequest("Missing parameter [name]");
+        for(Sensor sensor : allSensors) {
+            if(sensor.getDescription() == null) {
+                newSensors.add(sensor);
             } else {
-                Sensor sensor = new Sensor();
-                sensor.setId(address+"."+type);
-                sensor.setAddress(address);
-                switch(type) {
-                    case "DOOR":
-                        sensor.setType(SensorType.DOOR);
-                        break;
-                    case "LIGHT":
-                        sensor.setType(SensorType.LIGHT);
-                        break;
-                    case "TEMP":
-                        sensor.setType(SensorType.TEMP);
-                        break;
-                    case "HUMIDITY":
-                        sensor.setType(SensorType.HUMIDITY);
-                        break;
-                    case "POWER":
-                        sensor.setType(SensorType.POWER);
-                        break;
-                    case "PRESENCE":
-                        sensor.setType(SensorType.PRESENCE);
-                        break;
-                }
-                Sensor.create(sensor);
-                return created(Json.toJson(sensor));
+                oldSensors.add(sensor);
             }
         }
+        return ok(sensors.render(oldSensors, newSensors));
     }
 
-    @Security.Authenticated(Secured.class)
-    public static Result deleteSensor(String sensorId) {
-        // DELETE http://localhost:9000/api/sensor/sensorId
-        Sensor.find.ref(sensorId).delete();
-        return ok();
+    public static Result sensor(String id) {
+        Form form = form(Sensor.class);
+        Sensor sensor = Sensor.find.byId(id);
+        System.out.println("List: id "+ id + " " + sensor);
+        form.data().put("name", sensor.getName());
+        form.data().put("address", sensor.getAddress());
+        form.data().put("location", sensor.getLocation());
+        form.data().put("description", sensor.getDescription());
+        String type = "Type";
+        switch(sensor.getType()) {
+            case DOOR:
+                type = "Contact de porte";
+                break;
+            case LIGHT:
+                type = "Luminosité";
+                break;
+            case TEMP:
+                type = "Température";
+                break;
+            case HUMIDITY:
+                type = "humidité";
+                break;
+            case POWER:
+                type = "Consommation électrique";
+                break;
+            case PRESENCE:
+                type = "Présence";
+                break;
+        }
+        form.data().put("type", type);
+
+        return ok(editSensor.render(form));
+    }
+
+    public static Result updateSensor() {
+        Form<Sensor> sensorForm = form(Sensor.class).bindFromRequest();
+        System.out.println("Form : name " + sensorForm.get().name);
+        Sensor sensor = sensorForm.get();
+        System.out.println("Form : addresse " + sensor.getAddress() + "  " + sensorForm.get().address);
+        return sensors();
     }
 }

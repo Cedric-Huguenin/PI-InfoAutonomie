@@ -1,6 +1,7 @@
-package controllers;
+package controllers.api;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import controllers.Secured;
 import model.*;
 import model.Data;
 import model.json.DataNode;
