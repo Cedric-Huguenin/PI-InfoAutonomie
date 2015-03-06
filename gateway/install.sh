@@ -33,6 +33,10 @@ echo 'Installing tools to run EnOcean softwares'
 apt-get install gcc g++
 apt-get install perl libdevice-serialport-perl libio-socket-ssl-perl libwww-perl
 apt-get install –f
+apt-get install openjdk-7-jdk
+echo 'Make sure you choose the right JRE : openjdk-7-jre' 
+update-alternatives --config java
+apt-get install librxtx-java
 
 echo 'Deactivating the GPIO used by Linux to connect to EnOceanPi'
 if [[ !( -f "./serial.sh" ) ]]
@@ -65,4 +69,8 @@ cd /opt/fhem
 echo "define TCM310_0 TCM 310 /dev/ttyAMA0@57600" >> fhem.cfg
 perl fhem.pl fhem.cfg
 
+echo 'Installing EnoPush'
+# TODO configure EnoPush
+
 echo 'Note : A reboot could be necessary (for the serial access for example)'
+echo 'Installation finished'
