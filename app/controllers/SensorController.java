@@ -54,6 +54,9 @@ public class SensorController extends Controller {
                     case "TEMP":
                         sensor.setType(SensorType.TEMP);
                         break;
+                    case "HUMIDITY":
+                        sensor.setType(SensorType.HUMIDITY);
+                        break;
                     case "POWER":
                         sensor.setType(SensorType.POWER);
                         break;
