@@ -3,36 +3,43 @@
 # ~~~~
 
 # Home page
-GET        /                               controllers.Application.index()
+GET           /                                         controllers.Application.index()
 
 # Pages
-GET        /init                           controllers.Application.init()
-GET        /createEvent                    controllers.Application.createEvent()
+GET           /init                                     controllers.Application.init()
+GET           /createEvent                              controllers.Application.createEvent()
 
 # Raw values
-GET        /raw/data                       controllers.Application.data()
-GET        /raw/graph                      controllers.Application.oldEvents()
-GET        /raw/live                       controllers.Application.liveStream()
+GET           /raw/data                                 controllers.Application.data()
+GET           /raw/graph                                controllers.Application.oldEvents()
+GET           /raw/live                                 controllers.Application.liveStream()
 
 # Basic events
-GET        /basic/data                     controllers.BasicEventController.data()
-GET        /basic/graph                    controllers.BasicEventController.graph()
+GET           /basic/data                               controllers.BasicEventController.data()
+GET           /basic/graph                              controllers.BasicEventController.graph()
 
 # Events
-GET        /computeEvent                   controllers.EventController.index()
-GET        /testEvent                      controllers.EventController.test()
-GET        /listEvents                     controllers.EventController.listEvents()
+GET           /computeEvent                             controllers.EventController.index()
+GET           /testEvent                                controllers.EventController.test()
+GET           /listEvents                               controllers.EventController.listEvents()
 
 # JS
-GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS()
+GET           /assets.javascript.ws.js                  controllers.Application.liveStreamJS()
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                   controllers.Assets.at(path="/public", file)
+GET           /assets/*file                             controllers.Assets.at(path="/public", file)
 
 # API
+## Data
+GET           /api/data                                 controllers.DataController.getAllData
+GET           /api/data/:timestamp/:mote/:label         controllers.DataController.getData(timestamp: Long, mote: String, label: String)
+GET           /api/data/:begin/:end/:mote/:label        controllers.DataController.getDataRange(begin: Long, end: Long, mote: String, label: String)
+POST          /api/data                                 controllers.DataController.createData
+DELETE        /api/data/:timestamp/:mote/:label         controllers.DataController.deleteData(timestamp: Long, mote: String, label: String)
 
-GET           /data                                controllers.DataController.getAllData
-GET           /data/:timestamp/:mote/:label        controllers.DataController.getData(timestamp: Long, mote: String, label: String)
-GET           /data/:begin/:end/:mote/:label       controllers.DataController.getDataRange(begin: Long, end: Long, mote: String, label: String)
-POST          /data                                controllers.DataController.createData
-DELETE        /data/:timestamp/:mote/:label        controllers.DataController.deleteData(timestamp: Long, mote: String, label: String)
+## Sensor
+
+GET           /api/sensors                              controllers.SensorController.getMotes
+GET           /api/sensor/:sensorId                    controllers.SensorController.getMote(sensorId: String)
+POST          /api/sensor                               controllers.SensorController.createSensor
+DELETE        /api/sensor/:sensorId                    controllers.SensorController.deleteSensor(sensorId: String)
