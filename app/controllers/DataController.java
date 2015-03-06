@@ -8,6 +8,7 @@ import org.omg.CORBA.DATA_CONVERSION;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import utils.GetDataFromUrl;
 import utils.TimestampUtils;
 
@@ -50,6 +51,7 @@ public class DataController extends Controller {
         return ok(Json.toJson(dataList));
     }
 
+    @Security.Authenticated(Secured.class)
     public static Result createData() {
         // POST http://localhost:9000/api/data  {"timestamp":1411848808,"label":"temperature","value":24.0,"mote":"219.98"}
         model.json.Data newData = Json.fromJson(request().body().asJson(), model.json.Data.class);
@@ -58,6 +60,7 @@ public class DataController extends Controller {
         return created(Json.toJson(inserted));
     }
 
+    @Security.Authenticated(Secured.class)
     public static Result deleteData(Long timestamp, String mote, String label) {
         // DELETE http://localhost:9000/api/data/1411848808/219.98/temperature
         Data data = new Data(timestamp, 0, label, mote);

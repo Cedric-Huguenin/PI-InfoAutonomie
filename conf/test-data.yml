@@ -53,3 +53,9 @@
     sensor:             *tempSensor
     detectionMethod:    *detection2
     icon:               fa-fire-extinguisher
+
+# API
+
+- &token1 !!model.Token
+    id:    Token1
+    token: hj1456bsdg1bfsg846bg1sb125gfd

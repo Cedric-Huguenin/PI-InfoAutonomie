@@ -9,6 +9,7 @@ import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class SensorController extends Controller {
         return ok(Json.toJson(sensor));
     }
 
+    @Security.Authenticated(Secured.class)
     public static Result createSensor() {
         // POST http://localhost:9000/api/sensor  {"address":"153.111","type":"LIGHT"}
         JsonNode json = request().body().asJson();
@@ -70,6 +72,7 @@ public class SensorController extends Controller {
         }
     }
 
+    @Security.Authenticated(Secured.class)
     public static Result deleteSensor(String sensorId) {
         // DELETE http://localhost:9000/api/sensor/sensorId
         Sensor.find.ref(sensorId).delete();

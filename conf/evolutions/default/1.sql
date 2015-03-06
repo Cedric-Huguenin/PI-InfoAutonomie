@@ -54,6 +54,12 @@ create table time_interval (
   constraint pk_time_interval primary key (id))
 ;
 
+create table token (
+  id                        varchar(255) not null,
+  token                     varchar(255),
+  constraint pk_token primary key (id))
+;
+
 
 create table event_basic_event (
   event_id                       varchar(255) not null,
@@ -71,6 +77,8 @@ create sequence event_seq;
 create sequence sensor_seq;
 
 create sequence time_interval_seq;
+
+create sequence token_seq;
 
 alter table basic_event add constraint fk_basic_event_sensor_1 foreign key (sensor_id) references sensor (id) on delete restrict on update restrict;
 create index ix_basic_event_sensor_1 on basic_event (sensor_id);
@@ -103,6 +111,8 @@ drop table if exists sensor;
 
 drop table if exists time_interval;
 
+drop table if exists token;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists basic_event_seq;
@@ -116,4 +126,6 @@ drop sequence if exists event_seq;
 drop sequence if exists sensor_seq;
 
 drop sequence if exists time_interval_seq;
+
+drop sequence if exists token_seq;
 
