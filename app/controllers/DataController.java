@@ -58,13 +58,6 @@ public class DataController extends Controller {
         return created(Json.toJson(inserted));
     }
 
-    public static Result updateUser(Long id) {
-        Data user = Json.fromJson(request().body().asJson(), Data.class);
-        //Data updated = Data.updateUser(id, user);
-        return ok(Json.toJson(user));
-        // TODO !
-    }
-
     public static Result deleteData(Long timestamp, String mote, String label) {
         // DELETE http://localhost:9000/data/1411848808/219.98/temperature
         Data data = new Data(timestamp, 0, label, mote);

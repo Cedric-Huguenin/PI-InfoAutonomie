@@ -29,14 +29,10 @@ GET        /assets.javascript.ws.js        controllers.Application.liveStreamJS(
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                   controllers.Assets.at(path="/public", file)
 
-
-# API
-
 # API
 
 GET           /data                                controllers.DataController.getAllData
 GET           /data/:timestamp/:mote/:label        controllers.DataController.getData(timestamp: Long, mote: String, label: String)
 GET           /data/:begin/:end/:mote/:label       controllers.DataController.getDataRange(begin: Long, end: Long, mote: String, label: String)
 POST          /data                                controllers.DataController.createData
-PUT           /data/:id                            controllers.DataController.updateUser(id: Long)
 DELETE        /data/:timestamp/:mote/:label        controllers.DataController.deleteData(timestamp: Long, mote: String, label: String)
