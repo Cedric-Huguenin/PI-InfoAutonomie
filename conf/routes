@@ -3,29 +3,44 @@
 # ~~~~
 
 # Home page
-GET        /                               controllers.Application.index()
+GET           /                                         controllers.Application.index()
 
 # Pages
 # no link
-GET        /init                           controllers.Application.init()
+GET           /init                                     controllers.Application.init()
 
 # Raw values
-GET        /raw/data                       controllers.RawDataController.data()
-GET        /raw/graph                      controllers.RawDataController.graph()
-GET        /raw/live                       controllers.RawDataController.liveStream()
+GET           /raw/data                                 controllers.RawDataController.data()
+GET           /raw/graph                                controllers.RawDataController.graph()
+GET           /raw/live                                 controllers.RawDataController.liveStream()
 # js
-GET        /assets.javascript.ws.js        controllers.RawDataController.liveStreamJS()
+GET           /assets.javascript.ws.js                  controllers.RawDataController.liveStreamJS()
 
 # Basic events
-GET        /basic/data                     controllers.BasicEventController.data()
-GET        /basic/graph                    controllers.BasicEventController.graph()
-GET        /basic/timeline                 controllers.BasicEventController.timeline()
+GET           /basic/data                               controllers.BasicEventController.data()
+GET           /basic/graph                              controllers.BasicEventController.graph()
+GET           /basic/timeline                           controllers.BasicEventController.timeline()
 
 # Events
-GET        /event/create                   controllers.EventController.create()
+GET           /event/create                             controllers.EventController.create()
 # no link
-GET        /event/test                     controllers.EventController.test()
-GET        /event/timeline                 controllers.EventController.timeline()
+GET           /event/test                               controllers.EventController.test()
+GET           /event/timeline                           controllers.EventController.timeline()
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                   controllers.Assets.at(path="/public", file)
+GET           /assets/*file                             controllers.Assets.at(path="/public", file)
+
+# API
+## Data
+GET           /api/data                                 controllers.DataController.getAllData
+GET           /api/data/:timestamp/:mote/:label         controllers.DataController.getData(timestamp: Long, mote: String, label: String)
+GET           /api/data/:begin/:end/:mote/:label        controllers.DataController.getDataRange(begin: Long, end: Long, mote: String, label: String)
+POST          /api/data                                 controllers.DataController.createData
+DELETE        /api/data/:timestamp/:mote/:label         controllers.DataController.deleteData(timestamp: Long, mote: String, label: String)
+
+## Sensor
+
+GET           /api/sensors                              controllers.SensorController.getMotes
+GET           /api/sensor/:sensorId                     controllers.SensorController.getMote(sensorId: String)
+POST          /api/sensor                               controllers.SensorController.createSensor
+DELETE        /api/sensor/:sensorId                     controllers.SensorController.deleteSensor(sensorId: String)

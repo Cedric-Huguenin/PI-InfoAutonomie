@@ -22,6 +22,14 @@ create table basic_event_occurrence (
   constraint pk_basic_event_occurrence primary key (id))
 ;
 
+create table data (
+  timestamp                 bigint,
+  mote                      varchar(255),
+  label                     varchar(255),
+  value                     double,
+  constraint pk_data primary key (timestamp, mote, label))
+;
+
 create table detection (
   id                        varchar(255) not null,
   detection_type            integer,
@@ -68,6 +76,12 @@ create table time_interval (
   constraint pk_time_interval primary key (id))
 ;
 
+create table token (
+  id                        varchar(255) not null,
+  token                     varchar(255),
+  constraint pk_token primary key (id))
+;
+
 
 create table event_basic_event (
   event_id                       varchar(255) not null,
@@ -78,6 +92,8 @@ create sequence basic_event_seq;
 
 create sequence basic_event_occurrence_seq;
 
+create sequence data_seq;
+
 create sequence detection_seq;
 
 create sequence event_seq;
@@ -87,6 +103,8 @@ create sequence event_occurrence_seq;
 create sequence sensor_seq;
 
 create sequence time_interval_seq;
+
+create sequence token_seq;
 
 alter table basic_event add constraint fk_basic_event_sensor_1 foreign key (sensor_id) references sensor (id) on delete restrict on update restrict;
 create index ix_basic_event_sensor_1 on basic_event (sensor_id);
@@ -113,6 +131,8 @@ drop table if exists basic_event;
 
 drop table if exists basic_event_occurrence;
 
+drop table if exists data;
+
 drop table if exists detection;
 
 drop table if exists event;
@@ -125,11 +145,15 @@ drop table if exists sensor;
 
 drop table if exists time_interval;
 
+drop table if exists token;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists basic_event_seq;
 
 drop sequence if exists basic_event_occurrence_seq;
+
+drop sequence if exists data_seq;
 
 drop sequence if exists detection_seq;
 
@@ -140,4 +164,6 @@ drop sequence if exists event_occurrence_seq;
 drop sequence if exists sensor_seq;
 
 drop sequence if exists time_interval_seq;
+
+drop sequence if exists token_seq;
 
