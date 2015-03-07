@@ -82,4 +82,14 @@ public class SensorController extends Controller {
 
         return redirect(routes.SensorController.sensors());
     }
+
+    public static Result resetSensor(String id) {
+        Sensor sensor = Sensor.find.byId(id);
+        sensor.setDescription(null);
+        sensor.setName(null);
+        sensor.setLocation(null);
+        sensor.update();
+
+        return redirect(routes.SensorController.sensors());
+    }
 }

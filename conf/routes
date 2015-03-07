@@ -34,6 +34,7 @@ GET           /assets/*file                             controllers.Assets.at(pa
 
 GET           /sensor/sensors                           controllers.SensorController.sensors
 GET           /sensor/editSensor/:id                    controllers.SensorController.sensor(id: String)
+GET           /sensor/resetSensor/:id                   controllers.SensorController.resetSensor(id: String)
 POST          /sensor/update                            controllers.SensorController.updateSensor()
 
 # API
