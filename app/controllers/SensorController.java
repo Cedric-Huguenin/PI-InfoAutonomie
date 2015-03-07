@@ -80,7 +80,7 @@ public class SensorController extends Controller {
 
         sensor.update();
 
-        return redirect(routes.SensorController.sensors());
+        return redirect(controllers.routes.SensorController.sensors());
     }
 
     public static Result resetSensor(String id) {
@@ -90,6 +90,6 @@ public class SensorController extends Controller {
         sensor.setLocation(null);
         sensor.update();
 
-        return redirect(routes.SensorController.sensors());
+        return redirect(controllers.routes.SensorController.sensors());
     }
 }
