@@ -28,14 +28,16 @@
                                 <h3 class="panel-title">Modifier un capteur</h3>
                             </div>
                             <div class="panel-body">
-                            @helper.form(routes.SensorController.updateSensor) {
+                            @helper.form(action = routes.SensorController.updateSensor) {
+                                <div class="form-group">
+                                    <input class="form-control" type="hidden" name="id" placeholder="Id" value="@form("id").value">
+                                </div>
                                 <div class="form-group">
                                     <label>Nom</label>
                                     <input class="form-control" type="text" name="name" placeholder="Name" value="@form("name").value">
                                 </div>
                                 <div class="form-group">
-                                    <label>Adresse</label>
-                                    <input class="form-control" type="text" name="address" placeholder="Adresse" value="@form("address").value">
+                                    <input class="form-control" type="hidden" name="address" placeholder="Adresse" value="@form("address").value">
                                 </div>
                                 <div class="form-group">
                                     <label>Type</label>
@@ -51,9 +53,7 @@
                                 </div>
                                 <div>
                                     <button class="btn btn-primary" type="submit">Modifier</button>
-                                    @helper.form(routes.SensorController.sensors()) {
-                                        <input class="btn btn-default" type="submit" value="Retour">
-                                    }
+                                    <a href="@routes.SensorController.sensors()" class="btn btn-default">Retour</a>
                                 </div>
                             }
                             </div>

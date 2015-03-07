@@ -18,23 +18,21 @@
 				<div class="col-lg-3 col-md-6">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-                            @if(moteToConfNumber > 0) {
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-bug fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">@moteToConfNumber</div>
-                                        @if(moteToConfNumber == 1) {
-                                            <div>Nouveau capteur à configurer</div>
-                                        } else {
-                                            <div>Nouveaux capteurs à configurer</div>
-                                        }
-                                    </div>
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-bug fa-5x"></i>
                                 </div>
-                            }
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@moteToConfNumber</div>
+                                    @if(moteToConfNumber <= 1) {
+                                        <div>Nouveau capteur à configurer</div>
+                                    } else {
+                                        <div>Nouveaux capteurs à configurer</div>
+                                    }
+                                </div>
+                            </div>
 						</div>
-						<a href="#">
+						<a href="@routes.SensorController.sensors()">
 							<div class="panel-footer">
 								<span class="pull-left">View Details</span>
 								<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

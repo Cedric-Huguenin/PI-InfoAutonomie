@@ -3,7 +3,6 @@ package controllers;
 import model.Sensor;
 import static play.data.Form.*;
 
-import model.SensorType;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -11,7 +10,6 @@ import views.html.sensor.sensors;
 import views.html.sensor.editSensor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +38,7 @@ public class SensorController extends Controller {
         Form form = form(Sensor.class);
         Sensor sensor = Sensor.find.byId(id);
         System.out.println("List: id "+ id + " " + sensor);
+        form.data().put("id", sensor.getId());
         form.data().put("name", sensor.getName());
         form.data().put("address", sensor.getAddress());
         form.data().put("location", sensor.getLocation());
@@ -72,9 +71,15 @@ public class SensorController extends Controller {
 
     public static Result updateSensor() {
         Form<Sensor> sensorForm = form(Sensor.class).bindFromRequest();
-        System.out.println("Form : name " + sensorForm.get().name);
-        Sensor sensor = sensorForm.get();
-        System.out.println("Form : addresse " + sensor.getAddress() + "  " + sensorForm.get().address);
-        return sensors();
+
+        //System.out.println("\n\n\nForm : name " + sensorForm.get().getName() + sensorForm.get().getAddress()+"\n\n\n");
+        Sensor sensor = Sensor.find.ref(sensorForm.get().id);
+        sensor.setDescription(sensorForm.get().getDescription());
+        sensor.setLocation(sensorForm.get().getLocation());
+        sensor.setName(sensorForm.get().getName());
+
+        sensor.update();
+
+        return redirect(routes.SensorController.sensors());
     }
 }
