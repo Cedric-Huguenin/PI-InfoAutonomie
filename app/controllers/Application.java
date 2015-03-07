@@ -1,6 +1,7 @@
 package controllers;
 
 import com.avaje.ebean.Ebean;
+import model.Sensor;
 import play.libs.Yaml;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -30,6 +31,13 @@ public class Application extends Controller {
      * @return the index result.
      */
     public static Result index() {
-        return ok(index.render("Your new application is ready."));
+        List<Sensor> sensors = Sensor.all();
+        int cpt = 0;
+        for(Sensor sensor : sensors) {
+            if(sensor.getDescription() == null) {
+                cpt++;
+            }
+        }
+        return ok(index.render("Your new application is ready.", cpt));
     }
 }

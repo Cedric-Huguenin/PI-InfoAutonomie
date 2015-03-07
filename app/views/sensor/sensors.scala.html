@@ -1,0 +1,94 @@
+@(sensors: List[model.Sensor], newSensors: List[model.Sensor])
+
+@import java.util.List;
+@import helper._;
+
+@main("Capteurs") {
+
+<div id="wrapper">
+
+        @nav()
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Dashboard <small>Capteurs</small>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Liste des capteurs</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Nom</th>
+                                                <th>Adresse</th>
+                                                <th>Type</th>
+                                                <th>Emplacement</th>
+                                                <th>Description</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for(sensor <- newSensors) {
+                                                <tr>
+                                                    <td><i class="fa fa-exclamation-triangle"></i></td>
+                                                    <td>@sensor.name</td>
+                                                    <td>@sensor.address</td>
+                                                    <td>@sensor.getType</td>
+                                                    <td>@sensor.location</td>
+                                                    <td>@sensor.description</td>
+                                                    <td>
+                                                        @form(routes.SensorController.sensor(sensor.id)) {
+                                                            <input class="btn btn-primary" type="submit" value="Éditer">
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                            @for(sensor <- sensors) {
+                                                <tr>
+                                                    <td></td>
+                                                    <td>@sensor.name</td>
+                                                    <td>@sensor.address</td>
+                                                    <td>@sensor.getType</td>
+                                                    <td>@sensor.location</td>
+                                                    <td>@sensor.description</td>
+                                                    <td>
+                                                        @form(routes.SensorController.sensor(sensor.id)) {
+                                                            <input class="btn btn-primary" type="submit" value="Éditer">
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+}

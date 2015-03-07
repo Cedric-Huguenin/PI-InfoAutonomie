@@ -1,0 +1,94 @@
+@(form: Form[model.Sensor])
+
+@main("Capteurs") {
+
+<div id="wrapper">
+
+        @nav()
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Capteur
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Modifier un capteur</h3>
+                            </div>
+                            <div class="panel-body">
+                            @helper.form(action = routes.SensorController.updateSensor) {
+                                <div class="form-group">
+                                    <input class="form-control" type="hidden" name="id" placeholder="Id" value="@form("id").value">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input class="form-control" type="text" name="name" placeholder="Name" value="@form("name").value">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="hidden" name="address" placeholder="Adresse" value="@form("address").value">
+                                </div>
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <input class="form-control" type="text" name="type" placeholder="Type" value="@form("type").value" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Emplacement</label>
+                                    <input class="form-control" type="text" name="location" placeholder="Emplacement" value="@form("location").value">
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input class="form-control" type="text" name="description" placeholder="Description" value="@form("description").value">
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary" type="submit">Modifier</button>
+                                    <a href="@routes.SensorController.sensors()" class="btn btn-default">Retour</a>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+                                        Reset
+                                    </button>
+                                </div>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Attention</h4>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûr de vouloir réinitialiser les informations de ce capteur ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <a href="@routes.SensorController.resetSensor(form("id").value)"><button type="button" class="btn btn-primary">Réinitialiser</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+}

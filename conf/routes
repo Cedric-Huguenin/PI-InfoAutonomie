@@ -30,17 +30,24 @@ GET           /event/timeline                           controllers.EventControl
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                             controllers.Assets.at(path="/public", file)
 
+# Sensor
+
+GET           /sensor/sensors                           controllers.SensorController.sensors
+GET           /sensor/editSensor/:id                    controllers.SensorController.sensor(id: String)
+GET           /sensor/resetSensor/:id                   controllers.SensorController.resetSensor(id: String)
+POST          /sensor/update                            controllers.SensorController.updateSensor()
+
 # API
 ## Data
-GET           /api/data                                 controllers.DataController.getAllData
-GET           /api/data/:timestamp/:mote/:label         controllers.DataController.getData(timestamp: Long, mote: String, label: String)
-GET           /api/data/:begin/:end/:mote/:label        controllers.DataController.getDataRange(begin: Long, end: Long, mote: String, label: String)
-POST          /api/data                                 controllers.DataController.createData
-DELETE        /api/data/:timestamp/:mote/:label         controllers.DataController.deleteData(timestamp: Long, mote: String, label: String)
+GET           /api/data                                 controllers.api.DataController.getAllData
+GET           /api/data/:timestamp/:mote/:label         controllers.api.DataController.getData(timestamp: Long, mote: String, label: String)
+GET           /api/data/:begin/:end/:mote/:label        controllers.api.DataController.getDataRange(begin: Long, end: Long, mote: String, label: String)
+POST          /api/data                                 controllers.api.DataController.createData
+DELETE        /api/data/:timestamp/:mote/:label         controllers.api.DataController.deleteData(timestamp: Long, mote: String, label: String)
 
 ## Sensor
 
-GET           /api/sensors                              controllers.SensorController.getMotes
-GET           /api/sensor/:sensorId                     controllers.SensorController.getMote(sensorId: String)
-POST          /api/sensor                               controllers.SensorController.createSensor
-DELETE        /api/sensor/:sensorId                     controllers.SensorController.deleteSensor(sensorId: String)
+GET           /api/sensors                              controllers.api.SensorController.getMotes
+GET           /api/sensor/:sensorId                     controllers.api.SensorController.getMote(sensorId: String)
+POST          /api/sensor                               controllers.api.SensorController.createSensor
+DELETE        /api/sensor/:sensorId                     controllers.api.SensorController.deleteSensor(sensorId: String)
