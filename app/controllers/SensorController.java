@@ -35,9 +35,9 @@ public class SensorController extends Controller {
     }
 
     public static Result sensor(String id) {
-        Form form = form(Sensor.class);
+        Form<Sensor> form = form(Sensor.class);
         Sensor sensor = Sensor.find.byId(id);
-        System.out.println("List: id "+ id + " " + sensor);
+        //System.out.println("List: id "+ id + " " + sensor);
         form.data().put("id", sensor.getId());
         form.data().put("name", sensor.getName());
         form.data().put("address", sensor.getAddress());
