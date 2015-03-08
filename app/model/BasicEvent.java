@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import controllers.api.DataController;
 import model.json.Data;
 import model.json.DataNode;
 import play.db.ebean.Model;
@@ -78,25 +79,13 @@ public class BasicEvent extends Model {
     }
 
     public void check() {
-        DataNode rawDataNode = null;
-        String label = "light1";
-        switch(sensor.getType()) {
-            case LIGHT:
-                label = "light1";
-                break;
-            case TEMP:
-                label = "temperature";
-                break;
-        }
-        try {
-            URL url = new URL("http://iotlab.telecomnancy.eu/rest/data/1/"+ label +"/24");
-            ObjectMapper mapper = new ObjectMapper();
-            rawDataNode = mapper.readValue(url, DataNode.class);
-
-            Data old = null;
+            // TODO: select the correct range to retrieve data
+//            System.out.println("Checking " + this);
+            model.Data old = null;
             switch(detectionMethod.getDetectionType()) {
                 case DELTA:
-                    for (Data data : rawDataNode.getData()) {
+                    for (model.Data data : model.Data.find.where().eq("mote", this.getSensor().getId()).findList()) {
+                        //System.out.println(data);
                         if(old != null) {
                             if(Math.abs(data.getValue() - old.getValue()) > detectionMethod.getDelta()) {
                                 BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
@@ -104,7 +93,7 @@ public class BasicEvent extends Model {
                                 try {
                                     if(BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
                                         occurrence.save();
-                                        System.out.println(occurrence);
+                                        //System.out.println(occurrence);
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Error: " + e);
@@ -115,14 +104,14 @@ public class BasicEvent extends Model {
                     }
                     break;
                 case SIMPLE_THRESHOLD:
-                    for(Data data : rawDataNode.getData()) {
+                    for(model.Data data : model.Data.all()) {
                         if(data.getValue() > detectionMethod.getSimpleThreshold()) {
                             BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
                                     data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
                             try {
                                 if(BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
                                     occurrence.save();
-                                    System.out.println(occurrence);
+                                    //System.out.println(occurrence);
                                 }
                             } catch (Exception e) {
                                 System.out.println("Error: " + e);
@@ -131,10 +120,9 @@ public class BasicEvent extends Model {
                         old = data;
                     }
                     break;
+                default:
+                    break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -144,11 +132,11 @@ public class BasicEvent extends Model {
     @Override
     public String toString() {
         return "BasicEvent{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", sensor=" + sensor +
-                ", detectionMethod=" + detectionMethod +
-                ", icon='" + icon + '\'' +
+                "id='" + getId() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", sensor=" + getSensor() +
+                ", detectionMethod=" + getDetectionMethod() +
+                ", icon='" + getIcon() + '\'' +
                 '}';
     }
 

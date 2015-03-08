@@ -84,11 +84,12 @@ public class Sensor extends Model {
     @Override
     public String toString() {
         return "Sensor{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", type=" + type +
-                ", location='" + location + '\'' +
-                ", description='" + description + '\'' +
+                "id='" + getId() + '\'' +
+                "name='" + getName() + '\'' +
+                ", address='" + getAddress() + '\'' +
+                ", type=" + getType() +
+                ", location='" + getLocation() + '\'' +
+                ", description='" + getDescription() + '\'' +
                 '}';
     }
 }

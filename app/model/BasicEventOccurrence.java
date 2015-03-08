@@ -106,7 +106,7 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
                 '}';
     }
 
-    public boolean occur(TimeInterval t, BasicEvent basicEvent) {
+    public long occur(TimeInterval t, BasicEvent basicEvent) {
         GregorianCalendar c = new GregorianCalendar();
         c.setTimeInMillis(System.currentTimeMillis());
 
@@ -128,10 +128,11 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
         end.set(Calendar.SECOND, tmp.get(Calendar.SECOND));
 
 
-        begin.add(Calendar.DAY_OF_YEAR, -1);
-        end.add(Calendar.DAY_OF_YEAR, -1);
+        // TODO: adjust time range
+        begin.add(Calendar.DAY_OF_YEAR, 0);
+        end.add(Calendar.DAY_OF_YEAR, 0);
 
-        if(end.before(begin)) { //  if end is 8:00 and begin is 23:00 for example
+        if(end.before(begin)) { // e.g. if end is 8:00 and begin is 23:00
             end.add(Calendar.DAY_OF_YEAR, 1);
         }
 
@@ -145,6 +146,6 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
         System.out.println("Found " + basicsEventOccurrences.size() + " item(s) ");
 
 
-        return basicsEventOccurrences.size() > 0;
+        return basicsEventOccurrences.size() > 0 ? basicsEventOccurrences.get(0).getTimestamp() : -1;
     }
 }

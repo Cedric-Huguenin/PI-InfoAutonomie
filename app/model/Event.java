@@ -3,6 +3,7 @@ package model;
 import jboolexpr.BooleanExpression;
 import jboolexpr.MalformedBooleanException;
 import play.db.ebean.Model;
+import utils.TimestampUtils;
 
 import javax.persistence.*;
 import javax.script.ScriptEngine;
@@ -78,17 +79,20 @@ public class Event extends Model {
     public void check() {
         BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence();
 
-        String toEval = new String(expression);
+        String toEval = new String(expression); // copy the string
 
-        System.out.println("STRING : " + toEval);
-
+//        System.out.println("STRING : " + toEval);
+        long mean = 0;
+        int cpt = 0;
         String[] basicEventIds = toEval.split("(\\|\\||&&)");
         for(String id : basicEventIds) {
+            cpt++;
             id = id.trim();
             BasicEvent basicEvent = BasicEvent.find.ref(id);
 //            System.out.println("Current BasicEventID  : !" + basicEvent.getId());
-            boolean occur = basicEventOccurrence.occur(timeInterval, basicEvent);
-            toEval = toEval.replace(id, occur+"");
+            long occurTime = basicEventOccurrence.occur(timeInterval, basicEvent);
+            mean += occurTime;
+            toEval = toEval.replace(id, (occurTime>-1)+"");
 
         }
 
@@ -101,10 +105,12 @@ public class Event extends Model {
             // bool == true
             System.out.println(boolExpr.toString() + " == " + bool);
 
-            if(bool) {
-                EventOccurrence eventOccurrence = new EventOccurrence(this, 0, "");
-                eventOccurrence.save();
-                System.out.println("EVENT OCCURRENCE : persisted !");
+            if(bool && cpt > 0) {
+                EventOccurrence eventOccurrence = new EventOccurrence(this, mean/cpt, TimestampUtils.formatToString(mean/cpt, "dd-MM-yyyy HH:mm:SS"));
+                if(EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
+                    eventOccurrence.save();
+                }
+//                System.out.println("EVENT OCCURRENCE : persisted !");
             }
             // (((!true)&&false)||true) == true
         } catch (MalformedBooleanException e) {

@@ -32,7 +32,7 @@
     simpleThreshold: 0
     minValue:        0
     maxValue:        0
-    delta:           0.11
+    delta:           0.06
 
 # TimeInterval
 
