@@ -21,6 +21,7 @@ public class Sensor extends Model {
     public SensorType type;
     public String location;
     public String description;
+    public String unit;
 
     public static Sensor create(Sensor sensor) {
         sensor.save();
@@ -81,6 +82,14 @@ public class Sensor extends Model {
         this.id = id;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     @Override
     public String toString() {
         return "Sensor{" +
@@ -90,6 +99,7 @@ public class Sensor extends Model {
                 ", type=" + getType() +
                 ", location='" + getLocation() + '\'' +
                 ", description='" + getDescription() + '\'' +
+                ", unit='" + getUnit() + '\'' +
                 '}';
     }
 }

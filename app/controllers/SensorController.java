@@ -43,6 +43,7 @@ public class SensorController extends Controller {
         form.data().put("address", sensor.getAddress());
         form.data().put("location", sensor.getLocation());
         form.data().put("description", sensor.getDescription());
+        form.data().put("unit", sensor.getUnit());
         String type = "Type";
         switch(sensor.getType()) {
             case DOOR:
@@ -77,6 +78,7 @@ public class SensorController extends Controller {
         sensor.setDescription(sensorForm.get().getDescription());
         sensor.setLocation(sensorForm.get().getLocation());
         sensor.setName(sensorForm.get().getName());
+        sensor.setUnit(sensorForm.get().getUnit());
 
         sensor.update();
 

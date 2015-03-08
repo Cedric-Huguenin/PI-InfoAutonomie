@@ -40,6 +40,7 @@
                                                 <th>Type</th>
                                                 <th>Emplacement</th>
                                                 <th>Description</th>
+                                                <th>Unité</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -52,6 +53,7 @@
                                                     <td>@sensor.getType</td>
                                                     <td>@sensor.location</td>
                                                     <td>@sensor.description</td>
+                                                    <td>@sensor.unit</td>
                                                     <td>
                                                         @form(routes.SensorController.sensor(sensor.id)) {
                                                             <input class="btn btn-primary" type="submit" value="Éditer">
@@ -67,6 +69,7 @@
                                                     <td>@sensor.getType</td>
                                                     <td>@sensor.location</td>
                                                     <td>@sensor.description</td>
+                                                    <td>@sensor.unit</td>
                                                     <td>
                                                         @form(routes.SensorController.sensor(sensor.id)) {
                                                             <input class="btn btn-primary" type="submit" value="Éditer">

@@ -6,9 +6,6 @@ import play.db.ebean.Model;
 import utils.TimestampUtils;
 
 import javax.persistence.*;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 

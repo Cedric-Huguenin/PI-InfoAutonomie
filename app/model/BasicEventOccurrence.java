@@ -39,6 +39,10 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
         return basicEventOccurrence;
     }
 
+    public static List<BasicEventOccurrence> all() {
+        return find.all();
+    }
+
     public static Model.Finder<String,BasicEventOccurrence> find = new Model.Finder<>(String.class, BasicEventOccurrence.class);
 
     public String getDate() {

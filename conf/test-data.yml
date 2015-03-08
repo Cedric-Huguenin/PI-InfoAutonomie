@@ -1,20 +1,22 @@
 # Sensor
 
 - &sensor1 !!model.Sensor
-    id: 153.111.LIGHT
-    name: Light Sensor
-    address: 153.111
-    type: LIGHT
-    location: Bureau TN
+    id:          153.111.LIGHT
+    name:        Light Sensor
+    address:     153.111
+    type:        LIGHT
+    location:    Bureau TN
     description: Sur la commode
+    unit:        lux
 
 - &tempSensor !!model.Sensor
-    id: 153.111.TEMP
-    name: Temp Sensor
-    address: 153.111
-    type: TEMP
-    location: Bureau TN
+    id:          153.111.TEMP
+    name:        Temp Sensor
+    address:     153.111
+    type:        TEMP
+    location:    Bureau TN
     description: Sur la commode
+    unit:        °C
 
 # Detection
 

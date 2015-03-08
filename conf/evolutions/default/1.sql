@@ -65,6 +65,7 @@ create table sensor (
   type                      integer,
   location                  varchar(255),
   description               varchar(255),
+  unit                      varchar(255),
   constraint ck_sensor_type check (type in (0,1,2,3,4,5)),
   constraint pk_sensor primary key (id))
 ;
