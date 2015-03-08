@@ -52,6 +52,7 @@
     sensor:             *sensor1
     detectionMethod:    *delta_15
     icon:               fa-lightbulb-o
+    color:              warning
 
 - &basicEvent2 !!model.BasicEvent
     id:                 temp_delta_0_11
@@ -59,6 +60,7 @@
     sensor:             *tempSensor
     detectionMethod:    *delta_0_11
     icon:               fa-fire-extinguisher
+    color:              danger
 
 
 # BasicEventOccurrence
@@ -78,6 +80,8 @@
     name:         Petit dej
     timeInterval: *timeInterval1
     expression:   light_delta_15 || temp_delta_0_11
+    icon:         fa-coffee
+    color:        ''
 
 
 # API

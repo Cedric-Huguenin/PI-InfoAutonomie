@@ -46,6 +46,8 @@ public class BasicEvent extends Model {
      */
     public String icon;
 
+    public String color;
+
     public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
 
     /**
@@ -202,5 +204,13 @@ public class BasicEvent extends Model {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

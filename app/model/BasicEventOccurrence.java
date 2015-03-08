@@ -133,8 +133,8 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
 
 
         // TODO: adjust time range
-        begin.add(Calendar.DAY_OF_YEAR, 0);
-        end.add(Calendar.DAY_OF_YEAR, 0);
+        begin.add(Calendar.DAY_OF_YEAR, -1);
+        end.add(Calendar.DAY_OF_YEAR, -1);
 
         if(end.before(begin)) { // e.g. if end is 8:00 and begin is 23:00
             end.add(Calendar.DAY_OF_YEAR, 1);
@@ -142,7 +142,7 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
 
 //        System.out.println("From " +  (begin.getTimeInMillis()/1000) + " to " +  (end.getTimeInMillis()/1000));
 
-//        System.out.println("SEARCHING FOR " + basicEvent.getId());
+        System.out.println("SEARCHING FOR " + basicEvent.getId());
         String basicEventId = basicEvent.getId();
         List<BasicEventOccurrence> basicsEventOccurrences = BasicEventOccurrence.find.where()
                 .between("timestamp", begin.getTimeInMillis() / 1000, end.getTimeInMillis() / 1000).eq("basic_event_id", basicEventId).findList();

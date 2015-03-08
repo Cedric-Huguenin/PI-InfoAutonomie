@@ -45,6 +45,10 @@ public class Event extends Model {
      * The expression combining BasicEvent ids
      */
     public String expression;
+
+    public String icon;
+    public String color;
+
     /**
      * The list of all the existing Event.
      */
@@ -83,13 +87,15 @@ public class Event extends Model {
         int cpt = 0;
         String[] basicEventIds = toEval.split("(\\|\\||&&)");
         for(String id : basicEventIds) {
-            cpt++;
             id = id.trim();
             BasicEvent basicEvent = BasicEvent.find.ref(id);
 //            System.out.println("Current BasicEventID  : !" + basicEvent.getId());
             long occurTime = basicEventOccurrence.occur(timeInterval, basicEvent);
-            mean += occurTime;
-            toEval = toEval.replace(id, (occurTime>-1)+"");
+            if (occurTime != -1) {
+                cpt++;
+                mean += occurTime;
+            }
+            toEval = toEval.replace(id, (occurTime != -1)+"");
 
         }
 
@@ -99,7 +105,6 @@ public class Event extends Model {
         try {
             boolExpr = BooleanExpression.readLeftToRight(toEval);
             boolean bool = boolExpr.booleanValue();
-            // bool == true
             System.out.println(boolExpr.toString() + " == " + bool);
 
             if(bool && cpt > 0) {
@@ -193,6 +198,22 @@ public class Event extends Model {
 
     public void setExpression(String expression) {
         this.expression = expression;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     /**
