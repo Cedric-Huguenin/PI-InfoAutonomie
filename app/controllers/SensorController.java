@@ -55,7 +55,7 @@ public class SensorController extends Controller {
                 type = "Température";
                 break;
             case HUMIDITY:
-                type = "humidité";
+                type = "Humidité";
                 break;
             case POWER:
                 type = "Consommation électrique";

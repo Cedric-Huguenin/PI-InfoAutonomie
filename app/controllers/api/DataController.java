@@ -30,6 +30,12 @@ public class DataController extends Controller {
         return ok(Json.toJson(dataList));
     }
 
+    public static Data getDataIntern(Long timestamp, String mote, String label) {
+        Data data = new Data(timestamp, 0, label, mote);
+        data = Data.find.byId(data.getPrimKey());
+        return data;
+    }
+
     public static Result getData(Long timestamp, String mote, String label) {
         // GET http://localhost:9000/api/data/1411848808/219.98/temperature
         Data data = new Data(timestamp, 0, label, mote);
@@ -50,6 +56,12 @@ public class DataController extends Controller {
         List<Data> dataList = Data.find.where()
                 .between("timestamp", begin, end).eq("mote", mote).eq("label", label).findList();
         return ok(Json.toJson(dataList));
+    }
+
+    public static List<Data> getDataRangeIntern(Long begin, Long end, String mote, String label) {
+        List<Data> dataList = Data.find.where()
+                .between("timestamp", begin, end).eq("mote", mote).eq("label", label).findList();
+        return dataList;
     }
 
     @Security.Authenticated(Secured.class)
