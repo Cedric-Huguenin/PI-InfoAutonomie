@@ -30,12 +30,26 @@ public class DataController extends Controller {
         return ok(Json.toJson(dataList));
     }
 
+    /**
+     * Retrieve data from the database according to the given timestamp, data type and mote
+     * @param timestamp the timestamp
+     * @param mote the mote
+     * @param label the label
+     * @return the data given by the mote for the label at the given timestamp
+     */
     public static Data getDataIntern(Long timestamp, String mote, String label) {
         Data data = new Data(timestamp, 0, label, mote);
         data = Data.find.byId(data.getPrimKey());
         return data;
     }
 
+    /**
+     * Retrieve data from the database according to the given timestamp, data type and mote
+     * @param timestamp the timestamp
+     * @param mote the mote
+     * @param label the label
+     * @return the data given by the mote for the label at the given timestamp
+     */
     public static Result getData(Long timestamp, String mote, String label) {
         // GET http://localhost:9000/api/data/1411848808/219.98/temperature
         Data data = new Data(timestamp, 0, label, mote);
@@ -51,6 +65,14 @@ public class DataController extends Controller {
         return ok(result);
     }
 
+    /**
+     * Retrieve data from the database according to the given timestamp range, data type and mote
+     * @param begin begin of the range
+     * @param end end of the range
+     * @param mote data from this mote will be retrieved
+     * @param label data with this label will be retrieved
+     * @return the data list
+     */
     public static Result getDataRange(Long begin, Long end, String mote, String label) {
         // GET http://localhost:9000/api/data/1411848800/14118488010/219.98/temperature
         List<Data> dataList = Data.find.where()
@@ -58,6 +80,14 @@ public class DataController extends Controller {
         return ok(Json.toJson(dataList));
     }
 
+    /**
+     * Retrieve data from the database according to the given timestamp range, data type and mote
+     * @param begin begin of the range
+     * @param end end of the range
+     * @param mote data from this mote will be retrieved
+     * @param label data with this label will be retrieved
+     * @return the data list
+     */
     public static List<Data> getDataRangeIntern(Long begin, Long end, String mote, String label) {
         List<Data> dataList = Data.find.where()
                 .between("timestamp", begin, end).eq("mote", mote).eq("label", label).findList();
