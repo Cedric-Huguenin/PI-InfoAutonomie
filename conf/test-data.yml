@@ -1,20 +1,22 @@
 # Sensor
 
 - &sensor1 !!model.Sensor
-    id: 153.111.LIGHT
-    name: Light Sensor
-    address: 153.111
-    type: LIGHT
-    location: Bureau TN
+    id:          153.111.LIGHT
+    name:        Light Sensor
+    address:     153.111
+    type:        LIGHT
+    location:    Bureau TN
     description: Sur la commode
+    unit:        lux
 
 - &tempSensor !!model.Sensor
-    id: 153.111.TEMP
-    name: Temp Sensor
-    address: 153.111
-    type: TEMP
-    location: Bureau TN
+    id:          153.111.TEMP
+    name:        Temp Sensor
+    address:     153.111
+    type:        TEMP
+    location:    Bureau TN
     description: Sur la commode
+    unit:        °C
 
 # Detection
 
@@ -32,7 +34,7 @@
     simpleThreshold: 0
     minValue:        0
     maxValue:        0
-    delta:           0.11
+    delta:           0.06
 
 # TimeInterval
 
@@ -50,6 +52,7 @@
     sensor:             *sensor1
     detectionMethod:    *delta_15
     icon:               fa-lightbulb-o
+    color:              warning
 
 - &basicEvent2 !!model.BasicEvent
     id:                 temp_delta_0_11
@@ -57,6 +60,7 @@
     sensor:             *tempSensor
     detectionMethod:    *delta_0_11
     icon:               fa-fire-extinguisher
+    color:              danger
 
 
 # BasicEventOccurrence
@@ -76,6 +80,8 @@
     name:         Petit dej
     timeInterval: *timeInterval1
     expression:   light_delta_15 || temp_delta_0_11
+    icon:         fa-coffee
+    color:        ''
 
 
 # API

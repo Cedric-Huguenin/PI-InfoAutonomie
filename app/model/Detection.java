@@ -148,12 +148,12 @@ public class Detection extends Model {
     @Override
     public String toString() {
         return "Detection{" +
-                "id='" + id + '\'' +
-                ", detectionType=" + detectionType +
-                ", simpleThreshold=" + simpleThreshold +
-                ", minValue=" + minValue +
-                ", maxValue=" + maxValue +
-                ", delta=" + delta +
+                "id='" + getId() + '\'' +
+                ", detectionType=" + getDetectionType() +
+                ", simpleThreshold=" + getSimpleThreshold() +
+                ", minValue=" + getMinValue() +
+                ", maxValue=" + getMaxValue() +
+                ", delta=" + getDelta() +
                 '}';
     }
 }

@@ -56,6 +56,15 @@ public class Data extends Model{
             result = 31 * result + label.hashCode();
             return result;
         }
+
+        @Override
+        public String toString() {
+            return "PrimKey{" +
+                    "timestamp=" + timestamp +
+                    ", mote='" + mote + '\'' +
+                    ", label='" + label + '\'' +
+                    '}';
+        }
     }
 
     public Data() {
@@ -147,5 +156,13 @@ public class Data extends Model{
 
     public void setPrimKey(PrimKey primKey) {
         this.primKey = primKey;
+    }
+
+    @Override
+    public String toString() {
+        return "Data{" +
+                "primKey=" + getPrimKey() +
+                ", value=" + getValue() +
+                '}';
     }
 }

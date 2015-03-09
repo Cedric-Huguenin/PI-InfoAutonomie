@@ -1,6 +1,7 @@
 package controllers;
 
 import model.Sensor;
+
 import static play.data.Form.*;
 
 import play.data.Form;
@@ -24,8 +25,8 @@ public class SensorController extends Controller {
         List<Sensor> oldSensors = new ArrayList<>();
         List<Sensor> newSensors = new ArrayList<>();
 
-        for(Sensor sensor : allSensors) {
-            if(sensor.getDescription() == null) {
+        for (Sensor sensor : allSensors) {
+            if (sensor.getDescription() == null) {
                 newSensors.add(sensor);
             } else {
                 oldSensors.add(sensor);
@@ -43,8 +44,9 @@ public class SensorController extends Controller {
         form.data().put("address", sensor.getAddress());
         form.data().put("location", sensor.getLocation());
         form.data().put("description", sensor.getDescription());
+        form.data().put("unit", sensor.getUnit());
         String type = "Type";
-        switch(sensor.getType()) {
+        switch (sensor.getType()) {
             case DOOR:
                 type = "Contact de porte";
                 break;
@@ -55,7 +57,7 @@ public class SensorController extends Controller {
                 type = "Température";
                 break;
             case HUMIDITY:
-                type = "humidité";
+                type = "Humidité";
                 break;
             case POWER:
                 type = "Consommation électrique";
@@ -77,10 +79,11 @@ public class SensorController extends Controller {
         sensor.setDescription(sensorForm.get().getDescription());
         sensor.setLocation(sensorForm.get().getLocation());
         sensor.setName(sensorForm.get().getName());
+        sensor.setUnit(sensorForm.get().getUnit());
 
         sensor.update();
 
-        return redirect(routes.SensorController.sensors());
+        return redirect(controllers.routes.SensorController.sensors());
     }
 
     public static Result resetSensor(String id) {
@@ -90,6 +93,6 @@ public class SensorController extends Controller {
         sensor.setLocation(null);
         sensor.update();
 
-        return redirect(routes.SensorController.sensors());
+        return redirect(controllers.routes.SensorController.sensors());
     }
 }

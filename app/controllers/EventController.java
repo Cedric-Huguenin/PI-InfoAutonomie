@@ -1,16 +1,15 @@
 package controllers;
 
 import model.*;
-import model.json.Data;
-import model.json.DataNode;
+import play.data.Form;
 import play.mvc.Result;
-import utils.GetDataFromUrl;
-import utils.TimestampUtils;
+import views.html.event.create;
+import views.html.event.events;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
-import static play.mvc.Results.ok;
+import static play.data.Form.form;
+import static play.mvc.Results.*;
 
 /**
  * Controller to manage and display more complex events.
@@ -18,12 +17,46 @@ import static play.mvc.Results.ok;
  */
 public class EventController {
 
+    static Form<Event> eventForm = Form.form(Event.class);
+
+    public static Result events() {
+        List<Event> allEvents = Event.all();
+
+        return ok(events.render(allEvents));
+    }
+
+    public static Result edit(String id) {
+        Event event = Event.find.byId(id);
+        eventForm.data().put("id", event.getId());
+        eventForm.data().put("name", event.getName());
+        eventForm.data().put("expression", event.getExpression());
+
+        // TODO: template to edit an event
+        return ok(create.render(eventForm, BasicEvent.all()));
+    }
+
+    public static Result delete(String id) {
+        Event event = Event.find.byId(id);
+        event.delete();
+
+        return redirect(controllers.routes.EventController.events());
+    }
+
+    public static Result save() {
+        Form<Event> eventForm = form(Event.class).bindFromRequest();
+        if (eventForm.hasErrors()) {
+            return badRequest(create.render(eventForm, BasicEvent.all()));
+        }
+        eventForm.get().save();
+        return redirect(controllers.routes.EventController.events());
+    }
+
     /**
      * Loads the create event page.
      * @return the result of the event page.
      */
     public static Result create() {
-        return ok(views.html.event.create.render("Your new application is ready."));
+        return ok(create.render(form(Event.class), BasicEvent.all()));
     }
 
     /**

@@ -33,7 +33,7 @@
                             } else {
                                 <li class="timeline-inverted">
                             }
-                                <div class="timeline-badge warning"><i class="fa @event.getBasicEvent.getIcon"></i>
+                                <div class="timeline-badge @event.getBasicEvent.getColor"><i class="fa @event.getBasicEvent.getIcon"></i>
                                 </div>
                                 <div class="timeline-panel">
                                     <div class="timeline-heading">
@@ -41,7 +41,7 @@
                                         <p><small class="text-muted"><i class="fa fa-clock-o"></i> @event.getDate </small>
                                     </div>
                                     <div class="timeline-body">
-                                        <p>@event.fromValue to @event.toValue lux</p>
+                                        <p>@event.fromValue to @event.toValue @event.getBasicEvent.getSensor.getUnit</p>
                                     </div>
                                 </div>
                             </li>

@@ -9,6 +9,7 @@ create table basic_event (
   sensor_id                 varchar(255),
   detection_method_id       varchar(255),
   icon                      varchar(255),
+  color                     varchar(255),
   constraint pk_basic_event primary key (id))
 ;
 
@@ -47,6 +48,8 @@ create table event (
   duration                  integer,
   time_interval_id          varchar(255),
   expression                varchar(255),
+  icon                      varchar(255),
+  color                     varchar(255),
   constraint pk_event primary key (id))
 ;
 
@@ -65,6 +68,7 @@ create table sensor (
   type                      integer,
   location                  varchar(255),
   description               varchar(255),
+  unit                      varchar(255),
   constraint ck_sensor_type check (type in (0,1,2,3,4,5)),
   constraint pk_sensor primary key (id))
 ;
