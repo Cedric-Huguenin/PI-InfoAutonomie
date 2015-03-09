@@ -1,0 +1,29 @@
+\section{Sensor}
+
+L'API permet de recevoir les nouveaux capteurs détectés par le Raspberry. Ainsi, la plateforme peut connaître la liste des capteurs et associer une description et une localisation du capteur.
+
+\paragraph{POST /api/sensor} permet d'ajouter un nouveau capteur à la plateforme web. Si le capteur est déjà présent, l'action est ignorée.
+\begin{lstlisting}[language=json,emph={token, anAddress, aType},emphstyle={\bfseries\itshape},basicstyle={\ttfamily},caption=POST /api/sensor]
+HEADER : {"AUTH":"token"}
+BODY : {"address":"anAddress","type":"aType"}
+
+# Exemple
+
+HEADER : {"AUTH":"hj1456bsdg1bfsg846bg1sb125gfd"}
+BODY : {"address":"153.111","type":"LIGHT"}
+\end{lstlisting}
+
+
+
+
+\section{Data}
+
+\paragraph{POST /api/data} permet d'ajouter une nouvelle donnée à la plateforme web. Si la valeur est déjà présente, l'action est ignorée.
+\begin{lstlisting}[language=json,emph={token, aTimestamp, aLabel,aValue,aMote},emphstyle={\bfseries\itshape},basicstyle={\ttfamily},caption=POST /api/data]
+HEADER : {"AUTH":"token"}
+BODY : {"timestamp":"aTimestamp","label":"aLabel","value":"aValue","mote":"aMote"}
+
+# Exemple
+HEADER : {"AUTH":"hj1456bsdg1bfsg846bg1sb125gfd"}
+BODY : {"timestamp":1411848808,"label":"temperature","value":24.0,"mote":"219.98"}
+\end{lstlisting}
