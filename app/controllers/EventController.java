@@ -32,13 +32,13 @@ public class EventController {
         eventForm.data().put("expression", event.getExpression());
 
         // TODO: template to edit an event
-        return ok(create.render(eventForm));
+        return ok(create.render(eventForm, BasicEvent.all()));
     }
 
     public static Result save() {
         Form<Event> eventForm = form(Event.class).bindFromRequest();
         if (eventForm.hasErrors()) {
-            return badRequest(create.render(eventForm));
+            return badRequest(create.render(eventForm, BasicEvent.all()));
         }
         eventForm.get().save();
         return redirect(controllers.routes.EventController.events());
@@ -49,7 +49,7 @@ public class EventController {
      * @return the result of the event page.
      */
     public static Result create() {
-        return ok(create.render(form(Event.class)));
+        return ok(create.render(form(Event.class), BasicEvent.all()));
     }
 
     /**

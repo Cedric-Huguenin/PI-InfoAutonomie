@@ -1,5 +1,6 @@
-@(form: Form[model.Event])
+@(form: Form[model.Event], basicEvents: List[model.BasicEvent])
 
+@import java.util.List;
 @main("Créer un évènement") {
 
 <div id="wrapper">
@@ -34,7 +35,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Expression</label>
-                                    <input class="form-control" type="text" name="expression" placeholder="Description" value="@form("expression").value">
+                                    <input id="expression" class="form-control" type="text" name="expression" placeholder="Description" value="@form("expression").value">
+                                    <p id="basicEvents">
+                                        <a class="label label-primary" title="ET">&&</a>
+                                        <a class="label label-primary" title="OU">||</a>
+                                        @for(basicEvent <- basicEvents) {
+                                            <a class="label label-default" title="basicEvent.name">@basicEvent.id</a>
+                                        }
+                                    </p>
                                 </div>
                                 <div>
                                     <button class="btn btn-primary" type="submit">Créer</button>
@@ -46,6 +54,12 @@
                     </div>
                 </div>
                 <!-- /.row -->
+
+                <script>
+                $('#basicEvents').find('a').bind('click', function(event) {
+                    $('#expression').val($('#expression').val() + ' ' + event.target.textContent + ' ');
+                });
+                </script>
 
             </div>
             <!-- /.container-fluid -->
