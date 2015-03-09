@@ -78,6 +78,9 @@ public class Event extends Model {
 
 
     public void check() {
+        // TODO: verify that event has not already been detected for the last TimeInterval
+
+
         BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence();
 
         String toEval = new String(expression); // copy the string
