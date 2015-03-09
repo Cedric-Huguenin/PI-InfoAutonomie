@@ -13,10 +13,13 @@ import eu.aleon.aleoncean.device.StandardDevice;
 import eu.aleon.aleoncean.packet.EnOceanId;
 import eu.aleon.aleoncean.packet.RadioPacket;
 import eu.aleon.aleoncean.packet.radio.RadioPacket1BS;
-import eu.aleon.aleoncean.packet.radio.userdata.UserDataEEPD50001;
 import eu.aleon.aleoncean.rxtx.ESP3Connector;
 
 public class RemoteDeviceEEPD50001 extends StandardDevice implements RemoteDevice  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteDeviceEEPD50001.class);
 	private boolean switchState;
 
@@ -31,16 +34,14 @@ public class RemoteDeviceEEPD50001 extends StandardDevice implements RemoteDevic
             return;
         }
 		
-		final UserDataEEPD50001 userData = new UserDataEEPD50001(radioPacket.getUserDataRaw());
-		
-		setSwitch(DeviceParameterUpdatedInitiation.RADIO_PACKET, userData.isContactClosed());
+		setSwitch(DeviceParameterUpdatedInitiation.RADIO_PACKET, (radioPacket.getData()[1] & 0x01) == 1);
 	}
 	
 	public void setSwitch(DeviceParameterUpdatedInitiation initiation,
 			boolean contactClosed) {
 		final boolean oldState = this.switchState;
         this.switchState = contactClosed;
-        fireParameterChanged(DeviceParameter.SWITCH, initiation, oldState, contactClosed);
+        fireParameterChanged(DeviceParameter.SWITCH, initiation, new Boolean(oldState), new Boolean(contactClosed));
 		
 	}
 	
@@ -66,7 +67,7 @@ public class RemoteDeviceEEPD50001 extends StandardDevice implements RemoteDevic
     public Object getByParameter(final DeviceParameter parameter) throws IllegalDeviceParameterException {
         switch (parameter) {
             case SWITCH:
-                return getSwitch();
+                return new Boolean(getSwitch());
             default:
                 return super.getByParameter(parameter);
         }

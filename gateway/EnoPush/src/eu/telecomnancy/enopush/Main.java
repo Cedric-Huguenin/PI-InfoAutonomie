@@ -10,6 +10,7 @@ import eu.aleon.aleoncean.packet.RadioPacket;
 import eu.aleon.aleoncean.rxtx.ESP3Connector;
 import eu.aleon.aleoncean.rxtx.ReaderShutdownException;
 import eu.aleon.aleoncean.rxtx.USB300;
+import eu.telecomnancy.enopush.telegram.DataManager;
 import eu.telecomnancy.enopush.telegram.TeachedDevices;
 
 public class Main {
@@ -40,12 +41,13 @@ public class Main {
 			try {
 				ESP3Packet packet = serialConnection.read(TIMEOUT, TimeUnit.SECONDS);
 				if(packet != null) {
-					System.out.println(packet.toString());
+					// System.out.println(packet.toString());
 					
 					if(packet.getPacketType() == PacketType.RADIO) {
 						RadioPacket radioPacket = new RadioPacket(packet.getData()[0]);
 						radioPacket.setData(packet.getData());
 						radioPacket.setOptionalData(packet.getOptionalData());
+						DataManager.process(radioPacket);
 						TeachedDevices.addDevice(radioPacket);
 					}
 				}

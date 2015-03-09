@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.DeviceParameterUpdatedInitiation;
+import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
 import eu.aleon.aleoncean.device.RemoteDevice;
 import eu.aleon.aleoncean.device.StandardDevice;
 import eu.aleon.aleoncean.packet.EnOceanId;
@@ -17,6 +18,10 @@ import eu.aleon.aleoncean.rxtx.ESP3Connector;
 
 public class RemoteDeviceEEPA50701 extends StandardDevice implements RemoteDevice {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteDeviceEEPA50701.class);
 	private double supplyVoltage;
 	private char pirStatus;
@@ -77,5 +82,17 @@ public class RemoteDeviceEEPA50701 extends StandardDevice implements RemoteDevic
         this.pirStatus = pirStatus;
         fireParameterChanged(DeviceParameter.MOTION, initiation, oldState, pirStatus);
 	}
+	
+	@Override
+    public Object getByParameter(final DeviceParameter parameter) throws IllegalDeviceParameterException {
+        switch (parameter) {
+            case SUPPLY_VOLTAGE_V:
+                return getSupplyVoltage();
+            case MOTION:
+            	return getPirStatus();
+            default:
+                return super.getByParameter(parameter);
+        }
+    }
 
 }

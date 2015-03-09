@@ -9,10 +9,10 @@ import java.util.HashMap;
 
 import eu.aleon.aleoncean.device.Device;
 import eu.aleon.aleoncean.device.remote.RemoteDeviceEEPA50205;
+import eu.aleon.aleoncean.packet.EnOceanId;
 import eu.aleon.aleoncean.packet.RadioChoice;
 import eu.aleon.aleoncean.packet.RadioPacket;
 import eu.aleon.aleoncean.packet.radio.userdata.UserData1BS;
-import eu.aleon.aleoncean.packet.radio.userdata.UserData4BS;
 import eu.telecomnancy.enopush.Main;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPA50701;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPD50001;
@@ -129,6 +129,16 @@ public class TeachedDevices {
 	    	}
 	    }
 	    return 0;
+	}
+
+	public static boolean containsDevices(EnOceanId id) {
+		return learntDevices.containsKey(id.toString());
+	}
+
+	public static Device getDevice(EnOceanId senderId) {
+		if(containsDevices(senderId))
+			return learntDevices.get(senderId.toString());
+		return null;
 	}
 
 }
