@@ -13,17 +13,28 @@ HEADER : {"AUTH":"hj1456bsdg1bfsg846bg1sb125gfd"}
 BODY : {"address":"153.111","type":"LIGHT"}
 \end{lstlisting}
 
-
+\texttt{type} peut prendre différentes valeurs parmi :
+\begin{itemize}
+\item LIGHT
+\item TEMP
+\item HUMIDITY
+\item PRESENCE
+\item DOOR
+\item POWER
+\end{itemize}
 
 
 \section{Data}
 
 \paragraph{POST /api/data} permet d'ajouter une nouvelle donnée à la plateforme web. Si la valeur est déjà présente, l'action est ignorée.
-\begin{lstlisting}[language=json,emph={token, aTimestamp, aLabel,aValue,aMote},emphstyle={\bfseries\itshape},basicstyle={\ttfamily},caption=POST /api/data]
+\begin{lstlisting}[language=json,emph={token, aTimestamp, aLabel,aValue,aMoteAddress,aType},emphstyle={\bfseries\itshape},basicstyle={\ttfamily},caption=POST /api/data]
 HEADER : {"AUTH":"token"}
-BODY : {"timestamp":"aTimestamp","label":"aLabel","value":"aValue","mote":"aMote"}
+BODY : {"timestamp":"aTimestamp","label":"aLabel",
+									"value":"aValue","mote":"aMoteAddress.aType"}
 
 # Exemple
 HEADER : {"AUTH":"hj1456bsdg1bfsg846bg1sb125gfd"}
-BODY : {"timestamp":1411848808,"label":"temperature","value":24.0,"mote":"219.98"}
+BODY : {"timestamp":1411848808,"label":"temperature","value":24.0,"mote":"219.98.TEMP"}
 \end{lstlisting}
+
+Type peut prendre les même valeurs que précédemment.
