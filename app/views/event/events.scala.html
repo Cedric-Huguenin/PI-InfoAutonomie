@@ -47,8 +47,7 @@
                                                     <td>@event.expression</td>
                                                     <td>
                                                         <a href="@routes.EventController.edit(event.id)" class="btn btn-primary">Éditer</a>
-                                                        <a href="@routes.EventController.delete(event.id)" class="btn btn-danger">Supprimer directement</a>
-                                                        <button id="deleteEvent" type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-id="@event.id">
+                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-id="@routes.EventController.delete(event.id)">
                                                             Supprimer
                                                         </button>
                                                     </td>
@@ -75,8 +74,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                <input class="form-control" name="id" placeholder="Id" value="">
-                                <a href="" class="btn btn-primary">Supprimer</a>
+                                <a href="" class="btn btn-danger">Supprimer définitivement</a>
                             </div>
                         </div>
                     </div>
@@ -86,7 +84,7 @@
                 $('#myModal').on('show.bs.modal', function(e) {
                     //get data-id attribute of the clicked element
                     var eventId = $(e.relatedTarget).data('id');
-                    $(e.currentTarget).find('input[name="id"]').val(eventId);
+                    $(e.currentTarget).find('a').attr("href", eventId);
                 });
                 </script>
 
