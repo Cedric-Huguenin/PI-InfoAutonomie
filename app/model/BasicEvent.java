@@ -1,15 +1,9 @@
 package model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import controllers.api.DataController;
-import model.json.Data;
-import model.json.DataNode;
 import play.db.ebean.Model;
 import utils.TimestampUtils;
 
 import javax.persistence.*;
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -89,9 +83,18 @@ public class BasicEvent extends Model {
         model.Data old = null;
         switch (detectionMethod.getDetectionType()) {
             case DELTA:
-                for (model.Data data : model.Data.find.where().eq("mote", this.getSensor().getId()).findList()) {
+                List<model.Data> dataList;
+                if(BasicEventOccurrence.find.where().eq("basic_event_id", getId()).findList().size() == 0) { // if it's the first computation for this basic event, use all available data
+                    dataList = model.Data.find.where().eq("mote", this.getSensor().getId()).findList();
+                } else { // else only use a short time windows period
+                    long now = System.currentTimeMillis()/1000; // current second timestamp
+                    dataList = model.Data.find.where().eq("mote", this.getSensor().getId()).between("timestamp",now-3600,now).findList();
+                }
+                System.out.println(getName() + " " + dataList.size());
+                for (model.Data data : dataList) {
                     //System.out.println(data);
                     if (old != null) {
+                        //System.out.println(getName() + " " + Math.abs(data.getValue() - old.getValue()));
                         if (Math.abs(data.getValue() - old.getValue()) > detectionMethod.getDelta()) {
                             BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
                                     data.getTimestamp(), old.getValue(), data.getValue());
