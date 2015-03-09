@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import eu.aleon.aleoncean.packet.ESP3Packet;
 import eu.aleon.aleoncean.packet.PacketType;
 import eu.aleon.aleoncean.packet.RadioPacket;
+import eu.aleon.aleoncean.rxtx.ESP3Connector;
 import eu.aleon.aleoncean.rxtx.ReaderShutdownException;
 import eu.aleon.aleoncean.rxtx.USB300;
 import eu.telecomnancy.enopush.telegram.TeachedDevices;
@@ -14,6 +15,7 @@ import eu.telecomnancy.enopush.telegram.TeachedDevices;
 public class Main {
 	private static final Logger log = Logger.getLogger( Main.class.getName() );
 	private static final long TIMEOUT = 2;
+	public static ESP3Connector serialConnection = new USB300();
 
 	public static void main(String[] args) {
 		
@@ -24,8 +26,6 @@ public class Main {
 		
 		System.setProperty("gnu.io.rxtx.SerialPorts", args[0]);
 		System.setProperty("java.library.path", "/usr/lib/jni");
-		
-		USB300 serialConnection = new USB300();
 		
 		if(!serialConnection.connect(args[0])) {
 			log.log(Level.SEVERE, "Impossible to connect to the specified serial interface");
@@ -49,6 +49,8 @@ public class Main {
 			} catch (ReaderShutdownException e) {
 				e.printStackTrace();
 			}
+			
+			System.out.println(TeachedDevices.devicesToString());
 		}
 		
 		// serialConnection.disconnect();
