@@ -1,24 +1,15 @@
 package controllers;
 
 import model.*;
-import model.json.Data;
-import model.json.DataNode;
 import play.data.Form;
 import play.mvc.Result;
-import utils.GetDataFromUrl;
-import utils.TimestampUtils;
-import views.html.sensor.editSensor;
-import views.html.sensor.sensors;
-
-import java.io.IOException;
-import java.util.*;
-import views.html.event.events;
 import views.html.event.create;
+import views.html.event.events;
+
+import java.util.List;
 
 import static play.data.Form.form;
-import static play.mvc.Results.badRequest;
-import static play.mvc.Results.ok;
-import static play.mvc.Results.redirect;
+import static play.mvc.Results.*;
 
 /**
  * Controller to manage and display more complex events.

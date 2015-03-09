@@ -32,9 +32,10 @@ public class DataController extends Controller {
 
     /**
      * Retrieve data from the database according to the given timestamp, data type and mote
+     *
      * @param timestamp the timestamp
-     * @param mote the mote
-     * @param label the label
+     * @param mote      the mote
+     * @param label     the label
      * @return the data given by the mote for the label at the given timestamp
      */
     public static Data getDataIntern(Long timestamp, String mote, String label) {
@@ -45,9 +46,10 @@ public class DataController extends Controller {
 
     /**
      * Retrieve data from the database according to the given timestamp, data type and mote
+     *
      * @param timestamp the timestamp
-     * @param mote the mote
-     * @param label the label
+     * @param mote      the mote
+     * @param label     the label
      * @return the data given by the mote for the label at the given timestamp
      */
     public static Result getData(Long timestamp, String mote, String label) {
@@ -56,7 +58,7 @@ public class DataController extends Controller {
         data = Data.find.byId(data.getPrimKey());
 
         ObjectNode result = Json.newObject();
-        if(data != null) {
+        if (data != null) {
             result.put("timestamp", data.getTimestamp());
             result.put("mote", data.getMote());
             result.put("label", data.getLabel());
@@ -67,9 +69,10 @@ public class DataController extends Controller {
 
     /**
      * Retrieve data from the database according to the given timestamp range, data type and mote
+     *
      * @param begin begin of the range
-     * @param end end of the range
-     * @param mote data from this mote will be retrieved
+     * @param end   end of the range
+     * @param mote  data from this mote will be retrieved
      * @param label data with this label will be retrieved
      * @return the data list
      */
@@ -82,9 +85,10 @@ public class DataController extends Controller {
 
     /**
      * Retrieve data from the database according to the given timestamp range, data type and mote
+     *
      * @param begin begin of the range
-     * @param end end of the range
-     * @param mote data from this mote will be retrieved
+     * @param end   end of the range
+     * @param mote  data from this mote will be retrieved
      * @param label data with this label will be retrieved
      * @return the data list
      */

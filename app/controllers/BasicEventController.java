@@ -3,11 +3,9 @@ package controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.BasicEvent;
 import model.BasicEventOccurrence;
-import model.SensorType;
 import model.json.Data;
 import model.json.DataNode;
 import play.mvc.Result;
-import utils.GetDataFromUrl;
 import utils.TimestampUtils;
 
 import java.io.IOException;
@@ -34,9 +32,8 @@ public class BasicEventController {
 
         DataNode rawDataNode = null;
         String response = "Date,Occurrences\n";
-        String date = "";
-        long timestamp = 0;
-        double value = 0.0;
+        String date;
+        double value;
 //        List<String> basicEventList = new ArrayList<>();
 
         // first, parse the data obtained from the url and put it in a DataNode
@@ -56,7 +53,6 @@ public class BasicEventController {
             for (Data rawData : rawDataList) {
                 double delta = basicEvent.getDetectionMethod().getDelta();
                 int actualIndex = rawDataList.indexOf(rawData);
-                timestamp = (long) rawData.getTimestamp();
                 value = rawData.getValue();
 
                 if (actualIndex + 1 < rawDataList.size()) {
@@ -97,8 +93,8 @@ public class BasicEventController {
      */
     public static Result timeline() {
         List<BasicEventOccurrence> basicEventOccurrences = BasicEventOccurrence.all();
-            Collections.sort(basicEventOccurrences);
-            Collections.reverse(basicEventOccurrences);
+        Collections.sort(basicEventOccurrences);
+        Collections.reverse(basicEventOccurrences);
         return ok(views.html.basic.timeline.render("Évènements de base", basicEventOccurrences));
     }
 }

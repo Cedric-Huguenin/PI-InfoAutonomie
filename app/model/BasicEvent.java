@@ -48,13 +48,14 @@ public class BasicEvent extends Model {
 
     public String color;
 
-    public static Model.Finder<String,BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
+    public static Model.Finder<String, BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
 
     /**
      * Creates a new BasicEvent and saves it in the database.
-     * @param basicEvent the BasicEvent that must be initialized.
+     *
+     * @param basicEvent      the BasicEvent that must be initialized.
      * @param detectionMethod the method of detection of the event.
-     * @param sensor the identifier of the sensor used.
+     * @param sensor          the identifier of the sensor used.
      * @return the BasicEvent given updated and saved.
      */
     public static BasicEvent create(BasicEvent basicEvent, String detectionMethod, String sensor) {
@@ -66,6 +67,7 @@ public class BasicEvent extends Model {
 
     /**
      * Returns the list of all the BasicEvent created.
+     *
      * @return the list of all the BasicEvent created.
      */
     public static List<BasicEvent> all() {
@@ -74,6 +76,7 @@ public class BasicEvent extends Model {
 
     /**
      * Returns the BasicEvent with the given id.
+     *
      * @return the list of all the BasicEvent created.
      */
     public static BasicEvent byId(String id) {
@@ -81,37 +84,19 @@ public class BasicEvent extends Model {
     }
 
     public void check() {
-            // TODO: select the correct range to retrieve data
+        // TODO: select the correct range to retrieve data
 //            System.out.println("Checking " + this);
-            model.Data old = null;
-            switch(detectionMethod.getDetectionType()) {
-                case DELTA:
-                    for (model.Data data : model.Data.find.where().eq("mote", this.getSensor().getId()).findList()) {
-                        //System.out.println(data);
-                        if(old != null) {
-                            if(Math.abs(data.getValue() - old.getValue()) > detectionMethod.getDelta()) {
-                                BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
-                                        data.getTimestamp(), old.getValue(), data.getValue());
-                                try {
-                                    if(BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
-                                        occurrence.save();
-                                        //System.out.println(occurrence);
-                                    }
-                                } catch (Exception e) {
-                                    System.out.println("Error: " + e);
-                                }
-                            }
-                        }
-                        old = data;
-                    }
-                    break;
-                case SIMPLE_THRESHOLD:
-                    for(model.Data data : model.Data.all()) {
-                        if(data.getValue() > detectionMethod.getSimpleThreshold()) {
+        model.Data old = null;
+        switch (detectionMethod.getDetectionType()) {
+            case DELTA:
+                for (model.Data data : model.Data.find.where().eq("mote", this.getSensor().getId()).findList()) {
+                    //System.out.println(data);
+                    if (old != null) {
+                        if (Math.abs(data.getValue() - old.getValue()) > detectionMethod.getDelta()) {
                             BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
-                                    data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
+                                    data.getTimestamp(), old.getValue(), data.getValue());
                             try {
-                                if(BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
+                                if (BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
                                     occurrence.save();
                                     //System.out.println(occurrence);
                                 }
@@ -119,16 +104,35 @@ public class BasicEvent extends Model {
                                 System.out.println("Error: " + e);
                             }
                         }
-                        old = data;
                     }
-                    break;
-                default:
-                    break;
-            }
+                    old = data;
+                }
+                break;
+            case SIMPLE_THRESHOLD:
+                for (model.Data data : model.Data.all()) {
+                    if (data.getValue() > detectionMethod.getSimpleThreshold()) {
+                        BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
+                                data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
+                        try {
+                            if (BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
+                                occurrence.save();
+                                //System.out.println(occurrence);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    }
+                    old = data;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     /**
      * Returns the characteristics of the BasicEvent in JSON.
+     *
      * @return a string in JSON representing the object.
      */
     @Override
@@ -144,6 +148,7 @@ public class BasicEvent extends Model {
 
     /**
      * Returns the ID of the BasicEvent.
+     *
      * @return the ID of the BasicEvent.
      */
     public String getId() {
@@ -152,6 +157,7 @@ public class BasicEvent extends Model {
 
     /**
      * Sets the ID of the BasicEvent.
+     *
      * @param id the new ID.
      */
     public void setId(String id) {
@@ -160,6 +166,7 @@ public class BasicEvent extends Model {
 
     /**
      * Returns the sensor used to detect the event.
+     *
      * @return the sensor used to detect the event.
      */
     public Sensor getSensor() {
@@ -168,6 +175,7 @@ public class BasicEvent extends Model {
 
     /**
      * Sets a new sensor for the BasicEvent.
+     *
      * @param sensor the new sensor.
      */
     public void setSensor(Sensor sensor) {
@@ -176,6 +184,7 @@ public class BasicEvent extends Model {
 
     /**
      * Returns the method used to detect the Event.
+     *
      * @return the method used to detect the Event.
      */
     public Detection getDetectionMethod() {
@@ -184,6 +193,7 @@ public class BasicEvent extends Model {
 
     /**
      * Sets the method used for the detection of the Event.
+     *
      * @param detectionMethod the new method.
      */
     public void setDetectionMethod(Detection detectionMethod) {

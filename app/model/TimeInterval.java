@@ -29,7 +29,7 @@ public class TimeInterval extends Model {
         return timeInterval;
     }
 
-    public static Model.Finder<String,TimeInterval> find = new Model.Finder<>(String.class, TimeInterval.class);
+    public static Model.Finder<String, TimeInterval> find = new Model.Finder<>(String.class, TimeInterval.class);
 
     public TimeInterval getActualTimeInterval() {
         TimeInterval result = new TimeInterval();
@@ -47,7 +47,7 @@ public class TimeInterval extends Model {
         beginToday.set(Calendar.SECOND, old.get(Calendar.SECOND));
 
         // adjust to current day or past day
-        if(beginToday.getTimeInMillis() > System.currentTimeMillis()) { // if begin is in future
+        if (beginToday.getTimeInMillis() > System.currentTimeMillis()) { // if begin is in future
             // subtract one day
             beginToday.add(Calendar.DAY_OF_YEAR, -1);
         }
@@ -64,10 +64,10 @@ public class TimeInterval extends Model {
         endToday.set(Calendar.SECOND, old.get(Calendar.SECOND));
 
         // adjust to current day or past day
-        if(endToday.getTimeInMillis() > System.currentTimeMillis()) { // if end is in future
+        if (endToday.getTimeInMillis() > System.currentTimeMillis()) { // if end is in future
             // subtract one day
             endToday.add(Calendar.DAY_OF_YEAR, -1);
-        } else if(beginToday.getTimeInMillis() < System.currentTimeMillis() && endToday.getTimeInMillis() > System.currentTimeMillis()) {
+        } else if (beginToday.getTimeInMillis() < System.currentTimeMillis() && endToday.getTimeInMillis() > System.currentTimeMillis()) {
             // current time is between begin and end hour
             endToday.setTimeInMillis(System.currentTimeMillis());
         }

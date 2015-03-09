@@ -1,6 +1,7 @@
 package controllers;
 
 import model.Sensor;
+
 import static play.data.Form.*;
 
 import play.data.Form;
@@ -24,8 +25,8 @@ public class SensorController extends Controller {
         List<Sensor> oldSensors = new ArrayList<>();
         List<Sensor> newSensors = new ArrayList<>();
 
-        for(Sensor sensor : allSensors) {
-            if(sensor.getDescription() == null) {
+        for (Sensor sensor : allSensors) {
+            if (sensor.getDescription() == null) {
                 newSensors.add(sensor);
             } else {
                 oldSensors.add(sensor);
@@ -45,7 +46,7 @@ public class SensorController extends Controller {
         form.data().put("description", sensor.getDescription());
         form.data().put("unit", sensor.getUnit());
         String type = "Type";
-        switch(sensor.getType()) {
+        switch (sensor.getType()) {
             case DOOR:
                 type = "Contact de porte";
                 break;

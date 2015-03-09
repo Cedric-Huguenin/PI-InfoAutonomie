@@ -52,11 +52,12 @@ public class Event extends Model {
     /**
      * The list of all the existing Event.
      */
-    public static Model.Finder<String,Event> find = new Model.Finder<>(String.class, Event.class);
+    public static Model.Finder<String, Event> find = new Model.Finder<>(String.class, Event.class);
 
     /**
      * Initializes the given Event with the given time interval and saves it.
-     * @param event the Event to initialize.
+     *
+     * @param event        the Event to initialize.
      * @param timeInterval a description of the TimeInterval.
      * @return the Event saved and initialized.
      */
@@ -70,6 +71,7 @@ public class Event extends Model {
 
     /**
      * Returns the list of all the Events
+     *
      * @return the list of all the Events
      */
     public static List<Event> all() {
@@ -89,7 +91,7 @@ public class Event extends Model {
         long mean = 0;
         int cpt = 0;
         String[] basicEventIds = toEval.split("(\\|\\||&&)");
-        for(String id : basicEventIds) {
+        for (String id : basicEventIds) {
             id = id.trim();
             BasicEvent basicEvent = BasicEvent.find.ref(id);
 //            System.out.println("Current BasicEventID  : !" + basicEvent.getId());
@@ -98,7 +100,7 @@ public class Event extends Model {
                 cpt++;
                 mean += occurTime;
             }
-            toEval = toEval.replace(id, (occurTime != -1)+"");
+            toEval = toEval.replace(id, (occurTime != -1) + "");
 
         }
 
@@ -110,9 +112,9 @@ public class Event extends Model {
             boolean bool = boolExpr.booleanValue();
             System.out.println(boolExpr.toString() + " == " + bool);
 
-            if(bool && cpt > 0) {
-                EventOccurrence eventOccurrence = new EventOccurrence(this, mean/cpt, TimestampUtils.formatToString(mean/cpt, "dd-MM-yyyy HH:mm:SS"));
-                if(EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
+            if (bool && cpt > 0) {
+                EventOccurrence eventOccurrence = new EventOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:SS"));
+                if (EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
                     eventOccurrence.save();
                 }
 //                System.out.println("EVENT OCCURRENCE : persisted !");
@@ -125,6 +127,7 @@ public class Event extends Model {
 
     /**
      * Returns the name of the Event.
+     *
      * @return the name of the Event.
      */
     public String getName() {
@@ -133,6 +136,7 @@ public class Event extends Model {
 
     /**
      * Sets the name of the Event.
+     *
      * @param name the new Event name.
      */
     public void setName(String name) {
@@ -141,6 +145,7 @@ public class Event extends Model {
 
     /**
      * Returns the list of the BasicEvent used to identify this Event.
+     *
      * @return the list of the BasicEvent used to identify this Event.
      */
     public List<BasicEvent> getBasicEvents() {
@@ -149,6 +154,7 @@ public class Event extends Model {
 
     /**
      * Sets the list of the BasicEvent used to identify this Event.
+     *
      * @param basicEvents the new list.
      */
     public void setBasicEvents(List<BasicEvent> basicEvents) {
@@ -157,6 +163,7 @@ public class Event extends Model {
 
     /**
      * Returns the duration of the Event.
+     *
      * @return the duration of the Event.
      */
     public int getDuration() {
@@ -165,6 +172,7 @@ public class Event extends Model {
 
     /**
      * Sets the duration of the Event.
+     *
      * @param duration the new duration.
      */
     public void setDuration(int duration) {
@@ -173,6 +181,7 @@ public class Event extends Model {
 
     /**
      * Returns the TimeInterval in which the Event can occur.
+     *
      * @return the TimeInterval in which the Event can occur.
      */
     public TimeInterval getTimeInterval() {
@@ -181,6 +190,7 @@ public class Event extends Model {
 
     /**
      * Sets the TimeInterval in which the Event can occur.
+     *
      * @param timeInterval the new TimeInterval.
      */
     public void setTimeInterval(TimeInterval timeInterval) {
@@ -221,12 +231,13 @@ public class Event extends Model {
 
     /**
      * Returns the description of the object as JSON.
+     *
      * @return the description of the object as JSON.
      */
     @Override
     public String toString() {
         String basicEventsStr = "";
-        for(BasicEvent b : basicEvents) {
+        for (BasicEvent b : basicEvents) {
             basicEventsStr += b.toString() + " --- ";
         }
         return "Event{" +
