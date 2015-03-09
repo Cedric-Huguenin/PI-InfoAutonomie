@@ -114,10 +114,10 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
         TimeInterval todayTimeInterval = t.getActualTimeInterval(); // get today timestamp corresponding to TimeInterval
 
         GregorianCalendar begin = new GregorianCalendar();
-        begin.setTimeInMillis(todayTimeInterval.getTimestampStart());
+        begin.setTimeInMillis(todayTimeInterval.getTimestampStart()*1000);
 
         GregorianCalendar end = new GregorianCalendar();
-        end.setTimeInMillis(todayTimeInterval.getTimestampEnd());
+        end.setTimeInMillis(todayTimeInterval.getTimestampEnd()*1000);
 
         System.out.println("From " +  (begin.getTimeInMillis()/1000) + " to " +  (end.getTimeInMillis()/1000));
         System.out.println("SEARCHING FOR " + basicEvent.getId());

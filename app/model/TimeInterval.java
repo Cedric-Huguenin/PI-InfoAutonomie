@@ -21,7 +21,14 @@ public class TimeInterval extends Model {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
 
+    /**
+     * Begin timestamp in second
+     */
     public long timestampStart;
+
+    /**
+     * End timestamp in second
+     */
     public long timestampEnd;
 
     public static TimeInterval create(TimeInterval timeInterval) {
@@ -31,6 +38,10 @@ public class TimeInterval extends Model {
 
     public static Model.Finder<String, TimeInterval> find = new Model.Finder<>(String.class, TimeInterval.class);
 
+    /**
+     * Compute a TimeInterval for the current day
+     * @return a new TimeInterval corresponding to the current day
+     */
     public TimeInterval getActualTimeInterval() {
         TimeInterval result = new TimeInterval();
 
@@ -72,8 +83,8 @@ public class TimeInterval extends Model {
             endToday.setTimeInMillis(System.currentTimeMillis());
         }
 
-        result.setTimestampStart(beginToday.getTimeInMillis());
-        result.setTimestampEnd(endToday.getTimeInMillis());
+        result.setTimestampStart(beginToday.getTimeInMillis()/1000);
+        result.setTimestampEnd(endToday.getTimeInMillis()/1000);
 
         return result;
     }

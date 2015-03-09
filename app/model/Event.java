@@ -6,6 +6,7 @@ import play.db.ebean.Model;
 import utils.TimestampUtils;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +82,12 @@ public class Event extends Model {
 
     public void check() {
         // TODO: verify that event has not already been detected for the last TimeInterval
+        TimeInterval todayTimeInterval = this.getTimeInterval().getActualTimeInterval();
+        if (EventOccurrence.find.where().eq("event_id", getId())
+                .between("timestamp", todayTimeInterval.getTimestampStart(), todayTimeInterval.getTimestampEnd())
+                .findIds().size() > 0) { // Event already in DB
+            return;
+        }
 
 
         BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence();
