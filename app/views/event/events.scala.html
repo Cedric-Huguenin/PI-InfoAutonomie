@@ -35,7 +35,6 @@
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
-                                                <th></th>
                                                 <th>Nom</th>
                                                 <th>Expression</th>
                                                 <th></th>
@@ -44,13 +43,14 @@
                                         <tbody>
                                             @for(event <- events) {
                                                 <tr>
-                                                    <td><i class="fa fa-exclamation-triangle"></i></td>
                                                     <td>@event.name</td>
                                                     <td>@event.expression</td>
                                                     <td>
-                                                        @form(routes.EventController.edit(event.id)) {
-                                                            <input class="btn btn-primary" type="submit" value="Éditer">
-                                                        }
+                                                        <a href="@routes.EventController.edit(event.id)" class="btn btn-primary">Éditer</a>
+                                                        <a href="@routes.EventController.delete(event.id)" class="btn btn-danger">Supprimer directement</a>
+                                                        <button id="deleteEvent" type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-id="@event.id">
+                                                            Supprimer
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             }
@@ -61,6 +61,34 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Attention</h4>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûr de vouloir définitivement supprimer cet évènement ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <input class="form-control" name="id" placeholder="Id" value="">
+                                <a href="" class="btn btn-primary">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                $('#myModal').on('show.bs.modal', function(e) {
+                    //get data-id attribute of the clicked element
+                    var eventId = $(e.relatedTarget).data('id');
+                    $(e.currentTarget).find('input[name="id"]').val(eventId);
+                });
+                </script>
 
             </div>
             <!-- /.container-fluid -->

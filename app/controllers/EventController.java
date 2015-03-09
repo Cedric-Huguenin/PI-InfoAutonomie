@@ -35,6 +35,13 @@ public class EventController {
         return ok(create.render(eventForm, BasicEvent.all()));
     }
 
+    public static Result delete(String id) {
+        Event event = Event.find.byId(id);
+        event.delete();
+
+        return redirect(controllers.routes.EventController.events());
+    }
+
     public static Result save() {
         Form<Event> eventForm = form(Event.class).bindFromRequest();
         if (eventForm.hasErrors()) {
