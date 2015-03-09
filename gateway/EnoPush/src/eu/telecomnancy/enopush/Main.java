@@ -33,6 +33,9 @@ public class Main {
 		}
 		log.log(Level.INFO, "Connected to the serial interface " + args[0]);
 		
+		if(TeachedDevices.loadDevices() > 0)
+			log.log(Level.INFO, "Loaded some devices from file: \n" + TeachedDevices.devicesToString());
+		
 		while(true) {
 			try {
 				ESP3Packet packet = serialConnection.read(TIMEOUT, TimeUnit.SECONDS);
@@ -49,8 +52,6 @@ public class Main {
 			} catch (ReaderShutdownException e) {
 				e.printStackTrace();
 			}
-			
-			System.out.println(TeachedDevices.devicesToString());
 		}
 		
 		// serialConnection.disconnect();

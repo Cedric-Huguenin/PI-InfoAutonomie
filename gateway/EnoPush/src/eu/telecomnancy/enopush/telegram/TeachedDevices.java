@@ -1,5 +1,10 @@
 package eu.telecomnancy.enopush.telegram;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 import eu.aleon.aleoncean.device.Device;
@@ -25,13 +30,12 @@ public class TeachedDevices {
 					RemoteDeviceEEPD50001 device = new RemoteDeviceEEPD50001(Main.serialConnection,
 							radioPacket.getSenderId(),
 							radioPacket.getSenderId());
-					learntDevices.put(radioPacket.getSenderId().toString(), device);
+					put(radioPacket.getSenderId().toString(), device);
 				}
 			}
 			break;
 		case RadioChoice.RORG_4BS:
-			UserData4BS userData4 = new UserData4BS(radioPacket.getData());
-			if(userData4.isTeachIn()) {
+			if(((radioPacket.getData()[4] & 0x08) >> 3) == 0) {
 				int func,type;
 				func = (radioPacket.getData()[1] & 0xfc) >> 2;
 				type = ((radioPacket.getData()[1] & 0x03) << 5) + ((radioPacket.getData()[2] & 0xf8) >> 3);
@@ -40,16 +44,15 @@ public class TeachedDevices {
 					RemoteDeviceEEPA50205 device = new RemoteDeviceEEPA50205(Main.serialConnection,
 							radioPacket.getSenderId(),
 							radioPacket.getSenderId());
-					learntDevices.put(radioPacket.getSenderId().toString(), device);
+					put(radioPacket.getSenderId().toString(), device);
 				}
 				if(func == 0x07 && type == 0x01) {
 					RemoteDeviceEEPA50701 device = new RemoteDeviceEEPA50701(Main.serialConnection,
 							radioPacket.getSenderId(),
 							radioPacket.getSenderId());
-					learntDevices.put(radioPacket.getSenderId().toString(), device);
+					put(radioPacket.getSenderId().toString(), device);
 				}
 			}
-			System.out.println(userData4.toString());
 			break;
 		case RadioChoice.RORG_ADT:
 			break;
@@ -67,8 +70,65 @@ public class TeachedDevices {
 		
 	}
 	
+	public static void put(String key, Device device) {
+		learntDevices.put(key, device);
+		saveDevices();
+	}
+	
 	public static String devicesToString() {
 		return learntDevices.toString();
+	}
+	
+	public static void saveDevices() {
+	    ObjectOutputStream oos = null;
+
+	    try {
+	        final FileOutputStream file = new FileOutputStream("devices.enp");
+	        oos = new ObjectOutputStream(file);
+	        oos.writeObject(learntDevices);
+
+	        oos.flush();
+	    } catch (final java.io.IOException e) {
+	    	e.printStackTrace();
+	    } finally {
+	    	try {
+		    	if (oos != null) {
+		    	    oos.flush();
+		    	    oos.close();
+		      	}
+	    	} catch (final IOException ex) {
+	    		ex.printStackTrace();
+	    	}
+	    }
+	}
+	
+	public static int loadDevices() {
+	    ObjectInputStream ois = null;
+
+	    try {
+	        final FileInputStream file = new FileInputStream("devices.enp");
+	        ois = new ObjectInputStream(file);
+	        
+	        @SuppressWarnings("unchecked")
+			HashMap<String,Device> temp = (HashMap<String,Device>) ois.readObject();
+	        if(temp != null && temp.size() != 0) {
+	        	learntDevices = temp;
+	        	return learntDevices.size();
+	        }
+
+	    } catch (final IOException e) {
+	    } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+	    	try {
+		    	if (ois != null) {
+		    	    ois.close();
+		      	}
+	    	} catch (final IOException ex) {
+	    		ex.printStackTrace();
+	    	}
+	    }
+	    return 0;
 	}
 
 }
