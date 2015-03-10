@@ -23,6 +23,6 @@ public class WebAuthentication extends Security.Authenticator {
 
     @Override
     public Result onUnauthorized(Http.Context ctx) {
-        return forbidden();
+        return LoginController.login();
     }
 }
