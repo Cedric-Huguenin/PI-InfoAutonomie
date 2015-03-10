@@ -1,9 +1,18 @@
 package eu.telecomnancy.enopush.telegram;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 import java.util.Set;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.aleon.aleoncean.device.Device;
 import eu.aleon.aleoncean.device.DeviceParameter;
@@ -25,7 +34,9 @@ public class DataManager {
 	}
 	
 	
-	public static final String platformAddress = "http://vps91071.ovh.net/api/";
+	public static final String platformAddress = "http://vps91071.ovh.net/api";
+	public static final String token = "hj1456bsdg1bfsg846bg1sb125gfd";
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataManager.class);
 
 	@SuppressWarnings("unchecked")
 	public static void process(RadioPacket radioPacket) {
@@ -166,6 +177,61 @@ public class DataManager {
 	
 	public static void sendData(String jsonData, DataPurpose purpose) {
 		System.out.println(jsonData);
+		URL url;
+	    HttpURLConnection connection = null;
+	    
+	    try {
+	        //Create connection
+	    	switch(purpose) {
+			case DATA:
+				url = new URL(platformAddress+"/data");
+				break;
+			case SENSOR:
+				url = new URL(platformAddress+"/sensor");
+				break;
+			default:
+				url = new URL(platformAddress+"/data");
+				break;
+	    	
+	    	}
+	    	
+	    	System.out.println(url.toString());
+	        
+	        connection = (HttpURLConnection)url.openConnection();
+	        connection.setRequestMethod("POST");
+	        connection.setRequestProperty("Content-Type","application/json");
+	        connection.setRequestProperty("AUTH", token);
+	
+	        connection.setUseCaches (false);
+	        connection.setDoInput(true);
+	        connection.setDoOutput(true);
+	
+	        //Send request
+	        DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
+	        wr.writeBytes(jsonData);
+	        wr.flush ();
+	        wr.close ();
+	
+	        //Get Response    
+	        InputStream is = connection.getInputStream();
+	        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+	        String line;
+	        
+	        StringBuffer response = new StringBuffer(); 
+	        while((line = rd.readLine()) != null) {
+	        	response.append(line);
+	        	response.append('\n');
+	        }
+	        rd.close();
+	        // TODO use this
+	        System.out.println(response.toString());
+	   } catch (IOException e) {
+		   LOGGER.warn("Failed to send HTTP message. Verify server information.");
+		   e.printStackTrace();
+       } finally {
+	       if(connection != null) {
+	    	   connection.disconnect(); 
+	       }
+       }
 	}
-
 }
