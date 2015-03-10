@@ -31,7 +31,7 @@ public class LoginController extends Controller {
             session().clear();
             session("email", loginForm.get().email);
             Account account = Account.find.ref(loginForm.get().email);
-            session("admin", account.isAdmin()+""); // TODO: check in DB
+            session("admin", account.isAdmin()+""); // check in DB
             return redirect(controllers.routes.Application.index());
         }
     }

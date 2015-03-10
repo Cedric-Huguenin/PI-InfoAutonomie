@@ -5,7 +5,7 @@
 
 @main("Capteurs") {
 
-<div id="wrapper">
+    <div id="wrapper">
 
         @nav()
 
@@ -13,7 +13,7 @@
 
             <div class="container-fluid">
 
-                <!-- Page Heading -->
+                    <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
@@ -21,7 +21,7 @@
                         </h1>
                     </div>
                 </div>
-                <!-- /.row -->
+                    <!-- /.row -->
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -41,7 +41,9 @@
                                                 <th>Emplacement</th>
                                                 <th>Description</th>
                                                 <th>Unité</th>
-                                                <th>Actions</th>
+                                                @if("true".equals(session.get("admin"))) {
+                                                    <th>Actions</th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -54,11 +56,13 @@
                                                     <td>@sensor.location</td>
                                                     <td>@sensor.description</td>
                                                     <td>@sensor.unit</td>
-                                                    <td>
+                                                    @if("true".equals(session.get("admin"))) {
+                                                        <td>
                                                         @form(routes.SensorController.sensor(sensor.id)) {
                                                             <input class="btn btn-primary" type="submit" value="Éditer">
-                                                        }
-                                                    </td>
+                                                            }
+                                                        </td>
+                                                    }
                                                 </tr>
                                             }
                                             @for(sensor <- sensors) {
@@ -70,11 +74,13 @@
                                                     <td>@sensor.location</td>
                                                     <td>@sensor.description</td>
                                                     <td>@sensor.unit</td>
-                                                    <td>
+                                                    @if("true".equals(session.get("admin"))) {
+                                                        <td>
                                                         @form(routes.SensorController.sensor(sensor.id)) {
                                                             <input class="btn btn-primary" type="submit" value="Éditer">
-                                                        }
-                                                    </td>
+                                                            }
+                                                        </td>
+                                                    }
                                                 </tr>
                                             }
                                         </tbody>
@@ -86,10 +92,10 @@
                 </div>
 
             </div>
-            <!-- /.container-fluid -->
+                <!-- /.container-fluid -->
 
         </div>
-        <!-- /#page-wrapper -->
+            <!-- /#page-wrapper -->
 
     </div>
     <!-- /#wrapper -->
