@@ -3,6 +3,13 @@
 
 # --- !Ups
 
+create table account (
+  email                     varchar(255) not null,
+  hashed_password           varchar(255),
+  is_admin                  boolean,
+  constraint pk_account primary key (email))
+;
+
 create table basic_event (
   id                        varchar(255) not null,
   name                      varchar(255),
@@ -92,6 +99,8 @@ create table event_basic_event (
   basic_event_id                 varchar(255) not null,
   constraint pk_event_basic_event primary key (event_id, basic_event_id))
 ;
+create sequence account_seq;
+
 create sequence basic_event_seq;
 
 create sequence basic_event_occurrence_seq;
@@ -131,6 +140,8 @@ alter table event_basic_event add constraint fk_event_basic_event_basic_ev_02 fo
 
 SET REFERENTIAL_INTEGRITY FALSE;
 
+drop table if exists account;
+
 drop table if exists basic_event;
 
 drop table if exists basic_event_occurrence;
@@ -152,6 +163,8 @@ drop table if exists time_interval;
 drop table if exists token;
 
 SET REFERENTIAL_INTEGRITY TRUE;
+
+drop sequence if exists account_seq;
 
 drop sequence if exists basic_event_seq;
 

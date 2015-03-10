@@ -5,6 +5,7 @@ import model.Sensor;
 import play.libs.Yaml;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.With;
 import views.html.index;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class Application extends Controller {
      *
      * @return the index result.
      */
+    @With(Authorization.class)
     public static Result index() {
         List<Sensor> sensors = Sensor.all();
         int cpt = 0;

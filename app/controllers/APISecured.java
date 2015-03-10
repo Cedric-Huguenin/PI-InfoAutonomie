@@ -10,7 +10,7 @@ import play.mvc.Security;
  *
  * Allow to verify if POST and DELETE request are sent by trusted people
  */
-public class Secured extends Security.Authenticator {
+public class APISecured extends Security.Authenticator {
 
     @Override
     public String getUsername(Http.Context ctx) {

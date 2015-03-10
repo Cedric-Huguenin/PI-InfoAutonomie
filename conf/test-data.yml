@@ -84,6 +84,14 @@
     color:        ''
 
 
+# Account
+
+- &accountAdmin !!model.Account
+    email:          cedric.huguenin@telecomnancy.eu
+    hashedPassword: 516626bf8a5006ecce1803eeb6a747182000d4f8
+    isAdmin:        true
+
+
 # API
 
 - &token1 !!model.Token
