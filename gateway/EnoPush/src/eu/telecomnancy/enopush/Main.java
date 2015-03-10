@@ -53,8 +53,10 @@ public class Main {
 		}
 		log.log(Level.INFO, "Connected to the serial interface " + args[0]);
 		
-		if(TeachedDevices.loadDevices() > 0)
+		if(TeachedDevices.loadDevices() > 0) {
 			log.log(Level.INFO, "Loaded some devices from file: \n" + TeachedDevices.devicesToString());
+			DataManager.sendDevices();
+		}
 		
 		while(true) {
 			try {

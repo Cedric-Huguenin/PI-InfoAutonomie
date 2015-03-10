@@ -93,6 +93,7 @@ public class TeachedDevices {
 	public static void put(String key, Device device) {
 		learntDevices.put(key, device);
 		saveDevices();
+		DataManager.sendDevices();
 	}
 	
 	/**
@@ -182,4 +183,11 @@ public class TeachedDevices {
 		return null;
 	}
 
+	/**
+	 * Returns the map containing all devices.
+	 * @return the devices map.
+	 */
+	public static HashMap<String,Device> getDevicesMap() {
+		return learntDevices;
+	}
 }
