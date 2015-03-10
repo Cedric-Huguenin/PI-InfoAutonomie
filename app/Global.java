@@ -29,7 +29,7 @@ public class Global extends GlobalSettings {
                 () -> {
                     Logger.info("ON START ---    " + System.currentTimeMillis());
                     System.out.println("ON START ---    " + System.currentTimeMillis());
-//                    try {
+//                    try { // allow to load local DB with iotlab data
 //                        URL url = new URL("http://iotlab.telecomnancy.eu/rest/data/1/light1/300/1425740196/1425826596");
 //                        ObjectMapper mapper = new ObjectMapper();
 //                        DataNode rawDataNode = mapper.readValue(url, DataNode.class);

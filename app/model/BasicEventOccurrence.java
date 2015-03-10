@@ -101,12 +101,12 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
     @Override
     public String toString() {
         return "BasicEventOccurrence{" +
-                "id='" + id + '\'' +
-                ", basicEvent=" + basicEvent +
-                ", timestamp=" + timestamp +
-                ", date='" + date + '\'' +
-                ", fromValue=" + fromValue +
-                ", toValue=" + toValue +
+                "id='" + getId() + '\'' +
+                ", basicEvent=" + getBasicEvent() +
+                ", timestamp=" + getTimestamp() +
+                ", date='" + getDate() + '\'' +
+                ", fromValue=" + getFromValue() +
+                ", toValue=" + getToValue() +
                 '}';
     }
 

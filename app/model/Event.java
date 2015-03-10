@@ -244,14 +244,14 @@ public class Event extends Model {
     @Override
     public String toString() {
         String basicEventsStr = "";
-        for (BasicEvent b : basicEvents) {
+        for (BasicEvent b : getBasicEvents()) {
             basicEventsStr += b.toString() + " --- ";
         }
         return "Event{" +
-                "name='" + name + '\'' +
+                "name='" + getName() + '\'' +
                 ", basicEvents=" + basicEventsStr +
-                ", duration=" + duration +
-                ", timeInterval=" + timeInterval +
+                ", duration=" + getDuration() +
+                ", timeInterval=" + getTimeInterval() +
                 '}';
     }
 }

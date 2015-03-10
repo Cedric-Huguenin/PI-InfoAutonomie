@@ -111,7 +111,7 @@ public class BasicEvent extends Model {
                     old = data;
                 }
                 break;
-            case SIMPLE_THRESHOLD:
+            case SIMPLE_THRESHOLD: // TODO test this
                 for (model.Data data : model.Data.all()) {
                     if (data.getValue() > detectionMethod.getSimpleThreshold()) {
                         BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
@@ -128,6 +128,7 @@ public class BasicEvent extends Model {
                     old = data;
                 }
                 break;
+            // TODO: add other detection method
             default:
                 break;
         }

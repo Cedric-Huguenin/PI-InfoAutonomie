@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Account class
+ * Represent an account with email address, hashed password and admin right
  */
 @Entity
 public class Account extends Model {
