@@ -51,47 +51,14 @@ public class RawDataController extends Controller {
             dataNode = mapper.readValue(result.toString(), DataNode.class);
 
             Collections.reverse(dataNode.getData());
-            boolean day = true;
-            boolean light = false;
-            double thresholdNightDay = 170, thresholdLight = 200;
             oldEvents = new ArrayList<>();
-            for (Data data : dataNode.getData()) {
-                double lightValue = data.getValue();
-                if (lightValue < thresholdNightDay) { // night level
-                    if (day || light) {
-                        oldEvents.add(new OldEvent(data.getTimestamp(), "back to night", TimestampUtils.timestampToString(data.getTimestamp()), lightValue));
-                    } else {
-                        oldEvents.add(new OldEvent(data.getTimestamp(), "night", TimestampUtils.timestampToString(data.getTimestamp()), lightValue));
-                    }
-                    day = false;
-                    light = false;
-                } else if (lightValue > thresholdNightDay && lightValue < thresholdLight) { // day level
-                    if (!day) {
-                        oldEvents.add(new OldEvent(data.getTimestamp(), "sunrise", TimestampUtils.timestampToString(data.getTimestamp()), lightValue));
-                    } else if (light) {
-                        oldEvents.add(new OldEvent(data.getTimestamp(), "light turned off", TimestampUtils.timestampToString(data.getTimestamp()), lightValue));
-
-                    } else {
-                        oldEvents.add(new OldEvent(data.getTimestamp(), "day", TimestampUtils.timestampToString(data.getTimestamp()), lightValue));
-                    }
-                    day = true;
-                    light = false;
-                } else { // light is on
-                    if (!light) {
-                        oldEvents.add(new OldEvent(data.getTimestamp(), "light turned on", TimestampUtils.timestampToString(data.getTimestamp()), lightValue));
-                    } else {
-                        oldEvents.add(new OldEvent(data.getTimestamp(), "light already on", TimestampUtils.timestampToString(data.getTimestamp()), lightValue));
-                    }
-                    light = true;
-                }
-            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return ok(views.html.raw.data.render("Your new application is ready.", dataNode.getData(), oldEvents));
+        return ok(views.html.raw.data.render("Your new application is ready.", model.Data.all(), oldEvents));
     }
 
     /**

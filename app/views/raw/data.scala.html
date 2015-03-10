@@ -1,4 +1,4 @@
-@(message: String, dataNode: List[model.json.Data], eventsList: List[model.OldEvent])
+@(message: String, dataNode: List[model.Data], eventsList: List[model.OldEvent])
 
 @import java.util.List;
 @main("Raw data") {
@@ -41,10 +41,10 @@
                                         <tbody>
                                             @for(data <- dataNode) {
                                                 <tr>
-                                                    <td>@data.timestamp</td>
-                                                    <td>@data.label</td>
-                                                    <td>@data.value</td>
-                                                    <td>@data.mote</td>
+                                                    <td>@data.getTimestamp</td>
+                                                    <td>@data.getLabel</td>
+                                                    <td>@data.getValue</td>
+                                                    <td>@data.getMote</td>
                                                 </tr>
                                             }
                                         </tbody>
