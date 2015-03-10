@@ -8,7 +8,7 @@ import play.mvc.Result;
 /**
  * Authorization
  */
-public class Authorization extends Action.Simple {
+public class WebSecured extends Action.Simple {
     @Override
     public F.Promise<Result> call(Http.Context context) throws Throwable {
         if(context.session().get("email") != null) {

@@ -31,7 +31,7 @@ public class Application extends Controller {
      *
      * @return the index result.
      */
-    @With(Authorization.class)
+    @With(WebSecured.class)
     public static Result index() {
         List<Sensor> sensors = Sensor.all();
         int cpt = 0;
