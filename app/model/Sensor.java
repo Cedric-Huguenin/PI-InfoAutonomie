@@ -3,9 +3,8 @@ package model;
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.List;
 
 /**
  * TODO document
@@ -14,15 +13,15 @@ import javax.persistence.Id;
 
 @Entity
 public class Sensor extends Model {
-
+    // {"id":"1","name":"Light Sensor","address":"153.111","type":"LIGHT","location":"Bureau TN","description":"Sur la commode"}
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
     public String name;
     public String address;
     public SensorType type;
     public String location;
     public String description;
+    public String unit;
 
     public static Sensor create(Sensor sensor) {
         sensor.save();
@@ -30,6 +29,10 @@ public class Sensor extends Model {
     }
 
     public static Model.Finder<String,Sensor> find = new Model.Finder<>(String.class, Sensor.class);
+
+    public static List<Sensor> all() {
+        return find.all();
+    }
 
     public String getName() {
         return name;
@@ -79,14 +82,24 @@ public class Sensor extends Model {
         this.id = id;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     @Override
     public String toString() {
         return "Sensor{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", type=" + type +
-                ", location='" + location + '\'' +
-                ", description='" + description + '\'' +
+                "id='" + getId() + '\'' +
+                "name='" + getName() + '\'' +
+                ", address='" + getAddress() + '\'' +
+                ", type=" + getType() +
+                ", location='" + getLocation() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", unit='" + getUnit() + '\'' +
                 '}';
     }
 }

@@ -6,7 +6,8 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * Created by Ced on 03/03/2015.
+ * Event Occurrence model
+ * Persistent object
  */
 
 @Entity

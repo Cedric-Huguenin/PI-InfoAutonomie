@@ -1,0 +1,43 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{mathced}
+\usepackage{graphicx}
+\usepackage{eurosym}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+	\usetikzlibrary{arrows,positioning,automata,trees,shapes}
+\usepackage[top=1.5cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{pgfplots}
+\usepackage{enumitem}
+\usepackage{mathpazo}
+\usepackage{vhistory}
+
+\makeatletter
+\author{PI Info-Autonomie}\let\Author\@author
+\title{Documentation API}\let\Title\@title
+\makeatother
+
+\hypersetup{ 
+  pdfauthor   = {\Author}, 
+  pdftitle    = {\Title} 
+}
+
+\everymath{\displaystyle}
+
+\usepackage{listings}
+\usepackage{color}
+
+\input{setListing.tex}
+
+\begin{document}
+\entete{\includegraphics[scale=0.17]{Fig/school-logo}}{\includegraphics[scale=0.75]{Fig/OHS}}{\Title}{PI}
+
+\begin{versionhistory}
+  \vhEntry{1.0}{09/03/2015}{CH}{Création}
+  \vhEntry{1.0.1}{09/03/2015}{CH}{Précisions sur les types}
+\end{versionhistory}
+
+
+\input{DOC-API_content.tex}
+
+\end{document}

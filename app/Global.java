@@ -1,5 +1,8 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import model.BasicEvent;
 import model.Event;
+import model.json.Data;
+import model.json.DataNode;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 import play.Application;
@@ -8,6 +11,8 @@ import play.Logger;
 import play.libs.Akka;
 import scala.concurrent.duration.Duration;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,6 +29,19 @@ public class Global extends GlobalSettings {
                 () -> {
                     Logger.info("ON START ---    " + System.currentTimeMillis());
                     System.out.println("ON START ---    " + System.currentTimeMillis());
+//                    try { // allow to load local DB with iotlab data
+//                        URL url = new URL("http://iotlab.telecomnancy.eu/rest/data/1/light1/300/1425740196/1425826596");
+//                        ObjectMapper mapper = new ObjectMapper();
+//                        DataNode rawDataNode = mapper.readValue(url, DataNode.class);
+//                        for(Data data : rawDataNode.getData()) {
+//                            model.Data persistData = new model.Data(data.getTimestamp(), data.getValue(), data.getLabel(), data.getMote()+".LIGHT");
+//
+//                            System.out.println(persistData.toString());
+//                            model.Data.create(persistData);
+//                        }
+//                    } catch (IOException e) {
+//
+//                    }
                 },
                 Akka.system().dispatcher()
         );
@@ -37,6 +55,7 @@ public class Global extends GlobalSettings {
                 () -> { // Runnable
 
                     // check for new BasicEvent occurrences
+                    System.out.println("BasicEvent : " + BasicEvent.all().size());
                     BasicEvent.all().forEach(model.BasicEvent::check);
 
                     // based on BasicEventOccurrences, check if Event occurs
