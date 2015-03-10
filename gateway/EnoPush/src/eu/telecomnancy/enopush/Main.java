@@ -31,6 +31,10 @@ public class Main {
 	 * The serial interface.
 	 */
 	public static ESP3Connector serialConnection = new USB300();
+	/**
+	 * Boolean to know if the ESP3Connector is ready to quit.
+	 */
+	public static boolean ready = true;
 
 	/**
 	 * Runs the program.
@@ -60,9 +64,25 @@ public class Main {
 			DataManager.sendDevices();
 		}
 		
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    public void run() {
+		    	if(ready)
+		    		serialConnection.disconnect();
+				else {
+					try {
+						Thread.sleep(1000*TIMEOUT);
+					} catch (InterruptedException e) {
+					}
+				}
+		    }
+		 });
+		
 		while(true) {
 			try {
+				ready = false;
 				ESP3Packet packet = serialConnection.read(TIMEOUT, TimeUnit.SECONDS);
+				ready = true;
 				if(packet != null) {
 					// System.out.println(packet.toString());
 					
@@ -78,9 +98,6 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-		
-		// TODO exit properly when CTRL+C
-		// serialConnection.disconnect();
 
 	}
 
