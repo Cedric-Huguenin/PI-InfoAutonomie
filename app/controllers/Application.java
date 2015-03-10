@@ -23,7 +23,7 @@ public class Application extends Controller {
     public static Result init() {
         Ebean.save((List) Yaml.load("test-data.yml"));
 
-        return index();
+        return redirect(controllers.routes.LoginController.login());
     }
 
     /**

@@ -1,5 +1,6 @@
 package controllers;
 
+import model.Account;
 import model.Login;
 import play.data.Form;
 import play.mvc.Controller;
@@ -29,7 +30,8 @@ public class LoginController extends Controller {
         } else {
             session().clear();
             session("email", loginForm.get().email);
-            session("admin", "yes"); // TODO: check in DB
+            Account account = Account.find.ref(loginForm.get().email);
+            session("admin", account.isAdmin()+""); // TODO: check in DB
             return redirect(controllers.routes.Application.index());
         }
     }
