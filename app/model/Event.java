@@ -50,6 +50,30 @@ public class Event extends Model {
     public String icon;
     public String color;
 
+    public String validate() {
+        validateExpression(expression);
+        if (expression.isEmpty()) {
+            return "Expression vide !";
+        }
+        if (!validateExpression(expression)) {
+            return "Expression fausse ou un évènement de base n'existe pas.";
+        }
+        return null;
+    }
+
+    public boolean validateExpression(String toEval) {
+        String[] basicEventIds = toEval.split("(\\|\\||&&)");
+        for (String id : basicEventIds) {
+            id = id.trim();
+            boolean basicEventExist = BasicEvent.find.where().eq("id", id).findRowCount() == 1;
+            if (!basicEventExist) {
+                return false;
+            }
+//            System.out.println("basicEventID: " + id + " " + basicEventExist);
+        }
+        return true;
+    }
+
     /**
      * The list of all the existing Event.
      */
@@ -92,7 +116,7 @@ public class Event extends Model {
 
         BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence();
 
-        String toEval = new String(expression); // copy the string
+        String toEval = expression; // copy the string
 
 //        System.out.println("STRING : " + toEval);
         long mean = 0;
