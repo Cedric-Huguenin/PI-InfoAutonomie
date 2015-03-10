@@ -304,68 +304,73 @@ public class DataManager {
 	 * @param jsonData the data to be sent.
 	 * @param purpose sensor information or physical measurement.
 	 */
-	public static void sendData(String jsonData, DataPurpose purpose) {
+	public static void sendData(final String jsonData, final DataPurpose purpose) {
 		System.out.println(jsonData);
-		URL url;
-	    HttpURLConnection connection = null;
 	    
-	    try {
-	        //Create connection
-	    	switch(purpose) {
-			case DATA:
-				url = new URL(platformAddress+"/data");
-				break;
-			case SENSOR:
-				url = new URL(platformAddress+"/sensor");
-				break;
-			default:
-				url = new URL(platformAddress+"/data");
-				break;
+	    Thread newThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				URL url;
+			    HttpURLConnection connection = null;
+			    try {
+			        //Create connection
+			    	switch(purpose) {
+					case DATA:
+						url = new URL(platformAddress+"/data");
+						break;
+					case SENSOR:
+						url = new URL(platformAddress+"/sensor");
+						break;
+					default:
+						url = new URL(platformAddress+"/data");
+						break;
+			    	
+			    	}
+			    	
+			    	System.out.println(url.toString());
+			        
+			        connection = (HttpURLConnection)url.openConnection();
+			        connection.setRequestMethod("POST");
+			        connection.setRequestProperty("Content-Type","application/json");
+			        connection.setRequestProperty("AUTH", token);
+			
+			        connection.setUseCaches (false);
+			        connection.setDoInput(true);
+			        connection.setDoOutput(true);
+			
+			        //Send request
+			        DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
+			        wr.writeBytes(jsonData);
+			        wr.flush ();
+			        wr.close ();
+			        
+			        if(connection.getResponseCode() >= 200 && connection.getResponseCode() <= 400) {
+			        	//Get Response    
+				        InputStream is = connection.getInputStream();
+				        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+				        String line;
+				        
+				        StringBuffer response = new StringBuffer(); 
+				        while((line = rd.readLine()) != null) {
+				        	response.append(line);
+				        	response.append('\n');
+				        }
+				        rd.close();
+			        } else {
+			        	if(purpose == DataPurpose.DATA)
+			        		LOGGER.info("Something went wrong with the server");
+			        }
+			   } catch (IOException e) {
+				   LOGGER.warn("Failed to send HTTP message. Verify server information.");
+				   e.printStackTrace();
+		       } finally {
+			       if(connection != null) {
+			    	   connection.disconnect(); 
+			       }
+		       }
+			}
 	    	
-	    	}
-	    	
-	    	System.out.println(url.toString());
-	        
-	        connection = (HttpURLConnection)url.openConnection();
-	        connection.setRequestMethod("POST");
-	        connection.setRequestProperty("Content-Type","application/json");
-	        connection.setRequestProperty("AUTH", token);
-	
-	        connection.setUseCaches (false);
-	        connection.setDoInput(true);
-	        connection.setDoOutput(true);
-	
-	        //Send request
-	        DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
-	        wr.writeBytes(jsonData);
-	        wr.flush ();
-	        wr.close ();
-	        
-	        if(connection.getResponseCode() >= 200 && connection.getResponseCode() <= 400) {
-	        	//Get Response    
-		        InputStream is = connection.getInputStream();
-		        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-		        String line;
-		        
-		        StringBuffer response = new StringBuffer(); 
-		        while((line = rd.readLine()) != null) {
-		        	response.append(line);
-		        	response.append('\n');
-		        }
-		        rd.close();
-		        // TODO use this
-		        System.out.println(response.toString());
-	        } else {
-	        	if(purpose == DataPurpose.DATA)
-	        		LOGGER.info("Something went wrong with the server");
-	        }
-	   } catch (IOException e) {
-		   LOGGER.warn("Failed to send HTTP message. Verify server information.");
-		   e.printStackTrace();
-       } finally {
-	       if(connection != null) {
-	    	   connection.disconnect(); 
-	       }
-       }
+	    });
+	    newThread.start();
 	}
 }
