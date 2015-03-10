@@ -207,12 +207,18 @@
 				<i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
-				<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+				<li><a href="#"><i class="fa fa-user fa-fw"></i>
+                    @if("true".equals(session.get("admin"))) {
+                        Admin
+                    } else {
+                        Guest
+                    }
+                </a>
 				</li>
 				<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
 				</li>
 				<li class="divider"></li>
-				<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+				<li><a href="@routes.LoginController.logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
 				</li>
 			</ul>
 			<!-- /.dropdown-user -->
@@ -257,9 +263,12 @@
 				<li>
 					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Évènements<span class="fa arrow"></span></a>
 					<ul aria-expanded="false" class="nav nav-second-level collapse">
-						<li>
-							<a href="@routes.EventController.create"><i class="fa fa-fw fa-file"></i> Créer un évènement</a>
-		                </li>
+                    @if("true".equals(session.get("admin"))) {
+                        <li>
+                            <a href="@routes.EventController.create"><i class="fa fa-fw fa-file"></i>
+                                Créer un évènement</a>
+                        </li>
+                    }
 		                <li>
 		                    <a href="@routes.EventController.timeline"><i class="fa fa-fw fa-file"></i> Timeline</a>
 		                </li>

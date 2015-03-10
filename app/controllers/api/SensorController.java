@@ -1,13 +1,10 @@
 package controllers.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import controllers.Secured;
-import model.Data;
+import controllers.APISecured;
 import model.Sensor;
 import model.SensorType;
 import play.libs.Json;
-import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -32,7 +29,7 @@ public class SensorController extends Controller {
         return ok(Json.toJson(sensor));
     }
 
-    @Security.Authenticated(Secured.class)
+    @Security.Authenticated(APISecured.class)
     public static Result createSensor() {
         // POST http://localhost:9000/api/sensor  {"address":"153.111","type":"LIGHT"}
         JsonNode json = request().body().asJson();
@@ -73,7 +70,7 @@ public class SensorController extends Controller {
         }
     }
 
-    @Security.Authenticated(Secured.class)
+    @Security.Authenticated(APISecured.class)
     public static Result deleteSensor(String sensorId) {
         // DELETE http://localhost:9000/api/sensor/sensorId
         Sensor.find.ref(sensorId).delete();

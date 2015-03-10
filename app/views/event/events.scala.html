@@ -37,7 +37,9 @@
                                             <tr>
                                                 <th>Nom</th>
                                                 <th>Expression</th>
-                                                <th></th>
+                                                @if("true".equals(session.get("admin"))) {
+                                                    <th></th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -45,12 +47,14 @@
                                                 <tr>
                                                     <td>@event.name</td>
                                                     <td>@event.expression</td>
-                                                    <td>
-                                                        <a href="@routes.EventController.edit(event.id)" class="btn btn-primary">Éditer</a>
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-id="@routes.EventController.delete(event.id)">
-                                                            Supprimer
-                                                        </button>
-                                                    </td>
+                                                    @if("true".equals(session.get("admin"))) {
+                                                        <td>
+                                                            <a href="@routes.EventController.edit(event.id)" class="btn btn-primary">Éditer</a>
+                                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-id="@routes.EventController.delete(event.id)">
+                                                                Supprimer
+                                                            </button>
+                                                        </td>
+                                                    }
                                                 </tr>
                                             }
                                         </tbody>

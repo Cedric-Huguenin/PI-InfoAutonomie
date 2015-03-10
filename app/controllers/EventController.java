@@ -3,6 +3,7 @@ package controllers;
 import model.*;
 import play.data.Form;
 import play.mvc.Result;
+import play.mvc.With;
 import views.html.event.create;
 import views.html.event.events;
 
@@ -25,6 +26,7 @@ public class EventController {
         return ok(events.render(allEvents));
     }
 
+    @With(WebAuthorization.class)
     public static Result edit(String id) {
         Event event = Event.find.byId(id);
         eventForm.data().put("id", event.getId());
@@ -35,6 +37,7 @@ public class EventController {
         return ok(create.render(eventForm, BasicEvent.all()));
     }
 
+    @With(WebAuthorization.class)
     public static Result delete(String id) {
         Event event = Event.find.byId(id);
         event.delete();
@@ -42,6 +45,7 @@ public class EventController {
         return redirect(controllers.routes.EventController.events());
     }
 
+    @With(WebAuthorization.class)
     public static Result save() {
         Form<Event> eventForm = form(Event.class).bindFromRequest();
         if (eventForm.hasErrors()) {
@@ -55,6 +59,7 @@ public class EventController {
      * Loads the create event page.
      * @return the result of the event page.
      */
+    @With(WebAuthorization.class)
     public static Result create() {
         return ok(create.render(form(Event.class), BasicEvent.all()));
     }

@@ -7,6 +7,7 @@ import static play.data.Form.*;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.With;
 import views.html.sensor.sensors;
 import views.html.sensor.editSensor;
 
@@ -71,6 +72,7 @@ public class SensorController extends Controller {
         return ok(editSensor.render(form));
     }
 
+    @With(WebAuthorization.class)
     public static Result updateSensor() {
         Form<Sensor> sensorForm = form(Sensor.class).bindFromRequest();
 
@@ -86,6 +88,7 @@ public class SensorController extends Controller {
         return redirect(controllers.routes.SensorController.sensors());
     }
 
+    @With(WebAuthorization.class)
     public static Result resetSensor(String id) {
         Sensor sensor = Sensor.find.byId(id);
         sensor.setDescription(null);
