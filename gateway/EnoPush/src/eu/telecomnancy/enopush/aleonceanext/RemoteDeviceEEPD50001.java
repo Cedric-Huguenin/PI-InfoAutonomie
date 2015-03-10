@@ -13,37 +13,68 @@ import eu.aleon.aleoncean.device.StandardDevice;
 import eu.aleon.aleoncean.packet.EnOceanId;
 import eu.aleon.aleoncean.packet.RadioPacket;
 import eu.aleon.aleoncean.packet.radio.RadioPacket1BS;
-import eu.aleon.aleoncean.packet.radio.userdata.UserDataEEPD50001;
 import eu.aleon.aleoncean.rxtx.ESP3Connector;
 
+/**
+ * Represents a D5-00-01 EnOcean device (contact sensor/switch).
+ * @author Mickael
+ *
+ */
 public class RemoteDeviceEEPD50001 extends StandardDevice implements RemoteDevice  {
+	/**
+	 * The serial version UID for the serialization.
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * The logger to do runtime logs.
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(RemoteDeviceEEPD50001.class);
+	/**
+	 * The state of the contact.
+	 */
 	private boolean switchState;
 
+	/**
+	 * Creates a new D5-00-01 EnOcean device. 
+	 * @param conn the serial interface from which the device comes.
+	 * @param addressRemote the address of the EnOcean devce.
+	 * @param addressLocal ?
+	 */
 	public RemoteDeviceEEPD50001(ESP3Connector conn, EnOceanId addressRemote,
 			EnOceanId addressLocal) {
 		super(conn, addressRemote, addressLocal);
 	}
 
+	/**
+	 * Parses a 1BS radio packet, interpret its data as D5-00-01 and stores it.
+	 * @param radioPacket the input 1BS radio packet.
+	 */
 	public void parseRadioPacket1BS(RadioPacket1BS radioPacket) {
 		if (radioPacket.isTeachIn()) {
             LOGGER.debug("Ignore teach-in packets.");
             return;
         }
 		
-		final UserDataEEPD50001 userData = new UserDataEEPD50001(radioPacket.getUserDataRaw());
-		
-		setSwitch(DeviceParameterUpdatedInitiation.RADIO_PACKET, userData.isContactClosed());
+		setSwitch(DeviceParameterUpdatedInitiation.RADIO_PACKET, (radioPacket.getData()[1] & 0x01) == 1);
 	}
 	
+	/**
+	 * Updates the state of the contact.
+	 * @param initiation the origin of the change.
+	 * @param contactClosed the new state of the contact.
+	 */
 	public void setSwitch(DeviceParameterUpdatedInitiation initiation,
 			boolean contactClosed) {
 		final boolean oldState = this.switchState;
         this.switchState = contactClosed;
-        fireParameterChanged(DeviceParameter.SWITCH, initiation, oldState, contactClosed);
+        fireParameterChanged(DeviceParameter.SWITCH, initiation, new Boolean(oldState), new Boolean(contactClosed));
 		
 	}
 	
+	/**
+	 * Returns the state of the contact.
+	 * @return true if closed, false otherwise.
+	 */
 	public boolean getSwitch() {
 		return switchState;
 	}
@@ -66,7 +97,7 @@ public class RemoteDeviceEEPD50001 extends StandardDevice implements RemoteDevic
     public Object getByParameter(final DeviceParameter parameter) throws IllegalDeviceParameterException {
         switch (parameter) {
             case SWITCH:
-                return getSwitch();
+                return new Boolean(getSwitch());
             default:
                 return super.getByParameter(parameter);
         }

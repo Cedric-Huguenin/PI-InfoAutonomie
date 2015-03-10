@@ -30,7 +30,12 @@ import eu.aleon.aleoncean.rxtx.ESP3Connector;
  */
 public abstract class StandardDevice implements Device {
 
-    protected final DeviceParameterUpdatedSupport parameterChangedSupport;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	protected final DeviceParameterUpdatedSupport parameterChangedSupport;
 
     private final transient ESP3Connector conn;
     private final EnOceanId addressRemote;

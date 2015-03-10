@@ -36,7 +36,12 @@ import eu.aleon.aleoncean.rxtx.ESP3Connector;
  */
 public class RemoteDeviceEEPA50205 extends StandardDevice implements RemoteDevice {
 
-    private static transient final Logger LOGGER = LoggerFactory.getLogger(RemoteDeviceEEPA50205.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(RemoteDeviceEEPA50205.class);
 
     private Double temperature;
 
