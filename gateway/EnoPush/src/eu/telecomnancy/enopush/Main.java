@@ -13,11 +13,30 @@ import eu.aleon.aleoncean.rxtx.USB300;
 import eu.telecomnancy.enopush.telegram.DataManager;
 import eu.telecomnancy.enopush.telegram.TeachedDevices;
 
+/**
+ * Main class running the Gateway.
+ * @author Mickael
+ *
+ */
 public class Main {
+	/**
+	 * Logger to use to write logs while running.
+	 */
 	private static final Logger log = Logger.getLogger( Main.class.getName() );
+	/**
+	 * Timeout in seconds to wait a radio packet on the interface. This freezes the main thread.
+	 */
 	private static final long TIMEOUT = 2;
+	/**
+	 * The serial interface.
+	 */
 	public static ESP3Connector serialConnection = new USB300();
 
+	/**
+	 * Runs the program.
+	 * @param args you have to provide in args on which serial interface you would like to connect (example : /dev/ttyAMA0).
+	 * Make sure the serial interface provided is available and not in use by the system.
+	 */
 	public static void main(String[] args) {
 		
 		if(args.length < 1) {
@@ -56,6 +75,7 @@ public class Main {
 			}
 		}
 		
+		// TODO exit properly when CTRL+C
 		// serialConnection.disconnect();
 
 	}

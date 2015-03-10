@@ -17,10 +17,25 @@ import eu.telecomnancy.enopush.Main;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPA50701;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPD50001;
 
+/**
+ * The class in charge of memorizing the sensors learned by the software.
+ * It provides data persistence to avoid having to put the sensors in TeachIn mode every
+ * time we start the gateway.
+ * @author Mickael
+ *
+ */
 public class TeachedDevices {
 
+	/**
+	 * The Map of the devices saved.
+	 */
 	private static HashMap<String,Device> learntDevices = new HashMap<>();
 	
+	/**
+	 * Adds a new device to the list and saves it on the hard drive. If the device already exists and equals the new one
+	 * nothing is done.
+	 * @param radioPacket the radioPacket received. It will be determined if it is a TeachIn packet. If it is not, it will be ignored. 
+	 */
 	public static void addDevice(RadioPacket radioPacket) {
 		switch(radioPacket.getChoice()) {
 		case RadioChoice.RORG_1BS:
@@ -70,15 +85,27 @@ public class TeachedDevices {
 		
 	}
 	
+	/**
+	 * Puts the specified device in the learned devices map. No verification is done.
+	 * @param key the key of the Entry in the Map (typically the EnOcean device address).
+	 * @param device the device to add or replace.
+	 */
 	public static void put(String key, Device device) {
 		learntDevices.put(key, device);
 		saveDevices();
 	}
 	
+	/**
+	 * Returns the devices list as a string.
+	 * @return a string describing the devices saved.
+	 */
 	public static String devicesToString() {
 		return learntDevices.toString();
 	}
 	
+	/**
+	 * Saves the list on the file system. The list is serialized.
+	 */
 	public static void saveDevices() {
 	    ObjectOutputStream oos = null;
 
@@ -102,6 +129,10 @@ public class TeachedDevices {
 	    }
 	}
 	
+	/**
+	 * Loads the list from the file system.
+	 * @return the number of elements of the list loaded.
+	 */
 	public static int loadDevices() {
 	    ObjectInputStream ois = null;
 
@@ -131,10 +162,20 @@ public class TeachedDevices {
 	    return 0;
 	}
 
+	/**
+	 * Returns if the map contains the device identified by the given id. 
+	 * @param id the EnOcean ID of the device searched.
+	 * @return true if the device is part of the map, false otherwise.
+	 */
 	public static boolean containsDevices(EnOceanId id) {
 		return learntDevices.containsKey(id.toString());
 	}
 
+	/**
+	 * Returns the specified device.
+	 * @param senderId the EnOcean ID of the desired device.
+	 * @return the desired device or null if not found.
+	 */
 	public static Device getDevice(EnOceanId senderId) {
 		if(containsDevices(senderId))
 			return learntDevices.get(senderId.toString());

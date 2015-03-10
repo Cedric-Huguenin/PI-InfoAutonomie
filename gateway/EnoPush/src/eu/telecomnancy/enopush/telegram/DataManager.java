@@ -27,18 +27,47 @@ import eu.aleon.aleoncean.packet.radio.RadioPacketRPS;
 import eu.aleon.aleoncean.packet.radio.RadioPacketUTE;
 import eu.aleon.aleoncean.packet.radio.RadioPacketVLD;
 
+
+/**
+ * Class in charge of the data processing to send it to the main platform.
+ * @author Mickael
+ *
+ */
 public class DataManager {
+	/**
+	 * The purpose of the sent data.
+	 * @author Mickael
+	 *
+	 */
 	public enum DataPurpose {
+		/**
+		 * This is data retrieved from sensors.
+		 */
 		DATA,
+		/**
+		 * This is sensor information.
+		 */
 		SENSOR
 	}
 	
-	
+	/**
+	 * The address of the platform API.
+	 */
 	public static final String platformAddress = "http://vps91071.ovh.net/api";
+	/**
+	 * The token used to connect to the platform.
+	 */
 	public static final String token = "hj1456bsdg1bfsg846bg1sb125gfd";
+	/**
+	 * The logger to do runtime logs.
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataManager.class);
 
 	@SuppressWarnings("unchecked")
+	/**
+	 * Processes the received data to adapt it to the platform and sends it.
+	 * @param radioPacket
+	 */
 	public static void process(RadioPacket radioPacket) {
 		if(TeachedDevices.containsDevices(radioPacket.getSenderId())) {
 			Device device = TeachedDevices.getDevice(radioPacket.getSenderId());
@@ -175,6 +204,11 @@ public class DataManager {
 		}
 	}
 	
+	/**
+	 * Sends data via HTTP or HTTPS to the platform.
+	 * @param jsonData the data to be sent.
+	 * @param purpose sensor information or physical measurement.
+	 */
 	public static void sendData(String jsonData, DataPurpose purpose) {
 		System.out.println(jsonData);
 		URL url;
