@@ -27,6 +27,7 @@ import eu.aleon.aleoncean.packet.radio.RadioPacketMSC;
 import eu.aleon.aleoncean.packet.radio.RadioPacketRPS;
 import eu.aleon.aleoncean.packet.radio.RadioPacketUTE;
 import eu.aleon.aleoncean.packet.radio.RadioPacketVLD;
+import eu.telecomnancy.enopush.Settings;
 
 
 /**
@@ -51,14 +52,6 @@ public class DataManager {
 		SENSOR
 	}
 	
-	/**
-	 * The address of the platform API.
-	 */
-	public static final String platformAddress = "http://vps91071.ovh.net/api";
-	/**
-	 * The token used to connect to the platform.
-	 */
-	public static final String token = "hj1456bsdg1bfsg846bg1sb125gfd";
 	/**
 	 * The logger to do runtime logs.
 	 */
@@ -316,13 +309,13 @@ public class DataManager {
 			        //Create connection
 			    	switch(purpose) {
 					case DATA:
-						url = new URL(platformAddress+"/data");
+						url = new URL(Settings.getProperty("api_path")+"/data");
 						break;
 					case SENSOR:
-						url = new URL(platformAddress+"/sensor");
+						url = new URL(Settings.getProperty("api_path")+"/sensor");
 						break;
 					default:
-						url = new URL(platformAddress+"/data");
+						url = new URL(Settings.getProperty("api_path")+"/data");
 						break;
 			    	
 			    	}
@@ -332,7 +325,7 @@ public class DataManager {
 			        connection = (HttpURLConnection)url.openConnection();
 			        connection.setRequestMethod("POST");
 			        connection.setRequestProperty("Content-Type","application/json");
-			        connection.setRequestProperty("AUTH", token);
+			        connection.setRequestProperty("AUTH", Settings.getProperty("api_token"));
 			
 			        connection.setUseCaches (false);
 			        connection.setDoInput(true);

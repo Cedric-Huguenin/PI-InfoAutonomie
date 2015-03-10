@@ -14,6 +14,7 @@ import eu.aleon.aleoncean.packet.RadioChoice;
 import eu.aleon.aleoncean.packet.RadioPacket;
 import eu.aleon.aleoncean.packet.radio.userdata.UserData1BS;
 import eu.telecomnancy.enopush.Main;
+import eu.telecomnancy.enopush.Settings;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPA50701;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPD50001;
 
@@ -111,7 +112,7 @@ public class TeachedDevices {
 	    ObjectOutputStream oos = null;
 
 	    try {
-	        final FileOutputStream file = new FileOutputStream("devices.enp");
+	        final FileOutputStream file = new FileOutputStream(Settings.getProperty("devices_file"));
 	        oos = new ObjectOutputStream(file);
 	        oos.writeObject(learntDevices);
 
@@ -138,7 +139,7 @@ public class TeachedDevices {
 	    ObjectInputStream ois = null;
 
 	    try {
-	        final FileInputStream file = new FileInputStream("devices.enp");
+	        final FileInputStream file = new FileInputStream(Settings.getProperty("devices_file"));
 	        ois = new ObjectInputStream(file);
 	        
 	        @SuppressWarnings("unchecked")

@@ -39,19 +39,21 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		if(args.length < 1) {
-			System.out.println("Incorrect arguments number. You must specify the serial port to listen.");
-			System.exit(1);
+		Settings.init();
+		String serialDevice = Settings.getProperty("default_serial");
+		
+		if(args.length > 0) {
+			serialDevice = args[0];
 		}
 		
-		System.setProperty("gnu.io.rxtx.SerialPorts", args[0]);
-		System.setProperty("java.library.path", "/usr/lib/jni");
+		System.setProperty("gnu.io.rxtx.SerialPorts", serialDevice);
+		System.setProperty("java.library.path", Settings.getProperty("lib_path"));
 		
-		if(!serialConnection.connect(args[0])) {
+		if(!serialConnection.connect(serialDevice)) {
 			log.log(Level.SEVERE, "Impossible to connect to the specified serial interface");
 			System.exit(1);
 		}
-		log.log(Level.INFO, "Connected to the serial interface " + args[0]);
+		log.log(Level.INFO, "Connected to the serial interface " + serialDevice);
 		
 		if(TeachedDevices.loadDevices() > 0) {
 			log.log(Level.INFO, "Loaded some devices from file: \n" + TeachedDevices.devicesToString());
