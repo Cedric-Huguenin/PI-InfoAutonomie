@@ -6,7 +6,6 @@ import play.db.ebean.Model;
 import utils.TimestampUtils;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +49,47 @@ public class Event extends Model {
     public String icon;
     public String color;
 
+    public String validate() {
+        validateExpression(expression);
+        if (expression.isEmpty()) {
+            return "Expression vide !";
+        }
+        if (!validateExpression(expression)) {
+            return "Expression fausse ou un évènement de base n'existe pas.";
+        }
+        return null;
+    }
+
+    public boolean validateExpression(String toEval) {
+        String[] basicEventIds = toEval.split("(\\|\\||&&)");
+
+        // first, check if all given basic events exist in database
+        for (String id : basicEventIds) {
+            id = id.trim();
+            toEval = toEval.replace(id, "true");
+            boolean basicEventExist = BasicEvent.find.where().eq("id", id).findRowCount() == 1;
+            System.out.println("basicEventID: " + id + " " + basicEventExist);
+            if (!basicEventExist) {
+                return false;
+            }
+        }
+
+        // then, test if the expression is syntactically correct by trying to parse it (after having replacer all the ids by true for example
+        BooleanExpression boolExpr;
+        try {
+            System.out.println("Expression: " + toEval);
+            boolExpr = BooleanExpression.readLeftToRight(toEval);
+            boolean bool = boolExpr.booleanValue();
+            System.out.println("Result of the evaluation: " + boolExpr + " == " + bool);
+        } catch (MalformedBooleanException e) {
+            System.out.println("Invalid Expression");
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * The list of all the existing Event.
      */
@@ -89,10 +129,9 @@ public class Event extends Model {
             return;
         }
 
-
         BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence();
 
-        String toEval = new String(expression); // copy the string
+        String toEval = expression; // copy the string
 
 //        System.out.println("STRING : " + toEval);
         long mean = 0;
@@ -101,7 +140,7 @@ public class Event extends Model {
         for (String id : basicEventIds) {
             id = id.trim();
             BasicEvent basicEvent = BasicEvent.find.ref(id);
-//            System.out.println("Current BasicEventID  : !" + basicEvent.getId());
+//            System.out.println("Current BasicEventID: " + basicEvent.getId());
             long occurTime = basicEventOccurrence.occur(timeInterval, basicEvent);
             if (occurTime != -1) {
                 cpt++;
@@ -124,7 +163,7 @@ public class Event extends Model {
                 if (EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
                     eventOccurrence.save();
                 }
-//                System.out.println("EVENT OCCURRENCE : persisted !");
+//                System.out.println("EVENT OCCURRENCE: persisted!");
             }
             // (((!true)&&false)||true) == true
         } catch (MalformedBooleanException e) {

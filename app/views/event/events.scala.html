@@ -49,8 +49,9 @@
                                                     <td>@event.expression</td>
                                                     @if("true".equals(session.get("admin"))) {
                                                         <td>
-                                                            <a href="@routes.EventController.edit(event.id)" class="btn btn-primary">Éditer</a>
-                                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" data-id="@routes.EventController.delete(event.id)">
+                                                            <a href="@routes.EventController.edit(event.id)" class="btn btn-primary btn-xs">
+                                                                Éditer</a>
+                                                            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal" data-id="@routes.EventController.delete(event.id)">
                                                                 Supprimer
                                                             </button>
                                                         </td>

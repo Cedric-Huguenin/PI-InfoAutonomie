@@ -43,6 +43,12 @@
                                             <a class="label label-default" title="@basicEvent.name">@basicEvent.id</a>
                                         }
                                     </p>
+                                    @if(form.hasGlobalErrors) {
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="sr-only">Error:</span>
+                                            @form.globalError.message
+                                        </div>
+                                    }
                                 </div>
                                 <div>
                                     <button class="btn btn-primary" type="submit">Créer</button>
