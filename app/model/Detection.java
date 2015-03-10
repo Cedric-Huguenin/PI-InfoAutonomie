@@ -156,4 +156,46 @@ public class Detection extends Model {
                 ", delta=" + getDelta() +
                 '}';
     }
+
+    public String getDetectionTypeAsString() {
+        String typeAsString;
+
+        switch (detectionType) {
+            case DELTA:
+                typeAsString = "Delta";
+                break;
+            case MIN_MAX_VALUES:
+                typeAsString = "Min/max";
+                break;
+            case SIMPLE_THRESHOLD:
+                typeAsString = "Seuil";
+                break;
+            default:
+                typeAsString = "Divers";
+                break;
+        }
+
+        return typeAsString;
+    }
+
+    public String getValueAsString() {
+        String valueAsString;
+
+        switch (detectionType) {
+            case DELTA:
+                valueAsString = "delta : " + delta;
+                break;
+            case MIN_MAX_VALUES:
+                valueAsString = "min/max : " + minValue + "/" + maxValue;
+                break;
+            case SIMPLE_THRESHOLD:
+                valueAsString = "seuil : " + simpleThreshold;
+                break;
+            default:
+                valueAsString = "divers : pas de valeur";
+                break;
+        }
+
+        return valueAsString;
+    }
 }

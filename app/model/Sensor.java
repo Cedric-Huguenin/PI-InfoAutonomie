@@ -102,4 +102,39 @@ public class Sensor extends Model {
                 ", unit='" + getUnit() + '\'' +
                 '}';
     }
+
+    public String getTypeAsString() {
+        String typeAsString;
+
+        switch (type) {
+            case DOOR:
+                typeAsString = "Contact de porte";
+                break;
+            case LIGHT:
+                typeAsString = "Luminosité";
+                break;
+            case TEMP:
+                typeAsString = "Température";
+                break;
+            case HUMIDITY:
+                typeAsString = "Humidité";
+                break;
+            case POWER:
+                typeAsString = "Consommation électrique";
+                break;
+            case PRESENCE:
+                typeAsString = "Présence";
+                break;
+            default:
+                typeAsString = "Divers";
+                break;
+        }
+
+        return typeAsString;
+    }
+
+    public List<BasicEvent> getAssociatedBasicEvents() {
+        List<BasicEvent> basicEvents = BasicEvent.find.where().eq("SENSOR_ID", id).findList();
+        return basicEvents;
+    }
 }

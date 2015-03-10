@@ -46,28 +46,7 @@ public class SensorController extends Controller {
         form.data().put("location", sensor.getLocation());
         form.data().put("description", sensor.getDescription());
         form.data().put("unit", sensor.getUnit());
-        String type = "Type";
-        switch (sensor.getType()) {
-            case DOOR:
-                type = "Contact de porte";
-                break;
-            case LIGHT:
-                type = "Luminosité";
-                break;
-            case TEMP:
-                type = "Température";
-                break;
-            case HUMIDITY:
-                type = "Humidité";
-                break;
-            case POWER:
-                type = "Consommation électrique";
-                break;
-            case PRESENCE:
-                type = "Présence";
-                break;
-        }
-        form.data().put("type", type);
+        form.data().put("type", sensor.getTypeAsString());
 
         return ok(editSensor.render(form));
     }
