@@ -20,7 +20,7 @@ GET           /assets.javascript.ws.js                  controllers.RawDataContr
 # Basic events
 GET           /basic/data                               controllers.BasicEventController.data()
 GET           /basic/graph                              controllers.BasicEventController.graph()
-GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "")
+GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15")
 
 # Events
 GET           /event/create                             controllers.EventController.create()

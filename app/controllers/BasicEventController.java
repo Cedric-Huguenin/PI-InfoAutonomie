@@ -95,14 +95,14 @@ public class BasicEventController {
      * @param order Sort order (either asc or desc)
      * @param filter Filter applied on basicEvent
      */
-    public static Result timeline(int page, String sortBy, String order, String filter) {
+    public static Result timeline(int page, String sortBy, String order, String filter, String amount) {
 //        List<BasicEventOccurrence> basicEventOccurrences = BasicEventOccurrence.all();
 //        Collections.sort(basicEventOccurrences);
 //        Collections.reverse(basicEventOccurrences);
         return ok(
                 views.html.basic.timeline.render("Évènements de base",
-                        model.BasicEventOccurrence.page(page, 15, sortBy, order, filter),
-                        sortBy, order, filter,
+                        model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
+                        sortBy, order, filter, amount,
                         BasicEvent.all()
                 )
         );
