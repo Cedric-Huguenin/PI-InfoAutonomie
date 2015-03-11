@@ -250,7 +250,8 @@ public class DataManager {
 				case SUPPLY_VOLTAGE_V:
 					break;
 				case SWITCH:
-					dataTransfert.put("type", "DOOR");
+					if(!(entry instanceof RemoteDeviceEEPD20108))
+						dataTransfert.put("type", "DOOR");
 					break;
 				case TEMPERATURE_CELSIUS:
 					dataTransfert.put("type", "TEMP");
