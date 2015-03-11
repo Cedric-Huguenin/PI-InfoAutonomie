@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.BasicEvent;
 import model.BasicEventOccurrence;
+import model.Sensor;
 import model.json.Data;
 import model.json.DataNode;
 import play.mvc.Result;
@@ -87,14 +88,23 @@ public class BasicEventController {
     }
 
     /**
-     * Read the BasicEventOccurrence and send the result to a timeline page
+     * Display the timeline of basicEventOccurrence.
      *
-     * @return the result of the occurrences in a timeline.
+     * @param page Current page number (starts from 0)
+     * @param sortBy Column to be sorted
+     * @param order Sort order (either asc or desc)
+     * @param filter Filter applied on basicEvent
      */
-    public static Result timeline() {
-        List<BasicEventOccurrence> basicEventOccurrences = BasicEventOccurrence.all();
-        Collections.sort(basicEventOccurrences);
-        Collections.reverse(basicEventOccurrences);
-        return ok(views.html.basic.timeline.render("Évènements de base", basicEventOccurrences));
+    public static Result timeline(int page, String sortBy, String order, String filter) {
+//        List<BasicEventOccurrence> basicEventOccurrences = BasicEventOccurrence.all();
+//        Collections.sort(basicEventOccurrences);
+//        Collections.reverse(basicEventOccurrences);
+        return ok(
+                views.html.basic.timeline.render("Évènements de base",
+                        model.BasicEventOccurrence.page(page, 15, sortBy, order, filter),
+                        sortBy, order, filter,
+                        BasicEvent.all()
+                )
+        );
     }
 }

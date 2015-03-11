@@ -1,7 +1,33 @@
-@(message: String, eventList:List[model.BasicEventOccurrence])
+@(message: String, currentPage: com.avaje.ebean.Page[model.BasicEventOccurrence], currentSortBy: String, currentOrder: String, currentFilter: String, basics: List[model.BasicEvent])
 
 @import java.util.List;
 @import java.math.BigInteger; var i=1
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+
+    var sortBy = currentSortBy
+    var order = currentOrder
+
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+
+    // Generate the link
+    routes.BasicEventController.timeline(newPage, sortBy, order, currentFilter)
+
+}
 
 @main(message) {
 
@@ -26,8 +52,19 @@
                     </div>
                         <!-- /.panel-heading -->
                     <div class="panel-body">
+                        <div id="actions">
+                            <form action="@link(0, "name")" method="GET" role="form">
+                                <input class="form-group" id="searchbox" name="f" value="@currentFilter" list="sensorList">
+                                <datalist id="sensorList">
+                                @for(basic <- basics) {
+                                    <option value="@basic.getId" label="@basic.getName">
+                                    }
+                                </datalist>
+                                <input class="btn btn-default" type="submit" id="searchsubmit" value="Filtrer par basicEvent" class="btn primary">
+                            </form>
+                        </div>
                         <ul class="timeline">
-                        @for(event <- eventList) {
+                        @for(event <- currentPage.getList) {
                             @if(i%2 == 0) {
                                 <li>
                             } else {

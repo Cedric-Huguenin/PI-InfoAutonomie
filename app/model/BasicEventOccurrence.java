@@ -1,5 +1,6 @@
 package model;
 
+import com.avaje.ebean.Page;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
@@ -130,5 +131,16 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
 
 
         return basicsEventOccurrences.size() > 0 ? basicsEventOccurrences.get(0).getTimestamp() : -1;
+    }
+
+    public static Page<BasicEventOccurrence> page(int page, int pageSize, String sortBy, String order, String filter) {
+        return
+                find.where()
+                        .ilike("basic_event_id", "%" + filter + "%")
+                        .orderBy(sortBy+ " " + order)
+                                //.fetch("company")
+                        .findPagingList(pageSize)
+                        .setFetchAhead(false)
+                        .getPage(page);
     }
 }

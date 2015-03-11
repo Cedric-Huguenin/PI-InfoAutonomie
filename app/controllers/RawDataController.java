@@ -149,12 +149,12 @@ public class RawDataController extends Controller {
     }
 
     /**
-     * Display the paginated list of computers.
+     * Display the paginated list of data.
      *
      * @param page Current page number (starts from 0)
      * @param sortBy Column to be sorted
      * @param order Sort order (either asc or desc)
-     * @param filter Filter applied on computer names
+     * @param filter Filter applied on sensor
      */
     public static Result list(int page, String sortBy, String order, String filter) {
         return ok(
