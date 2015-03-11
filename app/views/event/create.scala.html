@@ -3,6 +3,40 @@
 @import java.util.List;
 @main("Créer un évènement") {
 
+<script>
+$(document).ready(function(){
+    $('.multi-field-wrapper').each(function() {
+        var $wrapper = $('.multi-fields', this);
+        $(".add-field", $(this)).click(function(e) {
+            $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper);
+        });
+        $('.multi-field .panel-heading .remove-field', $wrapper).click(function() {
+            console.log("Remove field");
+            if ($('.multi-field', $wrapper).length > 1)
+                $(this).parent('.panel-heading').parent('.multi-field').remove();
+        });
+    });
+});
+
+// Bootstrap 3 Timepicker
+$(function () {
+    $('#datetimepicker1').datetimepicker({
+        defaultDate: "01/01/2015 00:00:00",
+        format: 'HH:mm:ss',
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-bullseye',
+            clear: 'fa fa-trash'
+        }
+    });
+});
+</script>
+
 <div id="wrapper">
 
         @nav()
@@ -33,6 +67,7 @@
                                     <label>Nom</label>
                                     <input class="form-control" type="text" name="name" placeholder="Name" value="@form("name").value">
                                 </div>
+
                                 <div class="form-group">
                                     <label>Expression</label>
                                     <input id="expression" class="form-control" type="text" name="expression" placeholder="Description" value="@form("expression").value">
@@ -63,6 +98,55 @@
                                         </div>
                                     }
                                 </div>
+
+                                <!-- <div class="form-group">
+                                    <label>Durée</label>
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <input type='text' class="form-control" placeholder="HH:mm:ss" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div> -->
+                                <!-- /.form-group -->
+
+                                <!-- Color form -->
+                                <div class="form-group">
+                                    <label>Couleur</label>
+                                    <select id="colorselector" name="color">
+                                        <option value="106" data-color="#A0522D">sienna</option>
+                                        <option value="47" data-color="#CD5C5C" selected="selected">indianred</option>
+                                        <option value="87" data-color="#FF4500">orangered</option>
+                                        <option value="15" data-color="#DC143C">crimson</option>
+                                        <option value="24" data-color="#FF8C00">darkorange</option>
+                                    </select>
+                                </div>
+
+                                <script>
+                                $('#colorselector').colorselector();
+                                </script>
+
+                                <style>
+                                .dropdown-colorselector>.dropdown-menu>li>.color-btn.selected:after {
+                                    content: "\f00c";
+                                    font-family: 'FontAwesome';
+                                }
+                                </style>
+                                <!-- /Color form -->
+
+                                <!-- Icon form -->
+                                <div class="form-group">
+                                    <label>Icône</label>
+                                    <select id="iconselector" name="icon">
+                                        <option value="fa-sitemap"><i class="fa fa-sitemap fa-fw"></i></option>
+                                        <option value="47" data-color="#CD5C5C" selected="selected">indianred</option>
+                                        <option value="87" data-color="#FF4500">orangered</option>
+                                        <option value="15" data-color="#DC143C">crimson</option>
+                                        <option value="24" data-color="#FF8C00">darkorange</option>
+                                    </select>
+                                </div>
+                                <!-- /Icon form -->
+
                                 <div>
                                     <button class="btn btn-primary" type="submit">Créer</button>
                                     <a href="@routes.EventController.events()" class="btn btn-default">Retour</a>
@@ -76,11 +160,7 @@
 
                 <script>
                 // $('.associatedBasicEvent').find('a').css( "color", "red" );
-                $('#basicEvents').find('a').bind('click', function(event) {
-                    $('#expression').val($('#expression').val() + ' ' + event.target.title + ' ');
-                });
                 $('.associatedBasicEvent').find('a').bind('click', function(event) {
-                    console.log("check!");
                     $('#expression').val($('#expression').val() + ' ' + event.target.title + ' ');
                 });
                 </script>
