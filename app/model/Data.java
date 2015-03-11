@@ -1,5 +1,6 @@
 package model;
 
+import com.avaje.ebean.Page;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
@@ -84,6 +85,17 @@ public class Data extends Model{
     public static Data create(Data data) {
         data.save();
         return data;
+    }
+
+    public static Page<Data> page(int page, int pageSize, String sortBy, String order, String filter) {
+        return
+                find.where()
+                        .ilike("mote", "%" + filter + "%")
+                        .orderBy(sortBy+ " " + order)
+                        //.fetch("company")
+                        .findPagingList(pageSize)
+                        .setFetchAhead(false)
+                        .getPage(page);
     }
 
     /**

@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.OldEvent;
+import model.Sensor;
 import model.json.Data;
 import model.json.DataNode;
 import play.mvc.Controller;
@@ -58,7 +59,7 @@ public class RawDataController extends Controller {
             e.printStackTrace();
         }
 
-        return ok(views.html.raw.data.render("Your new application is ready.", model.Data.all(), oldEvents));
+        return null;
     }
 
     /**
@@ -145,5 +146,23 @@ public class RawDataController extends Controller {
      */
     public static Result liveStreamJS() {
         return ok(views.js.raw.liveStream.render());
+    }
+
+    /**
+     * Display the paginated list of computers.
+     *
+     * @param page Current page number (starts from 0)
+     * @param sortBy Column to be sorted
+     * @param order Sort order (either asc or desc)
+     * @param filter Filter applied on computer names
+     */
+    public static Result list(int page, String sortBy, String order, String filter) {
+        return ok(
+                views.html.raw.data.render(
+                        model.Data.page(page, 10, sortBy, order, filter),
+                        sortBy, order, filter,
+                        Sensor.all()
+                )
+        );
     }
 }

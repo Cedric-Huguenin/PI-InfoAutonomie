@@ -10,9 +10,10 @@ GET           /                                         controllers.Application.
 GET           /init                                     controllers.Application.init()
 
 # Raw values
-GET           /raw/data                                 controllers.RawDataController.data()
+GET           /raw/data                                 controllers.RawDataController.list(p:Int ?= 0, s ?= "timestamp", o ?= "asc", f ?= "")
 GET           /raw/graph                                controllers.RawDataController.graph()
 GET           /raw/live                                 controllers.RawDataController.liveStream()
+
 # js
 GET           /assets.javascript.ws.js                  controllers.RawDataController.liveStreamJS()
 
