@@ -34,7 +34,7 @@ public class EventController {
         eventForm.data().put("expression", event.getExpression());
 
         // TODO: template to edit an event
-        return ok(create.render(eventForm, BasicEvent.all()));
+        return ok(create.render(eventForm, Sensor.all()));
     }
 
     @With(WebAuthorization.class)
@@ -49,7 +49,7 @@ public class EventController {
     public static Result save() {
         Form<Event> eventForm = form(Event.class).bindFromRequest();
         if (eventForm.hasErrors()) {
-            return badRequest(create.render(eventForm, BasicEvent.all()));
+            return badRequest(create.render(eventForm, Sensor.all()));
         }
         eventForm.get().save();
         return redirect(controllers.routes.EventController.events());
@@ -61,7 +61,7 @@ public class EventController {
      */
     @With(WebAuthorization.class)
     public static Result create() {
-        return ok(create.render(form(Event.class), BasicEvent.all()));
+        return ok(create.render(form(Event.class), Sensor.all()));
     }
 
     /**
