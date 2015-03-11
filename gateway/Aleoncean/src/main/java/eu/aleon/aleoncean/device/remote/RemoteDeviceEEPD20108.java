@@ -73,11 +73,18 @@ import eu.aleon.aleoncean.util.ThreadUtil;
  */
 public class RemoteDeviceEEPD20108 extends StandardDevice implements RemoteDevice {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RemoteDeviceEEPD20108.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static transient final Logger LOGGER = LoggerFactory.getLogger(RemoteDeviceEEPD20108.class);
 
     private Double energy;
     private Double power;
     private Boolean on;
+    
+    private RadioPacketUTE lastRadioPacket;
 
     public RemoteDeviceEEPD20108(final ESP3Connector conn, final EnOceanId addressRemote, final EnOceanId addressLocal) {
         super(conn, addressRemote, addressLocal);
@@ -120,6 +127,14 @@ public class RemoteDeviceEEPD20108 extends StandardDevice implements RemoteDevic
         userData.setOutputValueOnOff(on);
         send(userData);
         setOn(initiation, on);
+    }
+    
+    public void stopDimming() {
+        final UserDataEEPD201CMD01 userData = new UserDataEEPD201CMD01();
+        userData.setDimValue(DimValue.STOP_DIMMING);
+        userData.setIOChannel(IOChannel.OUTPUT_CHANNEL_00);
+        userData.setOutputValueOnOff(true);
+        send(userData);
     }
 
     public void sendTeachInResponse(final UserDataUTEQuery teachInQuery) {
@@ -207,7 +222,7 @@ public class RemoteDeviceEEPD20108 extends StandardDevice implements RemoteDevic
         send(userData);
     }
 
-    private void sendConfiguration() {
+    public void sendConfiguration() {
         configureSwitch();
         ThreadUtil.sleep(20);
 
@@ -224,13 +239,13 @@ public class RemoteDeviceEEPD20108 extends StandardDevice implements RemoteDevic
         ud.setOverCurrentShutDown(OverCurrentShutDown.AUTOMATIC_RESTART);
         ud.setResetOverCurrentShutDown(ResetOverCurrentShutDown.NOT_ACTIVE);
         ud.setLocalControl(LocalControl.ENABLE);
-        ud.setIOChannel(IOChannel.OUTPUT_CHANNEL_00);
+        ud.setIOChannel(IOChannel.ALL_OUTPUT_CHANNELS);
         ud.setDimTimer1(DimTimer.NOT_USED);
         ud.setDimTimer2(DimTimer.NOT_USED);
-        ud.setDimTimer3(DimTimer.TIMER_4_0_SEC);
+        ud.setDimTimer3(DimTimer.NOT_USED);
         ud.setUserInterfaceIndication(UserInterfaceIndication.DAY_OPERATION);
         ud.setPowerFailure(PowerFailure.DISABLE_DETECTION_OR_DETECTION_NOT_SUPPORTED);
-        ud.setDefaultState(DefaultState.REMEMBER_PREVIOUS_STATE);
+        ud.setDefaultState(DefaultState.ON_OR_100_PERCENT);
         LOGGER.trace("Send configuration ({} => {}): switch", getAddressLocal(), getAddressRemote());
         send(ud);
     }
@@ -244,8 +259,8 @@ public class RemoteDeviceEEPD20108 extends StandardDevice implements RemoteDevic
             ud.setIOChannel(IOChannel.OUTPUT_CHANNEL_00);
             ud.setUnit(Unit.ENERGY_WH);
             ud.setMeasurementDeltaToBeReported(1);
-            ud.setMaximumTimeBetweenTwoSubsequentActuator(130);
-            ud.setMinimumTimeBetweenTwoSubsequentActuator(15);
+            ud.setMaximumTimeBetweenTwoSubsequentActuator(240);
+            ud.setMinimumTimeBetweenTwoSubsequentActuator(30);
             LOGGER.trace("Send configuration ({} => {}): energy measurement", getAddressLocal(), getAddressRemote());
             send(ud);
         } catch (final UserDataScaleValueException ex) {

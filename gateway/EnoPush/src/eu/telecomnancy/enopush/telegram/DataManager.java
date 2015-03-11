@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import eu.aleon.aleoncean.device.Device;
 import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
+import eu.aleon.aleoncean.device.remote.RemoteDeviceEEPD20108;
 import eu.aleon.aleoncean.packet.RadioChoice;
 import eu.aleon.aleoncean.packet.RadioPacket;
 import eu.aleon.aleoncean.packet.radio.RadioPacket1BS;
@@ -139,6 +140,9 @@ public class DataManager {
 				case POSITION_PERCENT:
 					break;
 				case POWER_W:
+					dataTransfert.put("value", valueObtained);
+					dataTransfert.put("label", "power");
+					type = "POWER";
 					break;
 				case SETPOINT_POSITION_PERCENT:
 					break;
@@ -148,12 +152,14 @@ public class DataManager {
 					// dataTransfert.put("supply_voltage", (Double) valueObtained);
 					break;
 				case SWITCH:
-					double temp2 = 0;
-					if((Boolean) valueObtained)
-						temp2 = 1;
-					dataTransfert.put("value", temp2);
-					dataTransfert.put("label", "door");
-					type = "DOOR";
+					if(!(device instanceof RemoteDeviceEEPD20108)) {
+						double temp2 = 0;
+						if((Boolean) valueObtained)
+							temp2 = 1;
+						dataTransfert.put("value", temp2);
+						dataTransfert.put("label", "door");
+						type = "DOOR";
+					}
 					break;
 				case TEMPERATURE_CELSIUS:
 					dataTransfert.put("value", (Double) valueObtained);
@@ -235,6 +241,7 @@ public class DataManager {
 				case POSITION_PERCENT:
 					break;
 				case POWER_W:
+					dataTransfert.put("type", "POWER");
 					break;
 				case SETPOINT_POSITION_PERCENT:
 					break;
@@ -319,8 +326,6 @@ public class DataManager {
 						break;
 			    	
 			    	}
-			    	
-			    	System.out.println(url.toString());
 			        
 			        connection = (HttpURLConnection)url.openConnection();
 			        connection.setRequestMethod("POST");

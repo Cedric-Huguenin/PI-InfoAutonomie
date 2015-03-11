@@ -43,6 +43,10 @@ public class Settings {
 		props.setProperty("devices_file", "devices.enp");
 		saveProperties();
 	}
+	
+	public static void setProperty(String key, String value) {
+		props.setProperty(key, value);
+	}
 
 	public static void saveProperties() {
 		try {

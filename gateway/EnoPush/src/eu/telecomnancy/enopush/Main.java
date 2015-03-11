@@ -5,8 +5,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import eu.aleon.aleoncean.packet.ESP3Packet;
+import eu.aleon.aleoncean.packet.EnOceanId;
 import eu.aleon.aleoncean.packet.PacketType;
 import eu.aleon.aleoncean.packet.RadioPacket;
+import eu.aleon.aleoncean.packet.ResponsePacket;
 import eu.aleon.aleoncean.rxtx.ESP3Connector;
 import eu.aleon.aleoncean.rxtx.ReaderShutdownException;
 import eu.aleon.aleoncean.rxtx.USB300;
@@ -59,6 +61,8 @@ public class Main {
 		}
 		log.log(Level.INFO, "Connected to the serial interface " + serialDevice);
 		
+		System.out.println("Base ID: " + getBaseId());
+		
 		if(TeachedDevices.loadDevices() > 0) {
 			log.log(Level.INFO, "Loaded some devices from file: \n" + TeachedDevices.devicesToString());
 			DataManager.sendDevices();
@@ -99,6 +103,29 @@ public class Main {
 			}
 		}
 
+	}
+
+	public static EnOceanId getBaseId() {
+		if(serialConnection == null)
+			return null;
+		ESP3Packet packet = new ESP3Packet();
+		packet.setPacketType((byte) 0x05);
+		byte[] query = {0x08};
+		packet.setData(query);
+		ResponsePacket response = serialConnection.write(packet);
+		if(response.getReturnCode() == 0 && response.getData().length == 5)
+		{
+			byte addr[] = new byte[4];
+			addr[0] = response.getData()[1];
+			addr[1] = response.getData()[2];
+			addr[2] = response.getData()[3];
+			addr[3] = response.getData()[4];
+			EnOceanId baseId = new EnOceanId(addr);
+			
+			return baseId;
+		}
+		
+		return null;
 	}
 
 }
