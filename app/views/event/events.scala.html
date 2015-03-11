@@ -35,6 +35,7 @@
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
+                                                <th>Icône</th>
                                                 <th>Nom</th>
                                                 <th>Expression</th>
                                                 @if("true".equals(session.get("admin"))) {
@@ -45,6 +46,7 @@
                                         <tbody>
                                             @for(event <- events) {
                                                 <tr>
+                                                    <td><button class="btn btn-@event.color btn-xs"><i class="fa @event.icon"></i></button></td>
                                                     <td>@event.name</td>
                                                     <td>@event.expression</td>
                                                     @if("true".equals(session.get("admin"))) {
