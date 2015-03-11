@@ -81,7 +81,7 @@
     timeInterval: *timeInterval1
     expression:   light_delta_15 || temp_delta_0_11
     icon:         fa-coffee
-    color:        ''
+    color:        warning
 
 
 # Account

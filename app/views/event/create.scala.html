@@ -137,19 +137,19 @@ $(function () {
                                 <!-- Icon form -->
                                 <div class="form-group">
                                     <label>Icône</label>
-                                    <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="">
+                                    <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="fa-bug">
 
                                     <p>
                                         <div class="btn-group iconpicker">
-                                            <a class="btn btn-default"><i title="fa-bug" class="fa fa-bug"></i></a>
-                                            <a class="btn btn-default"><i title="fa-user" class="fa fa-user"></i></a>
+                                            <a class="btn btn-default"><i class="fa fa-bug"></i></a>
+                                            <a class="btn btn-default"><i class="fa fa-user"></i></a>
                                         </div>
                                     </p>
 
                                     <script>
                                     // $('.iconpicker').find('i').css( "color", "red" );
                                     $('.iconpicker').find('i').bind('click', function(event) {
-                                        $('#icon').val(event.target.title);
+                                        $('#icon').val(event.target.className.replace('fa ', ''));
                                     });
                                     </script>
                                 </div>
