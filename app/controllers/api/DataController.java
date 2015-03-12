@@ -2,12 +2,15 @@ package controllers.api;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.APISecured;
+import model.BasicEvent;
 import model.Data;
+import model.Event;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static play.mvc.Results.ok;
@@ -93,10 +96,16 @@ public class DataController extends Controller {
 
     @Security.Authenticated(APISecured.class)
     public static Result createData() {
-        // POST http://localhost:9000/api/data  {"timestamp":1411848808,"label":"temperature","value":24.0,"mote":"219.98"}
+        // POST http://localhost:9000/api/data  {"timestamp":1411848808,"label":"temperature","value":24.0,"mote":"219.98.TEMP"}
         model.json.Data newData = Json.fromJson(request().body().asJson(), model.json.Data.class);
         // transform to Database Data (with primary key)
         Data inserted = Data.create(new Data(newData.getTimestamp(), newData.getValue(), newData.getLabel(), newData.getMote()));
+        List<Event> eventsInvolved = new ArrayList<>();
+        for(BasicEvent basic : BasicEvent.find.where().eq("sensor_id", newData.getMote()).findList()) {
+            basic.check(); // check basic occurrence
+            Event.find.where().ilike("expression", "%" + basic.getId() + "%").findList().stream().filter(event -> !eventsInvolved.contains(event)).forEach(eventsInvolved::add); // get Event containing this basic (check if already add)
+        }
+        eventsInvolved.forEach(model.Event::check); // check Event occurrence
         return created(Json.toJson(inserted));
     }
 
