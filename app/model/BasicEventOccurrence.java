@@ -43,7 +43,7 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
         return find.all();
     }
 
-    public static Model.Finder<String,BasicEventOccurrence> find = new Model.Finder<>(String.class, BasicEventOccurrence.class);
+    public static Model.Finder<String, BasicEventOccurrence> find = new Model.Finder<>(String.class, BasicEventOccurrence.class);
 
     public String getDate() {
         return date;
@@ -99,7 +99,7 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
     }
 
     @Override
-    public String toString() {
+    public String toString() { 
         return "BasicEventOccurrence{" +
                 "id='" + getId() + '\'' +
                 ", basicEvent=" + getBasicEvent() +
@@ -111,16 +111,10 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
     }
 
     public long occur(TimeInterval t, BasicEvent basicEvent) {
-        int[] todayTimeInterval = t.getActualTimeInterval(); // get today timestamp corresponding to TimeInterval
+        long[] todayTimeInterval = t.getActualTimeInterval(); // get today timestamp corresponding to TimeInterval
 
-//        GregorianCalendar begin = new GregorianCalendar();
-//        begin.setTimeInMillis(Long.parseLong(todayTimeInterval.getTimestampStart())*1000);
-//
-//        GregorianCalendar end = new GregorianCalendar();
-//        end.setTimeInMillis(todayTimeInterval.getTimestampEnd()*1000);
-//
-//        System.out.println("From " +  (begin.getTimeInMillis()/1000) + " to " +  (end.getTimeInMillis()/1000));
-//        System.out.println("SEARCHING FOR " + basicEvent.getId());
+        System.out.println("From " + todayTimeInterval[0] + " to " + todayTimeInterval[1]);
+        System.out.println("SEARCHING FOR " + basicEvent.getId());
 
         String basicEventId = basicEvent.getId();
         List<BasicEventOccurrence> basicsEventOccurrences = BasicEventOccurrence.find.where()
