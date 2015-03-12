@@ -11,6 +11,8 @@ import utils.TimestampUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static play.mvc.Controller.request;
@@ -95,14 +97,35 @@ public class BasicEventController {
      * @param order Sort order (either asc or desc)
      * @param filter Filter applied on basicEvent
      */
-    public static Result timeline(int page, String sortBy, String order, String filter, String amount) {
+    public static Result timeline(int page, String sortBy, String order, String filter, String amount, String begin, String end) {
 //        List<BasicEventOccurrence> basicEventOccurrences = BasicEventOccurrence.all();
 //        Collections.sort(basicEventOccurrences);
 //        Collections.reverse(basicEventOccurrences);
-        return ok(
+        long beginTmp = 0, endTmp = 0; // timestamps in seconds
+        boolean timeFilter = false;
+        if(begin != null && begin.length() > 0) {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
+            try {
+                cal.setTime(sdf.parse(begin));// all done
+                beginTmp = cal.getTimeInMillis() / 1000;
+                cal.setTime(sdf.parse(end));// all done
+                endTmp = cal.getTimeInMillis() / 1000;
+                timeFilter = true;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return timeFilter ? ok(
                 views.html.basic.timeline.render("Évènements de base",
                         model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
-                        sortBy, order, filter, amount,
+                        sortBy, order, filter, amount, begin, end,
+                        BasicEvent.all()
+                ))
+                :
+                ok(views.html.basic.timeline.render("Évènements de base",
+                        model.BasicEventOccurrence.pageTime(page, Integer.parseInt(amount), sortBy, order, filter, beginTmp, endTmp),
+                        sortBy, order, filter, amount, begin, end,
                         BasicEvent.all()
                 )
         );

@@ -143,4 +143,16 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
                         .setFetchAhead(false)
                         .getPage(page);
     }
+
+    public static Page<BasicEventOccurrence> pageTime(int page, int pageSize, String sortBy, String order, String filter, long beginTmp, long endTmp) {
+        return
+                find.where()
+                        .between("timestamp",beginTmp,endTmp)
+                        .ilike("basic_event_id", "%" + filter + "%")
+                        .orderBy(sortBy+ " " + order)
+                                //.fetch("company")
+                        .findPagingList(pageSize)
+                        .setFetchAhead(false)
+                        .getPage(page);
+    }
 }
