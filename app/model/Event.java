@@ -157,35 +157,72 @@ public class Event extends Model {
         }
         String[] basicEventIds = matches.toArray(new String[matches.size()]);
 
-        // replace the ids by true or false
-        for (String id : basicEventIds) {
-            id = id.trim();
-            BasicEvent basicEvent = BasicEvent.find.ref(id);
-            System.out.println("Current BasicEventID: " + basicEvent.getId());
-            long occurTime = basicEventOccurrence.occur(todayTimeInterval, basicEvent);
-            if (occurTime != -1) {
-                cpt++;
-                mean += occurTime;
+        List<long[]> timeIntervals = new ArrayList<>();
+        timeIntervals.add(todayTimeInterval);
+
+        if (EventOccurrence.find.where().eq("event_id", getId()).findList().size() == 0 && BasicEventOccurrence.find.findRowCount() > 0) { // no Event occurrence in DB
+                                                                                                            // but BasicEventOccurrence in DB
+            // find the oldest BasicEventOccurrence
+            // compute for each day between now and this date
+
+            long oldestBasicOccurrence =
+                    BasicEventOccurrence.find.where().orderBy("timestamp ascending").
+                            findPagingList(1).getPage(1)
+                            .getList().get(0).getTimestamp();
+            System.out.println(oldestBasicOccurrence);
+
+            DateTime firstBasic = new DateTime(oldestBasicOccurrence*1000); // needs milliseconds
+            DateTime now = new DateTime(System.currentTimeMillis());
+            int dayBetween = now.get(DateTimeFieldType.dayOfYear()) - firstBasic.get(DateTimeFieldType.dayOfYear());
+
+            for(int i = 0; i < dayBetween; i++) {
+                long[] timeInterval = new long[2];
+
+                timeInterval[0] = todayTimeInterval[0] - (i+1)*24*3600;
+                timeInterval[1] = todayTimeInterval[1] - (i+1)*24*3600;
+                timeIntervals.add(timeInterval);
             }
-            toEval = toEval.replace(id, (occurTime != -1) + "");
+
+            // DEBUG
+//            for(int i = 0; i<timeIntervals.size(); i++) {
+//                System.out.println(timeIntervals.get(i)[0] + " " + TimestampUtils.formatToString(timeIntervals.get(i)[0], "dd-MM-yyyy HH:mm:SS"));
+//            }
+
         }
 
-        System.out.println("STRING : " + toEval);
-
-        BooleanExpression boolExpr;
-        try {
-            boolExpr = BooleanExpression.readLeftToRight(toEval);
-            boolean bool = boolExpr.booleanValue();
-            System.out.println(boolExpr.toString() + " == " + bool);
-
-            if (bool && cpt > 0) {
-                EventOccurrence eventOccurrence = new EventOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:SS"));
-                if (EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
-                    eventOccurrence.save();
+        for (long[] timeInterval : timeIntervals) {
+            // replace the ids by true or false
+            toEval = expression;
+//            System.out.println("\n\nSTRING : " + toEval);
+            for (String id : basicEventIds) {
+                id = id.trim();
+                BasicEvent basicEvent = BasicEvent.find.ref(id);
+//                System.out.println("Current BasicEventID: " + basicEvent.getId());
+                long occurTime = basicEventOccurrence.occur(timeInterval, basicEvent);
+                if (occurTime != -1) {
+                    cpt++;
+                    mean += occurTime;
                 }
+                toEval = toEval.replace(id, (occurTime != -1) + "");
             }
-        } catch (MalformedBooleanException e) {
-            e.printStackTrace();
+
+//            System.out.println("STRING : " + toEval);
+
+            BooleanExpression boolExpr;
+            try {
+                boolExpr = BooleanExpression.readLeftToRight(toEval);
+                boolean bool = boolExpr.booleanValue();
+//                System.out.println(boolExpr.toString() + " == " + bool);
+
+                if (bool && cpt > 0) {
+                    EventOccurrence eventOccurrence = new EventOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:SS"));
+                    if (EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
+                        eventOccurrence.save();
+                    }
+                }
+            } catch (MalformedBooleanException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -199,10 +236,10 @@ public class Event extends Model {
     public long getTimestampStart() {
         GregorianCalendar start = setCalWithLocalTime(beginTime);
 
-        if(start.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
-            return start.getTimeInMillis()/1000 - 24*3600; // subtract on day in second
+        if (start.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
+            return start.getTimeInMillis() / 1000 - 24 * 3600; // subtract on day in second
         } else {
-            return start.getTimeInMillis()/1000;
+            return start.getTimeInMillis() / 1000;
         }
     }
 
@@ -210,10 +247,10 @@ public class Event extends Model {
     public long getTimestampEnd() {
         GregorianCalendar end = setCalWithLocalTime(endTime);
 
-        if(end.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
-            return end.getTimeInMillis()/1000 - 24*3600; // subtract on day in second
+        if (end.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
+            return end.getTimeInMillis() / 1000 - 24 * 3600; // subtract on day in second
         } else {
-            return end.getTimeInMillis()/1000;
+            return end.getTimeInMillis() / 1000;
         }
     }
 

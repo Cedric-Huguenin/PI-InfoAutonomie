@@ -112,14 +112,14 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
     }
 
     public long occur(long[] t, BasicEvent basicEvent) {
-        System.out.println("From " + t[0] + " to " + t[1]);
-        System.out.println("SEARCHING FOR " + basicEvent.getId());
+//        System.out.println("From " + t[0] + " to " + t[1]);
+//        System.out.println("SEARCHING FOR " + basicEvent.getId());
 
         String basicEventId = basicEvent.getId();
         List<BasicEventOccurrence> basicsEventOccurrences = BasicEventOccurrence.find.where()
                 .between("timestamp", t[0], t[1]).eq("basic_event_id", basicEventId).findList();
 
-        System.out.println("Found " + basicsEventOccurrences.size() + " item(s) ");
+//        System.out.println("Found " + basicsEventOccurrences.size() + " item(s) ------ ");
 
 
         return basicsEventOccurrences.size() > 0 ? basicsEventOccurrences.get(0).getTimestamp() : -1;
