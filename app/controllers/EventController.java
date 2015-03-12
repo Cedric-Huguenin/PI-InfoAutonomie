@@ -6,6 +6,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import play.data.Form;
 import play.data.format.Formatters;
+import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
 import views.html.event.create;
@@ -25,7 +26,7 @@ import static play.mvc.Results.*;
  * Controller to manage and display more complex events.
  * Created by Ced on 31/01/2015.
  */
-public class EventController {
+public class EventController extends Controller {
 
     static Form<Event> eventForm = Form.form(Event.class);
 

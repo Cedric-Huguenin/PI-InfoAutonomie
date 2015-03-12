@@ -69,9 +69,13 @@ $(function () {
                                                         @sensor.getTypeAsString (@sensor.address) <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu" role="menu">
-                                                    @for(associatedBasicEvent <- sensor.getAssociatedBasicEvents) {
-                                                        <li><a href="#" title="@associatedBasicEvent.id">@associatedBasicEvent.name (@associatedBasicEvent.detectionMethod.getValueAsString @sensor.unit)</a></li>
-                                                    }
+                                                        @if(sensor.getAssociatedBasicEvents.isEmpty) {
+                                                            <li><a href="#" title="">Aucun évènement</a></li>
+                                                        } else {
+                                                            @for(associatedBasicEvent <- sensor.getAssociatedBasicEvents) {
+                                                                <li><a href="#" title="@associatedBasicEvent.id">@associatedBasicEvent.name (@associatedBasicEvent.detectionMethod.getValueAsString @sensor.unit)</a></li>
+                                                            }
+                                                        }
                                                     </ul>
                                                 </div>
                                             }
@@ -87,7 +91,7 @@ $(function () {
 
                                 <!-- Interval form -->
                                 <div class="form-group">
-                                    <label>Durée</label>
+                                    <label>Intervalle de temps</label>
                                     <div class='input-group date' id='datetimepicker1'>
                                         <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" />
                                         <span class="input-group-addon">
