@@ -21,15 +21,10 @@ public class TimeInterval extends Model {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
 
-    /**
-     * Begin timestamp in second
-     */
-    public long timestampStart;
-
-    /**
-     * End timestamp in second
-     */
-    public long timestampEnd;
+    public int beginHour;
+    public int beginMinutes;
+    public int endHour;
+    public int endMinutes;
 
     public static TimeInterval create(TimeInterval timeInterval) {
         timeInterval.save();
@@ -42,68 +37,42 @@ public class TimeInterval extends Model {
      * Compute a TimeInterval for the current day
      * @return a new TimeInterval corresponding to the current day
      */
-    public TimeInterval getActualTimeInterval() {
-        TimeInterval result = new TimeInterval();
-
-        // correct time but not the right day
-        GregorianCalendar old = new GregorianCalendar();
-        old.setTimeInMillis(this.getTimestampStart() * 1000);
-
-        // the right day
-        GregorianCalendar beginToday = new GregorianCalendar();
-        beginToday.setTimeInMillis(System.currentTimeMillis());
-        // and set the defined time
-        beginToday.set(Calendar.HOUR_OF_DAY, old.get(Calendar.HOUR_OF_DAY));
-        beginToday.set(Calendar.MINUTE, old.get(Calendar.MINUTE));
-        beginToday.set(Calendar.SECOND, old.get(Calendar.SECOND));
-
-        // adjust to current day or past day
-        if (beginToday.getTimeInMillis() > System.currentTimeMillis()) { // if begin is in future
-            // subtract one day
-            beginToday.add(Calendar.DAY_OF_YEAR, -1);
-        }
-
-
-        old.setTimeInMillis(this.getTimestampEnd() * 1000);
-
-        // the right day
-        GregorianCalendar endToday = new GregorianCalendar();
-        endToday.setTimeInMillis(System.currentTimeMillis());
-        // and set the defined time
-        endToday.set(Calendar.HOUR_OF_DAY, old.get(Calendar.HOUR_OF_DAY));
-        endToday.set(Calendar.MINUTE, old.get(Calendar.MINUTE));
-        endToday.set(Calendar.SECOND, old.get(Calendar.SECOND));
-
-        // adjust to current day or past day
-        if (endToday.getTimeInMillis() > System.currentTimeMillis()) { // if end is in future
-            // subtract one day
-            endToday.add(Calendar.DAY_OF_YEAR, -1);
-        } else if (beginToday.getTimeInMillis() < System.currentTimeMillis() && endToday.getTimeInMillis() > System.currentTimeMillis()) {
-            // current time is between begin and end hour
-            endToday.setTimeInMillis(System.currentTimeMillis());
-        }
-
-        result.setTimestampStart(beginToday.getTimeInMillis()/1000);
-        result.setTimestampEnd(endToday.getTimeInMillis()/1000);
-
-        return result;
+    public long[] getActualTimeInterval() {
+        long[] res = new long[2];
+        res[0] = getTimestampStart();
+        res[1] = getTimestampEnd();
+        return res;
     }
 
     public long getTimestampStart() {
-        return timestampStart;
+        GregorianCalendar start = new GregorianCalendar();
+        start.setTimeInMillis(System.currentTimeMillis());
+        start.set(Calendar.HOUR_OF_DAY, beginHour);
+        start.set(Calendar.MINUTE, beginMinutes);
+        start.set(Calendar.SECOND, 0);
+
+        if(start.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
+            return start.getTimeInMillis()/1000 - 24*3600; // subtract on day in second
+        } else {
+            return start.getTimeInMillis()/1000;
+        }
     }
 
-    public void setTimestampStart(long timestampStart) {
-        this.timestampStart = timestampStart;
-    }
 
     public long getTimestampEnd() {
-        return timestampEnd;
+        GregorianCalendar end = new GregorianCalendar();
+        end.setTimeInMillis(System.currentTimeMillis());
+        end.set(Calendar.HOUR_OF_DAY, endHour);
+        end.set(Calendar.MINUTE, endMinutes);
+        end.set(Calendar.SECOND, 0);
+
+        if(end.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
+            return end.getTimeInMillis()/1000 - 24*3600; // subtract on day in second
+        } else {
+            return end.getTimeInMillis()/1000;
+        }
     }
 
-    public void setTimestampEnd(long timestampEnd) {
-        this.timestampEnd = timestampEnd;
-    }
 
     public String getId() {
         return id;
@@ -113,12 +82,46 @@ public class TimeInterval extends Model {
         this.id = id;
     }
 
+    public int getBeginHour() {
+        return beginHour;
+    }
+
+    public void setBeginHour(int beginHour) {
+        this.beginHour = beginHour;
+    }
+
+    public int getBeginMinutes() {
+        return beginMinutes;
+    }
+
+    public void setBeginMinutes(int beginMinutes) {
+        this.beginMinutes = beginMinutes;
+    }
+
+    public int getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
+    public int getEndMinutes() {
+        return endMinutes;
+    }
+
+    public void setEndMinutes(int endMinutes) {
+        this.endMinutes = endMinutes;
+    }
+
     @Override
     public String toString() {
         return "TimeInterval{" +
-                "id='" + getId() + '\'' +
-                ", timestampStart=" + getTimestampStart() +
-                ", timestampEnd=" + getTimestampEnd() +
+                "id='" + id + '\'' +
+                ", beginHour=" + beginHour +
+                ", beginMinutes=" + beginMinutes +
+                ", endHour=" + endHour +
+                ", endMinutes=" + endMinutes +
                 '}';
     }
 }

@@ -40,8 +40,10 @@
 
 - &timeInterval1 !!model.TimeInterval
     id:            timeInterval1
-    timestampStart:  1423454400 # 5h00
-    timestampEnd:    1423479600 # 12h00
+    beginHour:    5
+    beginMinutes: 0
+    endHour:      12
+    endMinutes:   0
 
 
 # BasicEvent

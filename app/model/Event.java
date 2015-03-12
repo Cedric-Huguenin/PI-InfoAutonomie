@@ -8,6 +8,8 @@ import utils.TimestampUtils;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Describes an event.
@@ -50,7 +52,6 @@ public class Event extends Model {
     public String color;
 
     public String validate() {
-        validateExpression(expression);
         if (expression.isEmpty()) {
             return "Expression vide !";
         }
@@ -61,14 +62,21 @@ public class Event extends Model {
     }
 
     public boolean validateExpression(String toEval) {
-        String[] basicEventIds = toEval.split("(\\|\\||&&)");
+        Pattern p = Pattern.compile("\\w+");
+        Matcher m = p.matcher(toEval);
+
+        List<String> matches = new ArrayList<String>();
+        while (m.find()) {
+            matches.add(m.group());
+        }
+        String[] basicEventIds = matches.toArray(new String[matches.size()]);
 
         // first, check if all given basic events exist in database
         for (String id : basicEventIds) {
             id = id.trim();
             toEval = toEval.replace(id, "true");
             boolean basicEventExist = BasicEvent.find.where().eq("id", id).findRowCount() == 1;
-            System.out.println("basicEventID: " + id + " " + basicEventExist);
+            System.out.println("--- basicEventID: " + id + " " + basicEventExist + " ---");
             if (!basicEventExist) {
                 return false;
             }
@@ -82,8 +90,8 @@ public class Event extends Model {
             boolean bool = boolExpr.booleanValue();
             System.out.println("Result of the evaluation: " + boolExpr + " == " + bool);
         } catch (MalformedBooleanException e) {
-            System.out.println("Invalid Expression");
-            e.printStackTrace();
+            System.err.println("Invalid Expression");
+//            e.printStackTrace();
             return false;
         }
 
@@ -122,9 +130,9 @@ public class Event extends Model {
 
     public void check() {
         // TODO: verify that event has not already been detected for the last TimeInterval
-        TimeInterval todayTimeInterval = this.getTimeInterval().getActualTimeInterval();
+        long[] todayTimeInterval = this.getTimeInterval().getActualTimeInterval();
         if (EventOccurrence.find.where().eq("event_id", getId())
-                .between("timestamp", todayTimeInterval.getTimestampStart(), todayTimeInterval.getTimestampEnd())
+                .between("timestamp", todayTimeInterval[0], todayTimeInterval[1])
                 .findIds().size() > 0) { // Event already in DB
             return;
         }
@@ -136,7 +144,18 @@ public class Event extends Model {
 //        System.out.println("STRING : " + toEval);
         long mean = 0;
         int cpt = 0;
-        String[] basicEventIds = toEval.split("(\\|\\||&&)");
+
+        // fetch the ids of the basic events composing the event
+        Pattern p = Pattern.compile("\\w+");
+        Matcher m = p.matcher(toEval);
+
+        List<String> matches = new ArrayList<>();
+        while (m.find()) {
+            matches.add(m.group());
+        }
+        String[] basicEventIds = matches.toArray(new String[matches.size()]);
+
+        // replace the ids by true or false
         for (String id : basicEventIds) {
             id = id.trim();
             BasicEvent basicEvent = BasicEvent.find.ref(id);
@@ -147,7 +166,6 @@ public class Event extends Model {
                 mean += occurTime;
             }
             toEval = toEval.replace(id, (occurTime != -1) + "");
-
         }
 
         System.out.println("STRING : " + toEval);
