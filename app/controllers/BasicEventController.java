@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.BasicEvent;
 import model.BasicEventOccurrence;
+import model.Sensor;
 import model.json.Data;
 import model.json.DataNode;
 import play.mvc.Result;
@@ -10,6 +11,8 @@ import utils.TimestampUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static play.mvc.Controller.request;
@@ -87,14 +90,44 @@ public class BasicEventController {
     }
 
     /**
-     * Read the BasicEventOccurrence and send the result to a timeline page
+     * Display the timeline of basicEventOccurrence.
      *
-     * @return the result of the occurrences in a timeline.
+     * @param page Current page number (starts from 0)
+     * @param sortBy Column to be sorted
+     * @param order Sort order (either asc or desc)
+     * @param filter Filter applied on basicEvent
      */
-    public static Result timeline() {
-        List<BasicEventOccurrence> basicEventOccurrences = BasicEventOccurrence.all();
-        Collections.sort(basicEventOccurrences);
-        Collections.reverse(basicEventOccurrences);
-        return ok(views.html.basic.timeline.render("Évènements de base", basicEventOccurrences));
+    public static Result timeline(int page, String sortBy, String order, String filter, String amount, String begin, String end) {
+//        List<BasicEventOccurrence> basicEventOccurrences = BasicEventOccurrence.all();
+//        Collections.sort(basicEventOccurrences);
+//        Collections.reverse(basicEventOccurrences);
+        long beginTmp = 0, endTmp = 0; // timestamps in seconds
+        boolean timeFilter = false;
+        if(begin != null && begin.length() > 0) {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
+            try {
+                cal.setTime(sdf.parse(begin));// all done
+                beginTmp = cal.getTimeInMillis() / 1000;
+                cal.setTime(sdf.parse(end));// all done
+                endTmp = cal.getTimeInMillis() / 1000;
+                timeFilter = true;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return timeFilter ? ok(
+                views.html.basic.timeline.render("Évènements de base",
+                        model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
+                        sortBy, order, filter, amount, begin, end,
+                        BasicEvent.all()
+                ))
+                :
+                ok(views.html.basic.timeline.render("Évènements de base",
+                        model.BasicEventOccurrence.pageTime(page, Integer.parseInt(amount), sortBy, order, filter, beginTmp, endTmp),
+                        sortBy, order, filter, amount, begin, end,
+                        BasicEvent.all()
+                )
+        );
     }
 }

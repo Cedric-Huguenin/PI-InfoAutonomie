@@ -10,16 +10,17 @@ GET           /                                         controllers.Application.
 GET           /init                                     controllers.Application.init()
 
 # Raw values
-GET           /raw/data                                 controllers.RawDataController.data()
+GET           /raw/data                                 controllers.RawDataController.list(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "")
 GET           /raw/graph                                controllers.RawDataController.graph()
 GET           /raw/live                                 controllers.RawDataController.liveStream()
+
 # js
 GET           /assets.javascript.ws.js                  controllers.RawDataController.liveStreamJS()
 
 # Basic events
 GET           /basic/data                               controllers.BasicEventController.data()
 GET           /basic/graph                              controllers.BasicEventController.graph()
-GET           /basic/timeline                           controllers.BasicEventController.timeline()
+GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
 
 # Events
 GET           /event/create                             controllers.EventController.create()
