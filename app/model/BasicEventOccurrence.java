@@ -99,7 +99,7 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
     }
 
     @Override
-    public String toString() { 
+    public String toString() {
         return "BasicEventOccurrence{" +
                 "id='" + getId() + '\'' +
                 ", basicEvent=" + getBasicEvent() +
