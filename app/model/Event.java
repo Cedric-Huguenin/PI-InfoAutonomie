@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 @Entity
 public class Event extends Model {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
@@ -42,6 +41,7 @@ public class Event extends Model {
 
     @Formats.DateTime(pattern = "HH:mm")
     public DateTime beginTime;
+
     @Formats.DateTime(pattern = "HH:mm")
     public DateTime endTime;
 
@@ -348,6 +348,22 @@ public class Event extends Model {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public DateTime getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(DateTime beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public DateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(DateTime endTime) {
+        this.endTime = endTime;
     }
 
     /**

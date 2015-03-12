@@ -1,13 +1,22 @@
 package controllers;
 
 import model.*;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import play.data.Form;
+import play.data.format.Formatters;
 import play.mvc.Result;
 import play.mvc.With;
 import views.html.event.create;
 import views.html.event.events;
 
+import java.text.ParseException;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static play.data.Form.form;
 import static play.mvc.Results.*;
@@ -47,11 +56,29 @@ public class EventController {
 
     @With(WebAuthorization.class)
     public static Result save() {
+        Formatters.register(DateTime.class, new Formatters.SimpleFormatter<DateTime>() {
+            @Override
+            public DateTime parse(String input, Locale l) throws ParseException {
+                DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
+                DateTime dt = formatter.parseDateTime(input);
+
+                return dt;
+            }
+
+            @Override
+            public String print(DateTime dt, Locale l) {
+                return dt.toString("HH:mm");
+            }
+        });
+
         Form<Event> eventForm = form(Event.class).bindFromRequest();
+
         if (eventForm.hasErrors()) {
             return badRequest(create.render(eventForm, Sensor.all()));
+        } else {
+            eventForm.get().save();
         }
-        eventForm.get().save();
+
         return redirect(controllers.routes.EventController.events());
     }
 

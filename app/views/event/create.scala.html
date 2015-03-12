@@ -4,25 +4,11 @@
 @main("Créer un évènement") {
 
 <script>
-$(document).ready(function(){
-    $('.multi-field-wrapper').each(function() {
-        var $wrapper = $('.multi-fields', this);
-        $(".add-field", $(this)).click(function(e) {
-            $('.multi-field:first-child', $wrapper).clone(true).appendTo($wrapper);
-        });
-        $('.multi-field .panel-heading .remove-field', $wrapper).click(function() {
-            console.log("Remove field");
-            if ($('.multi-field', $wrapper).length > 1)
-                $(this).parent('.panel-heading').parent('.multi-field').remove();
-        });
-    });
-});
-
 // Bootstrap 3 Timepicker
 $(function () {
-    $('#datetimepicker1').datetimepicker({
+    $('#datetimepicker1, #datetimepicker2').datetimepicker({
         defaultDate: "01/01/2015 00:00:00",
-        format: 'HH:mm:ss',
+        format: 'HH:mm',
         icons: {
             time: "fa fa-clock-o",
             date: "fa fa-calendar",
@@ -99,16 +85,23 @@ $(function () {
                                     }
                                 </div>
 
-                                <!-- <div class="form-group">
+                                <!-- Interval form -->
+                                <div class="form-group">
                                     <label>Durée</label>
                                     <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' class="form-control" placeholder="HH:mm:ss" />
+                                        <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" />
                                         <span class="input-group-addon">
                                             <span class="fa fa-calendar"></span>
                                         </span>
                                     </div>
-                                </div> -->
-                                <!-- /.form-group -->
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input type='text' name="endTime" class="form-control" placeholder="HH:mm" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- /Interval form -->
 
                                 <!-- Color form -->
                                 <div class="form-group">
