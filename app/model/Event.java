@@ -2,12 +2,14 @@ package model;
 
 import jboolexpr.BooleanExpression;
 import jboolexpr.MalformedBooleanException;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeFieldType;
+import play.data.format.Formats;
 import play.db.ebean.Model;
 import utils.TimestampUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,11 +39,11 @@ public class Event extends Model {
      * The duration of the event.
      */
     public int duration;
-    /**
-     * The time interval in which the event can happen.
-     */
-    @OneToOne
-    public TimeInterval timeInterval;
+
+    @Formats.DateTime(pattern = "HH:mm")
+    public DateTime beginTime;
+    @Formats.DateTime(pattern = "HH:mm")
+    public DateTime endTime;
 
     /**
      * The expression combining BasicEvent ids
@@ -111,7 +113,7 @@ public class Event extends Model {
      * @return the Event saved and initialized.
      */
     public static Event create(Event event, String timeInterval) {
-        event.timeInterval = TimeInterval.find.byId(timeInterval);
+//        event.timeInterval = TimeInterval.find.byId(timeInterval);
         event.save();
         event.saveManyToManyAssociations("basicEvents");
         event.save();
@@ -130,7 +132,7 @@ public class Event extends Model {
 
     public void check() {
         // TODO: verify that event has not already been detected for the last TimeInterval
-        long[] todayTimeInterval = this.getTimeInterval().getActualTimeInterval();
+        long[] todayTimeInterval = getActualTimeInterval();
         if (EventOccurrence.find.where().eq("event_id", getId())
                 .between("timestamp", todayTimeInterval[0], todayTimeInterval[1])
                 .findIds().size() > 0) { // Event already in DB
@@ -159,8 +161,8 @@ public class Event extends Model {
         for (String id : basicEventIds) {
             id = id.trim();
             BasicEvent basicEvent = BasicEvent.find.ref(id);
-//            System.out.println("Current BasicEventID: " + basicEvent.getId());
-            long occurTime = basicEventOccurrence.occur(timeInterval, basicEvent);
+            System.out.println("Current BasicEventID: " + basicEvent.getId());
+            long occurTime = basicEventOccurrence.occur(todayTimeInterval, basicEvent);
             if (occurTime != -1) {
                 cpt++;
                 mean += occurTime;
@@ -181,12 +183,48 @@ public class Event extends Model {
                 if (EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
                     eventOccurrence.save();
                 }
-//                System.out.println("EVENT OCCURRENCE: persisted!");
             }
-            // (((!true)&&false)||true) == true
         } catch (MalformedBooleanException e) {
             e.printStackTrace();
         }
+    }
+
+    public long[] getActualTimeInterval() {
+        long[] res = new long[2];
+        res[0] = getTimestampStart();
+        res[1] = getTimestampEnd();
+        return res;
+    }
+
+    public long getTimestampStart() {
+        GregorianCalendar start = setCalWithLocalTime(beginTime);
+
+        if(start.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
+            return start.getTimeInMillis()/1000 - 24*3600; // subtract on day in second
+        } else {
+            return start.getTimeInMillis()/1000;
+        }
+    }
+
+
+    public long getTimestampEnd() {
+        GregorianCalendar end = setCalWithLocalTime(endTime);
+
+        if(end.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
+            return end.getTimeInMillis()/1000 - 24*3600; // subtract on day in second
+        } else {
+            return end.getTimeInMillis()/1000;
+        }
+    }
+
+    private GregorianCalendar setCalWithLocalTime(DateTime localTime) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY, localTime.get(DateTimeFieldType.clockhourOfDay()));
+        cal.set(Calendar.MINUTE, localTime.get(DateTimeFieldType.minuteOfHour()));
+        cal.set(Calendar.SECOND, 0);
+
+        return cal;
     }
 
     /**
@@ -243,24 +281,6 @@ public class Event extends Model {
         this.duration = duration;
     }
 
-    /**
-     * Returns the TimeInterval in which the Event can occur.
-     *
-     * @return the TimeInterval in which the Event can occur.
-     */
-    public TimeInterval getTimeInterval() {
-        return timeInterval;
-    }
-
-    /**
-     * Sets the TimeInterval in which the Event can occur.
-     *
-     * @param timeInterval the new TimeInterval.
-     */
-    public void setTimeInterval(TimeInterval timeInterval) {
-        this.timeInterval = timeInterval;
-    }
-
     public String getId() {
         return id;
     }
@@ -308,7 +328,6 @@ public class Event extends Model {
                 "name='" + getName() + '\'' +
                 ", basicEvents=" + basicEventsStr +
                 ", duration=" + getDuration() +
-                ", timeInterval=" + getTimeInterval() +
                 '}';
     }
 }

@@ -121,7 +121,7 @@ public class EventController {
         Event event = new Event();
         event.setName("My first Event");
         event.getBasicEvents().add(retrieveBasicEvent);
-        event.setTimeInterval(retrieveTimeInterval);
+        //event.setTimeInterval(retrieveTimeInterval);
 
         Event.create(event, retrieveTimeInterval.id);
 

@@ -116,7 +116,7 @@ public class BasicEventController {
                 e.printStackTrace();
             }
         }
-        System.out.println("Timefiler : " + timeFilter + " begin " + beginTmp + begin + " end " + endTmp + end);
+        //System.out.println("Timefiler : " + timeFilter + " begin " + beginTmp + begin + " end " + endTmp + end);
         return timeFilter ?
                 ok(views.html.basic.timeline.render("Évènements de base",
                         model.BasicEventOccurrence.pageTime(page, Integer.parseInt(amount), sortBy, order, filter, beginTmp, endTmp),
