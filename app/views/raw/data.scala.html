@@ -101,7 +101,7 @@
                                             <tbody>
                                             @for(data <- currentPage.getList) {
                                                 <tr>
-                                                    <td>@data.getTimestamp</td>
+                                                    <td>@utils.TimestampUtils.formatToString(data.getTimestamp,"dd-MM-yyyy HH:mm:SS")</td>
                                                     <td>@data.getLabel</td>
                                                     <td>@data.getValue</td>
                                                     <td>@data.getMote</td>

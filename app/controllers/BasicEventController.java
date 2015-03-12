@@ -116,15 +116,17 @@ public class BasicEventController {
                 e.printStackTrace();
             }
         }
-        return timeFilter ? ok(
-                views.html.basic.timeline.render("Évènements de base",
-                        model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
+        System.out.println("Timefiler : " + timeFilter + " begin " + beginTmp + begin + " end " + endTmp + end);
+        return timeFilter ?
+                ok(views.html.basic.timeline.render("Évènements de base",
+                        model.BasicEventOccurrence.pageTime(page, Integer.parseInt(amount), sortBy, order, filter, beginTmp, endTmp),
                         sortBy, order, filter, amount, begin, end,
                         BasicEvent.all()
                 ))
                 :
-                ok(views.html.basic.timeline.render("Évènements de base",
-                        model.BasicEventOccurrence.pageTime(page, Integer.parseInt(amount), sortBy, order, filter, beginTmp, endTmp),
+                ok(
+                views.html.basic.timeline.render("Évènements de base",
+                        model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
                         sortBy, order, filter, amount, begin, end,
                         BasicEvent.all()
                 )
