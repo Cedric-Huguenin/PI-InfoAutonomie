@@ -70,8 +70,10 @@ public class EventController {
      */
     public static Result test() {
         TimeInterval timeInterval = new TimeInterval();
-        timeInterval.setTimestampStart(123456);
-        timeInterval.setTimestampEnd(123789);
+        timeInterval.setBeginHour(5);
+        timeInterval.setBeginMinutes(0);
+        timeInterval.setEndHour(12);
+        timeInterval.setEndMinutes(0);
         TimeInterval.create(timeInterval);
 
         System.out.println(timeInterval.toString());

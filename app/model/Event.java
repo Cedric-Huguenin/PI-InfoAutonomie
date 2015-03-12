@@ -130,9 +130,9 @@ public class Event extends Model {
 
     public void check() {
         // TODO: verify that event has not already been detected for the last TimeInterval
-        TimeInterval todayTimeInterval = this.getTimeInterval().getActualTimeInterval();
+        int[] todayTimeInterval = this.getTimeInterval().getActualTimeInterval();
         if (EventOccurrence.find.where().eq("event_id", getId())
-                .between("timestamp", todayTimeInterval.getTimestampStart(), todayTimeInterval.getTimestampEnd())
+                .between("timestamp", todayTimeInterval[0], todayTimeInterval[1])
                 .findIds().size() > 0) { // Event already in DB
             return;
         }

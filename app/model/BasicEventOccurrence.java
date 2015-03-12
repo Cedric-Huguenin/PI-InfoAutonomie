@@ -111,20 +111,20 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
     }
 
     public long occur(TimeInterval t, BasicEvent basicEvent) {
-        TimeInterval todayTimeInterval = t.getActualTimeInterval(); // get today timestamp corresponding to TimeInterval
+        int[] todayTimeInterval = t.getActualTimeInterval(); // get today timestamp corresponding to TimeInterval
 
-        GregorianCalendar begin = new GregorianCalendar();
-        begin.setTimeInMillis(todayTimeInterval.getTimestampStart()*1000);
-
-        GregorianCalendar end = new GregorianCalendar();
-        end.setTimeInMillis(todayTimeInterval.getTimestampEnd()*1000);
-
-        System.out.println("From " +  (begin.getTimeInMillis()/1000) + " to " +  (end.getTimeInMillis()/1000));
-        System.out.println("SEARCHING FOR " + basicEvent.getId());
+//        GregorianCalendar begin = new GregorianCalendar();
+//        begin.setTimeInMillis(Long.parseLong(todayTimeInterval.getTimestampStart())*1000);
+//
+//        GregorianCalendar end = new GregorianCalendar();
+//        end.setTimeInMillis(todayTimeInterval.getTimestampEnd()*1000);
+//
+//        System.out.println("From " +  (begin.getTimeInMillis()/1000) + " to " +  (end.getTimeInMillis()/1000));
+//        System.out.println("SEARCHING FOR " + basicEvent.getId());
 
         String basicEventId = basicEvent.getId();
         List<BasicEventOccurrence> basicsEventOccurrences = BasicEventOccurrence.find.where()
-                .between("timestamp", begin.getTimeInMillis() / 1000, end.getTimeInMillis() / 1000).eq("basic_event_id", basicEventId).findList();
+                .between("timestamp", todayTimeInterval[0], todayTimeInterval[1]).eq("basic_event_id", basicEventId).findList();
 
         System.out.println("Found " + basicsEventOccurrences.size() + " item(s) ");
 
