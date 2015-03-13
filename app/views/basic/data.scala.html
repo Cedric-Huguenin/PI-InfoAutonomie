@@ -47,11 +47,11 @@
                                         <tbody>
                                             @for(basicEvent <- basicEventList) {
                                                 <tr>
-                                                    <td>@basicEvent.basicEvent.id</td>
-                                                    <td>@basicEvent.basicEvent.detectionMethod.delta</td>
-                                                    <td>@basicEvent.date</td>
-                                                    <td>@basicEvent.fromValue</td>
-                                                    <td>@basicEvent.toValue</td>
+                                                    <td>@basicEvent.getBasicEvent.getId</td>
+                                                    <td>@basicEvent.getBasicEvent.getDetectionMethod.getDelta</td>
+                                                    <td>@basicEvent.getDate</td>
+                                                    <td>@basicEvent.getFromValue</td>
+                                                    <td>@basicEvent.getToValue</td>
                                                 </tr>
                                             }
                                         </tbody>

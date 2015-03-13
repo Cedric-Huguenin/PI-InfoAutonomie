@@ -30,49 +30,16 @@ public class BasicEventController {
      * @return the basic events page result.
      */
     public static Result data() {
-        BasicEvent basicEvent = BasicEvent.byId("light_delta_15"); // Saut de luminosité de 15
-        List<BasicEventOccurrence> basicEventList = new ArrayList<>();
+        BasicEvent basicEvent = BasicEvent.byId("light_delta_15"); // fix the BasicEvent
 
-        DataNode rawDataNode = null;
+        // Retrieve occurrences in play DB
+        List<BasicEventOccurrence> basicEventList = BasicEventOccurrence.find.where().eq("basic_event_id", basicEvent.getId()).findList();
+
         String response = "Date,Occurrences\n";
-        String date;
-        double value;
-//        List<String> basicEventList = new ArrayList<>();
-
-        // first, parse the data obtained from the url and put it in a DataNode
-        try {
-            URL url = new URL("http://iotlab.telecomnancy.eu/rest/data/1/light1/24/153.111");
-            ObjectMapper mapper = new ObjectMapper();
-            rawDataNode = mapper.readValue(url, DataNode.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // then, extract the timestamp and the values from the data to compute the basic events
-        if (rawDataNode != null) {
-            List<Data> rawDataList = rawDataNode.getData();
-            Collections.reverse(rawDataList);
-
-            for (Data rawData : rawDataList) {
-                double delta = basicEvent.getDetectionMethod().getDelta();
-                int actualIndex = rawDataList.indexOf(rawData);
-                value = rawData.getValue();
-
-                if (actualIndex + 1 < rawDataList.size()) {
-                    Data nextData = rawDataList.get(actualIndex + 1);
-                    double actualDifference = Math.abs(value - nextData.getValue());
-
-
-                    if (actualDifference > delta) {
-                        date = TimestampUtils.formatToString(nextData.getTimestamp(), "dd-MM-yyyy HH:mm:ss");
-                        String simpleDate = TimestampUtils.formatToString(nextData.getTimestamp(), "yyyy-MM-dd");
-                        response += simpleDate + ",1\n";
-                        BasicEventOccurrence basicEventOccurrence = new BasicEventOccurrence(basicEvent, date, nextData.getTimestamp(), value, nextData.getValue());
-
-                        basicEventList.add(basicEventOccurrence);
-                        System.out.println(response);
-                    }
-                }
+        if (basicEventList != null && basicEventList.size() > 0) { // check for null result or empty list
+            for (BasicEventOccurrence occurrence : basicEventList) {
+                String simpleDate = TimestampUtils.formatToString(occurrence.getTimestamp(), "yyyy-MM-dd");
+                response += simpleDate + ",1\n"; // add entry in response for each occurrence
             }
         } else {
             response = "Aucun évènement n'a pu être généré car aucune donnée brute n'a été reçue.";
