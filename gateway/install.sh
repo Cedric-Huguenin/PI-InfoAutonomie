@@ -46,28 +46,28 @@ fi
 chmod +x ./serial.sh
 ./serial.sh disable
 
-echo 'Installing FHEM'
-if [[ -d "/opt/fhem" ]]
-then
-	echo "Warning : it seems that FHEM is already installed. If you continue, you could lose data."
-	echo "Would you like to continue anyway ? (yes/no)"
-	read choice
-	if [[ $choice != "yes" || $choice != "y" ]]
-	then
-		echo 'Note : A reboot could be necessary (for the serial access for example)'
-		exit 0
-	fi
-fi
-if [[ !( -f "./fhem-5.6.tar.gz" ) ]]
-then
-	wget http://fhem.de/fhem-5.6.tar.gz
-fi
-tar -xf ./fhem-5.6.tar.gz
-cd ./fhem-5.6
-make install
-cd /opt/fhem
-echo "define TCM310_0 TCM 310 /dev/ttyAMA0@57600" >> fhem.cfg
-perl fhem.pl fhem.cfg
+# echo 'Installing FHEM'
+# if [[ -d "/opt/fhem" ]]
+# then
+	# echo "Warning : it seems that FHEM is already installed. If you continue, you could lose data."
+	# echo "Would you like to continue anyway ? (yes/no)"
+	# read choice
+	# if [[ $choice != "yes" || $choice != "y" ]]
+	# then
+		# echo 'Note : A reboot could be necessary (for the serial access for example)'
+		# exit 0
+	# fi
+# fi
+# if [[ !( -f "./fhem-5.6.tar.gz" ) ]]
+# then
+	# wget http://fhem.de/fhem-5.6.tar.gz
+# fi
+# tar -xf ./fhem-5.6.tar.gz
+# cd ./fhem-5.6
+# make install
+# cd /opt/fhem
+# echo "define TCM310_0 TCM 310 /dev/ttyAMA0@57600" >> fhem.cfg
+# perl fhem.pl fhem.cfg
 
 echo 'Installing EnoPush'
 # TODO configure EnoPush
