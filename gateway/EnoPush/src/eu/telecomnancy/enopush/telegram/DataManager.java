@@ -306,7 +306,6 @@ public class DataManager {
 	 * @param purpose sensor information or physical measurement.
 	 */
 	public static void sendData(final String jsonData, final DataPurpose purpose) {
-		System.out.println(jsonData);
 	    
 	    Thread newThread = new Thread(new Runnable() {
 			@Override

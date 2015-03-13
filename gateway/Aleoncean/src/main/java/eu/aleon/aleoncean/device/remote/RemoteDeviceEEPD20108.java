@@ -285,23 +285,23 @@ public class RemoteDeviceEEPD20108 extends StandardDevice implements RemoteDevic
     }
 
     public void handleIncomingEnergyValue(final double wattSeconds) {
-        LOGGER.debug("{} - Received new energy value: {} Ws", getAddressRemote(), wattSeconds);
+        //LOGGER.debug("{} - Received new energy value: {} Ws", getAddressRemote(), wattSeconds);
         setEnergy(DeviceParameterUpdatedInitiation.RADIO_PACKET, wattSeconds);
     }
 
     public void handleIncomingPowerValue(final double watt) {
-        LOGGER.debug("{} - Received new power value: {} W", getAddressRemote(), watt);
+        //LOGGER.debug("{} - Received new power value: {} W", getAddressRemote(), watt);
         setPower(DeviceParameterUpdatedInitiation.RADIO_PACKET, watt);
     }
 
     public void handleIncomingOutputValue(final boolean on) {
-        LOGGER.debug("{} - Received new output value: {}", getAddressRemote(), on);
+        //LOGGER.debug("{} - Received new output value: {}", getAddressRemote(), on);
         setOn(DeviceParameterUpdatedInitiation.RADIO_PACKET, on);
     }
 
     public void handleIncomingActuatorMeasurementResponse(final UserDataEEPD201CMD07 userData) {
         if (userData.getIOChannel() != IOChannel.OUTPUT_CHANNEL_00) {
-            LOGGER.warn("Received measurement response from invalid channel ({}).", userData.getIOChannel());
+            //LOGGER.warn("Received measurement response from invalid channel ({}).", userData.getIOChannel());
             return;
         }
 
