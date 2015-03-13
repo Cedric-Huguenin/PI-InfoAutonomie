@@ -1,0 +1,18 @@
+#!/bin/bash
+# MyApp
+#
+# description: bla bla
+
+case $1 in
+    start)
+        /bin/bash /usr/local/bin/enopush/start.sh
+    ;;
+    stop)
+        /bin/bash /usr/local/bin/enopush/stop.sh
+    ;;
+    restart)
+        /bin/bash /usr/local/bin/enopush/start.sh
+        /bin/bash /usr/local/bin/enopush/stop.sh
+    ;;
+esac
+exit 0
