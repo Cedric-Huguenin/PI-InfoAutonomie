@@ -14,8 +14,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Controller to handle and display raw data.
@@ -151,18 +155,41 @@ public class RawDataController extends Controller {
     /**
      * Display the paginated list of data.
      *
-     * @param page Current page number (starts from 0)
+     * @param page   Current page number (starts from 0)
      * @param sortBy Column to be sorted
-     * @param order Sort order (either asc or desc)
+     * @param order  Sort order (either asc or desc)
      * @param filter Filter applied on sensor
      */
-    public static Result list(int page, String sortBy, String order, String filter) {
-        return ok(
-                views.html.raw.data.render(
-                        model.Data.page(page, 10, sortBy, order, filter),
-                        sortBy, order, filter,
-                        Sensor.all()
+    public static Result list(int page, String sortBy, String order, String filter, String amount, String begin, String end) {
+        long beginTmp = 0, endTmp = 0; // timestamps in seconds
+        boolean timeFilter = false;
+        if (begin != null && begin.length() > 0) {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
+            try {
+                cal.setTime(sdf.parse(begin));// all done
+                beginTmp = cal.getTimeInMillis() / 1000;
+                cal.setTime(sdf.parse(end));// all done
+                endTmp = cal.getTimeInMillis() / 1000;
+                timeFilter = true;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return timeFilter ?
+                ok(
+                        views.html.raw.data.render(
+                                model.Data.pageTime(page, Integer.parseInt(amount), sortBy, order, filter, beginTmp, endTmp),
+                                sortBy, order, filter, amount, begin, end,
+                                Sensor.all())
                 )
-        );
+                :
+                ok(
+                        views.html.raw.data.render(
+                                model.Data.page(page, Integer.parseInt(amount), sortBy, order, filter),
+                                sortBy, order, filter, amount, begin, end,
+                                Sensor.all()
+                        ));
     }
 }

@@ -92,7 +92,17 @@ public class Data extends Model{
                 find.where()
                         .ilike("mote", "%" + filter + "%")
                         .orderBy(sortBy+ " " + order)
-                        //.fetch("company")
+                        .findPagingList(pageSize)
+                        .setFetchAhead(false)
+                        .getPage(page);
+    }
+
+    public static Page<Data> pageTime(int page, int pageSize, String sortBy, String order, String filter, long beginTmp, long endTmp) {
+        return
+                find.where()
+                        .between("timestamp", beginTmp, endTmp)
+                        .ilike("mote", "%" + filter + "%")
+                        .orderBy(sortBy+ " " + order)
                         .findPagingList(pageSize)
                         .setFetchAhead(false)
                         .getPage(page);
