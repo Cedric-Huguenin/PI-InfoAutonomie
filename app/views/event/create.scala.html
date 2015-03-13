@@ -49,6 +49,13 @@ $(function () {
                             </div>
                             <div class="panel-body">
                             @helper.form(action = routes.EventController.save) {
+
+                                @if(form("id").value != null) {
+                                    <div class="form-group">
+                                        <input class="form-control" type="hidden" name="id" placeholder="Id" value="@form("id").value">
+                                    </div>
+                                }
+
                                 <div class="form-group">
                                     <label>Nom</label>
                                     <input class="form-control" type="text" name="name" placeholder="Name" value="@form("name").value">
@@ -93,13 +100,13 @@ $(function () {
                                 <div class="form-group">
                                     <label>Intervalle de temps</label>
                                     <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" />
+                                        <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" value="@form("beginTime").value" />
                                         <span class="input-group-addon">
                                             <span class="fa fa-calendar"></span>
                                         </span>
                                     </div>
                                     <div class='input-group date' id='datetimepicker2'>
-                                        <input type='text' name="endTime" class="form-control" placeholder="HH:mm" />
+                                        <input type='text' name="endTime" class="form-control" placeholder="HH:mm" value="@form("endTime").value" />
                                         <span class="input-group-addon">
                                             <span class="fa fa-calendar"></span>
                                         </span>
@@ -111,11 +118,11 @@ $(function () {
                                 <div class="form-group">
                                     <label>Couleur</label>
                                     <select id="colorselector" name="color">
-                                        <option value="primary" data-color="#337AB7">Bleu</option>
-                                        <option value="success" data-color="#5CB85C" selected="selected">Vert</option>
-                                        <option value="info" data-color="#5BC0DE">Cyan</option>
-                                        <option value="warning" data-color="#F0AD4E">Jaune</option>
-                                        <option value="danger" data-color="#D9534F">Rouge</option>
+                                        <option value="primary" data-color="#337AB7" @if(form("color").value != null && form("color").value.contentEquals("primary")){selected}>Bleu</option>
+                                        <option value="success" data-color="#5CB85C" @if(form("color").value != null && form("color").value.contentEquals("success")){selected}>Vert</option>
+                                        <option value="info" data-color="#5BC0DE" @if(form("color").value != null && form("color").value.contentEquals("info")){selected}>Cyan</option>
+                                        <option value="warning" data-color="#F0AD4E" @if(form("color").value != null && form("color").value.contentEquals("warning")){selected}>Jaune</option>
+                                        <option value="danger" data-color="#D9534F" @if(form("color").value != null && form("color").value.contentEquals("danger")){selected}>Rouge</option>
                                     </select>
                                 </div>
 
@@ -134,7 +141,11 @@ $(function () {
                                 <!-- Icon form -->
                                 <div class="form-group">
                                     <label>Icône</label>
-                                    <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="fa-bug">
+                                    @if(form("icon").value != null) {
+                                        <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="@form("icon").value">
+                                    } else {
+                                        <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="fa-bug">
+                                    }
 
                                     <p>
                                         <div class="btn-group iconpicker">

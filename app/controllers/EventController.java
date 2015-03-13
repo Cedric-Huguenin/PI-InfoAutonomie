@@ -42,6 +42,10 @@ public class EventController extends Controller {
         eventForm.data().put("id", event.getId());
         eventForm.data().put("name", event.getName());
         eventForm.data().put("expression", event.getExpression());
+        eventForm.data().put("beginTime", event.getBeginTime().toString("HH:mm"));
+        eventForm.data().put("endTime", event.getEndTime().toString("HH:mm"));
+        eventForm.data().put("color", event.getColor());
+        eventForm.data().put("icon", event.getIcon());
 
         // TODO: template to edit an event
         return ok(create.render(eventForm, Sensor.all()));
@@ -76,6 +80,17 @@ public class EventController extends Controller {
 
         if (eventForm.hasErrors()) {
             return badRequest(create.render(eventForm, Sensor.all()));
+        } else if (Event.find.where().eq("id", eventForm.get().getId()).findRowCount() == 1) {
+            Event event = Event.find.ref(eventForm.get().id);
+
+            event.setName(eventForm.get().getName());
+            event.setExpression(eventForm.get().getExpression());
+            event.setBeginTime(eventForm.get().getBeginTime());
+            event.setEndTime(eventForm.get().getEndTime());
+            event.setColor(eventForm.get().getColor());
+            event.setIcon(eventForm.get().getIcon());
+
+            eventForm.get().update();
         } else {
             eventForm.get().save();
         }
