@@ -1,4 +1,4 @@
-@(message: String, eventsList:List[model.OldEvent])
+@(message: String, dataList:List[model.Data])
 
 @import java.util.List;
 @main("Events") {
@@ -41,8 +41,8 @@
 								// Chart data records -- each entry in this array corresponds to a point on
 								// the chart.
 								data: [
-								@for(event <- eventsList) {
-									{ time: '@event.verboseDate', value: @event.value},
+								@for(data <- dataList) {
+									{ time: '@utils.TimestampUtils.timestampToString(data.getTimestamp)', value: @data.getValue},
 								}
 								],
 								// The name of the data record attribute that contains x-values.
