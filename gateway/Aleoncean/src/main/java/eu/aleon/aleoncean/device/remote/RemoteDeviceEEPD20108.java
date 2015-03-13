@@ -84,8 +84,6 @@ public class RemoteDeviceEEPD20108 extends StandardDevice implements RemoteDevic
     private Double power;
     private Boolean on;
     
-    private RadioPacketUTE lastRadioPacket;
-
     public RemoteDeviceEEPD20108(final ESP3Connector conn, final EnOceanId addressRemote, final EnOceanId addressLocal) {
         super(conn, addressRemote, addressLocal);
     }
