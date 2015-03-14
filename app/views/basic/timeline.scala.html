@@ -54,7 +54,7 @@
                             <nav class="navbar navbar-default" role="navigation">
                                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                     <form class="navbar-form navbar-left" action="@routes.BasicEventController.timeline(0, currentSortBy, currentOrder, currentFilter, currentAmount, currentBegin, currentEnd)" role="search">
-                                        <div class="navbar-form navbar-left">
+                                        <div class="navbar-form navbar-left"> <!-- Element amount field -->
                                             <div class="form-group">
                                                 Éléments par page <input placeholder="Nbre" name="a" type="number" min="5" step="5" class="form-control" value="@currentAmount"/>
                                             </div>
@@ -109,7 +109,7 @@
                                             <button type="submit" class="btn btn-default">Valider</button>
                                         </div>
 
-                                        <div class="navbar-form navbar-left"> <!-- Element amount field -->
+                                        <div class="navbar-form navbar-left"> <!-- BasicEvent filter field -->
                                             Filtre par évènement <input class="form-group" id="searchbox" name="f" value="@currentFilter" list="sensorList">
                                             <datalist id="sensorList">
                                             @for(basic <- basics) {

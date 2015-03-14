@@ -1,16 +1,10 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import model.BasicEvent;
 import model.BasicEventOccurrence;
-import model.Sensor;
-import model.json.Data;
-import model.json.DataNode;
 import play.mvc.Result;
 import utils.TimestampUtils;
 
-import java.io.IOException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -29,11 +23,13 @@ public class BasicEventController {
      *
      * @return the basic events page result.
      */
-    public static Result data() {
-        BasicEvent basicEvent = BasicEvent.byId("light_delta_15"); // fix the BasicEvent
+    public static Result data(String basicEventId) {
+
+        BasicEvent basicEvent = BasicEvent.byId(basicEventId); // fix the BasicEvent
 
         // Retrieve occurrences in play DB
-        List<BasicEventOccurrence> basicEventList = BasicEventOccurrence.find.where().eq("basic_event_id", basicEvent.getId()).findList();
+        List<BasicEventOccurrence> basicEventList = basicEventId.equals("") ? BasicEventOccurrence.all() : BasicEventOccurrence.find.where().eq("basic_event_id", basicEvent.getId()).findList();
+        String name = basicEventId.equals("") ? "Tous" : basicEvent.getName();
 
         String response = "Date,Occurrences\n";
         if (basicEventList != null && basicEventList.size() > 0) { // check for null result or empty list
@@ -48,12 +44,13 @@ public class BasicEventController {
         if (request().getHeader("Accept").contains("text/csv")) {
             return ok(response);
         } else {
-            return ok(views.html.basic.data.render("Your new application is ready.", basicEventList));
+            return ok(views.html.basic.data.render(name, basicEventList));
         }
     }
 
-    public static Result graph() {
-        return ok(views.html.basic.graph.render());
+    public static Result graph(String basicEventId) {
+        String name = basicEventId.equals("") ? "tous les basics" : BasicEvent.find.where().eq("id", basicEventId).findUnique().getName();
+        return ok(views.html.basic.graph.render(name, basicEventId, BasicEvent.all()));
     }
 
     /**

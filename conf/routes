@@ -18,8 +18,8 @@ GET           /raw/live                                 controllers.RawDataContr
 GET           /assets.javascript.ws.js                  controllers.RawDataController.liveStreamJS()
 
 # Basic events
-GET           /basic/data                               controllers.BasicEventController.data()
-GET           /basic/graph                              controllers.BasicEventController.graph()
+GET           /basic/data                               controllers.BasicEventController.data(f ?= "")
+GET           /basic/graph                              controllers.BasicEventController.graph(f ?= "")
 GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
 
 # Events
