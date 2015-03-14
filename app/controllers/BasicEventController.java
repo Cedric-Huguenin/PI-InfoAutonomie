@@ -18,14 +18,48 @@ import static play.mvc.Results.ok;
  */
 public class BasicEventController {
 
+
+    public static Result dataD3(String basicEventId) {
+        BasicEvent basicEvent = BasicEvent.byId(basicEventId);
+        List<BasicEventOccurrence> basicEventList = basicEventId.equals("") ? BasicEventOccurrence.all() : BasicEventOccurrence.find.where().eq("basic_event_id", basicEvent.getId()).findList();
+
+        String response = "Date,Occurrences\n";
+        if (basicEventList != null && basicEventList.size() > 0) { // check for null result or empty list
+            for (BasicEventOccurrence occurrence : basicEventList) {
+                String simpleDate = TimestampUtils.formatToString(occurrence.getTimestamp(), "yyyy-MM-dd");
+                response += simpleDate + ",1\n"; // add entry in response for each occurrence
+            }
+        } else {
+            response = "Aucun évènement n'a pu être généré car aucune donnée brute n'a été reçue.";
+        }
+
+        return ok(response);
+    }
+
     /**
      * Displays data about the basic events that occurred.
      *
      * @return the basic events page result.
      */
-    public static Result data(String basicEventId) {
+    public static Result data(int page, String sortBy, String order, String basicEventId, String amount, String begin, String end) {
 
-        BasicEvent basicEvent = BasicEvent.byId(basicEventId); // fix the BasicEvent
+        long beginTmp = 0, endTmp = 0; // timestamps in seconds
+        boolean timeFilter = false;
+        if(begin != null && begin.length() > 0) {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
+            try {
+                cal.setTime(sdf.parse(begin));// all done
+                beginTmp = cal.getTimeInMillis() / 1000;
+                cal.setTime(sdf.parse(end));// all done
+                endTmp = cal.getTimeInMillis() / 1000;
+                timeFilter = true;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        BasicEvent basicEvent = BasicEvent.byId(basicEventId);
 
         // Retrieve occurrences in play DB
         List<BasicEventOccurrence> basicEventList = basicEventId.equals("") ? BasicEventOccurrence.all() : BasicEventOccurrence.find.where().eq("basic_event_id", basicEvent.getId()).findList();
@@ -44,7 +78,20 @@ public class BasicEventController {
         if (request().getHeader("Accept").contains("text/csv")) {
             return ok(response);
         } else {
-            return ok(views.html.basic.data.render(name, basicEventList));
+            return timeFilter ?
+                    ok(views.html.basic.data.render("Évènements de base",
+                            model.BasicEventOccurrence.pageTime(page, Integer.parseInt(amount), sortBy, order, basicEventId, beginTmp, endTmp),
+                            sortBy, order, basicEventId, amount, begin, end,
+                            BasicEvent.all()
+                    ))
+                    :
+                    ok(
+                            views.html.basic.data.render("Évènements de base",
+                                    model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, basicEventId),
+                                    sortBy, order, basicEventId, amount, begin, end,
+                                    BasicEvent.all()
+                            )
+                    );
         }
     }
 

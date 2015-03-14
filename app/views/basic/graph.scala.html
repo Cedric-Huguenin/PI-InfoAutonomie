@@ -101,7 +101,7 @@
                                     .attr ( "class", "month" )
                                     .attr ( "d", monthPath ) ;
 
-                                    d3.csv ( " @routes.BasicEventController.data(currentFilter) ", function ( error, csv ) {
+                                    d3.csv ( " @routes.BasicEventController.dataD3(currentFilter) ", function ( error, csv ) {
                                     var data = d3.nest ( )
                                     .key ( function ( d ) { return d.Date ; } )
                                     .rollup ( function ( d ) {
