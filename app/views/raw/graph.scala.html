@@ -1,4 +1,4 @@
-@(message: String, dataList:List[model.Data])
+@(sensorName: String, dataList: List[model.Data], currentFilter: String, currentBegin: String, currentEnd: String, sensorList: List[model.Sensor])
 
 @import java.util.List;
 @main("Events") {
@@ -25,34 +25,106 @@
 				<div class="col-lg-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Valeurs brutes</h3>
+							<h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Valeurs brutes de @sensorName</h3>
 						</div>
-						<div class="panel-body">
-							<div id="myfirstchart"></div>
-							<script>
-								new Morris.Line({
-								// ID of the element in which to draw the chart.
-								element: 'myfirstchart',
-								// Chart data records -- each entry in this array corresponds to a point on
-								// the chart.
-								data: [
-								@for(data <- dataList) {
-									{ time: '@utils.TimestampUtils.timestampToString(data.getTimestamp)', value: @data.getValue},
-								}
-								],
-								// The name of the data record attribute that contains x-values.
-								xkey: 'time',
-								// A list of names of data record attributes that contain y-values.
-								ykeys: ['value'],
-								ymin: 'auto', ymax: 'auto',
-								//goals: [190.0, 170.0],
-								// Labels for the ykeys -- will be displayed when you hover over the
-								// chart.
-                                labels: ['Lumière 153.111'],
-								resize: true
-								});
-							</script>
-						</div>
+                        @if(dataList.size() > 0) {
+                            <div class="panel-body">
+                                <nav class="navbar navbar-default" role="navigation">
+                                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                        <form class="navbar-form navbar-left" action="@routes.RawDataController.graph(currentFilter, currentBegin, currentEnd)" role="search">
+
+                                            <div class="navbar-form navbar-left">
+                                                <div class="form-group">
+                                                    De <div class='input-group date' id='begin'>
+                                                    <input type='text' name="begin" class="form-control" value="@currentBegin" />
+                                                    <span class="input-group-addon"><span class="fa fa-calendar"></span>
+                                                    </span>
+                                                </div>
+                                                    <script type="text/javascript">
+                                                    $ ( function ( ) {
+                                                    $ ( '#begin' ).datetimepicker ( {
+                                                    locale : 'fr',
+                                                    icons : {
+                                                    time : "fa fa-clock-o",
+                                                    date : "fa fa-calendar",
+                                                    up : "fa fa-arrow-up",
+                                                    down : "fa fa-arrow-down",
+                                                    next : "fa fa-arrow-right",
+                                                    previous : "fa fa-arrow-left"
+                                                    },
+                                                    sideBySide : true
+                                                    } )
+                                                    } ) ;
+                                                    </script>
+                                                    à <div class='input-group date' id='end'>
+                                                    <input type='text' name="end" class="form-control" value="@currentEnd" />
+                                                    <span class="input-group-addon"><span class="fa fa-calendar"></span>
+                                                    </span>
+                                                </div>
+                                                    <script type="text/javascript">
+                                                    $ ( function ( ) {
+                                                    $ ( '#end' ).datetimepicker ( {
+                                                    locale : 'fr',
+                                                    icons : {
+                                                    time : "fa fa-clock-o",
+                                                    date : "fa fa-calendar",
+                                                    up : "fa fa-arrow-up",
+                                                    down : "fa fa-arrow-down",
+                                                    next : "fa fa-arrow-right",
+                                                    previous : "fa fa-arrow-left"
+                                                    },
+                                                    sideBySide : true
+                                                    } ) ;
+                                                    } ) ;
+                                                    </script>
+                                                </div>
+                                                <button type="submit" class="btn btn-default">Valider</button>
+                                            </div>
+
+                                            <div class="navbar-form navbar-left"> <!-- BasicEvent filter field -->
+                                                Filtre par capteur <input class="form-group" id="searchbox" name="f" value="@currentFilter" list="sensorList">
+                                                <datalist id="sensorList">
+                                                @for(sensor <- sensorList) {
+                                                    <option value="@sensor.getId" label="@sensor.getName @sensor.getLocation">
+                                                    }
+                                                </datalist>
+                                                <input class="btn btn-default" type="submit" id="searchsubmit" value="Filtrer" class="btn primary">
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </nav>
+                                <div id="myfirstchart"></div>
+                                <script>
+                                    new Morris.Line({
+                                    // ID of the element in which to draw the chart.
+                                    element: 'myfirstchart',
+                                    // Chart data records -- each entry in this array corresponds to a point on
+                                    // the chart.
+                                    data: [
+                                    @for(data <- dataList) {
+                                        { time: '@utils.TimestampUtils.timestampToString(data.getTimestamp)', value: @data.getValue},
+                                    }
+                                    ],
+                                    // The name of the data record attribute that contains x-values.
+                                    xkey: 'time',
+                                    // A list of names of data record attributes that contain y-values.
+                                    ykeys: ['value'],
+                                    ymin: 'auto', ymax: 'auto',
+                                    //goals: [190.0, 170.0],
+                                    // Labels for the ykeys -- will be displayed when you hover over the
+                                    // chart.
+                                    labels: ['Lumière 153.111'],
+                                    resize: true,
+                                        smooth: false
+                                    });
+                                </script>
+                            </div>
+                        } else {
+                            <div class="panel-body">
+                                Aucune valeur à afficher
+                            </div>
+                        }
 					</div>
 				</div>
 			</div>

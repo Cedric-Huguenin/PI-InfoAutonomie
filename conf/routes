@@ -11,7 +11,7 @@ GET           /init                                     controllers.Application.
 
 # Raw values
 GET           /raw/data                                 controllers.RawDataController.list(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "10", begin ?= "", end ?= "")
-GET           /raw/graph                                controllers.RawDataController.graph()
+GET           /raw/graph                                controllers.RawDataController.graph(f ?= "", begin ?= "", end ?= "")
 GET           /raw/live                                 controllers.RawDataController.liveStream()
 
 # js
