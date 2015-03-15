@@ -50,8 +50,8 @@ public class AlertController extends Controller {
 
     @With(WebAuthorization.class)
     public static Result delete(String id) {
-        Event event = Event.find.byId(id);
-        event.delete();
+        Alert alert = Alert.find.byId(id);
+        alert.delete();
 
         return redirect(controllers.routes.AlertController.alerts());
     }
