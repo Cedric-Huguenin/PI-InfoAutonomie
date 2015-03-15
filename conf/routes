@@ -22,6 +22,7 @@ GET           /basic/data                               controllers.BasicEventCo
 GET           /basic/graphData                          controllers.BasicEventController.dataD3(f ?= "")
 GET           /basic/graph                              controllers.BasicEventController.graph(f ?= "")
 GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
+GET           /basic/basics                             controllers.BasicEventController.basics()
 
 # Events
 GET           /event/create                             controllers.EventController.create()

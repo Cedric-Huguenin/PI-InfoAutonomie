@@ -4,10 +4,13 @@ import model.BasicEvent;
 import model.BasicEventOccurrence;
 import play.mvc.Result;
 import utils.TimestampUtils;
+import views.html.basic.basics;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import static play.mvc.Controller.request;
 import static play.mvc.Results.ok;
@@ -18,6 +21,11 @@ import static play.mvc.Results.ok;
  */
 public class BasicEventController {
 
+    public static Result basics() {
+        List<BasicEvent> allBasicEvents = BasicEvent.all();
+
+        return ok(basics.render(allBasicEvents));
+    }
 
     public static Result dataD3(String basicEventId) {
         BasicEvent basicEvent = BasicEvent.byId(basicEventId);
@@ -45,7 +53,7 @@ public class BasicEventController {
 
         long beginTmp = 0, endTmp = 0; // timestamps in seconds
         boolean timeFilter = false;
-        if(begin != null && begin.length() > 0) {
+        if (begin != null && begin.length() > 0) {
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
             try {
@@ -103,9 +111,9 @@ public class BasicEventController {
     /**
      * Display the timeline of basicEventOccurrence.
      *
-     * @param page Current page number (starts from 0)
+     * @param page   Current page number (starts from 0)
      * @param sortBy Column to be sorted
-     * @param order Sort order (either asc or desc)
+     * @param order  Sort order (either asc or desc)
      * @param filter Filter applied on basicEvent
      */
     public static Result timeline(int page, String sortBy, String order, String filter, String amount, String begin, String end) {
@@ -114,7 +122,7 @@ public class BasicEventController {
 //        Collections.reverse(basicEventOccurrences);
         long beginTmp = 0, endTmp = 0; // timestamps in seconds
         boolean timeFilter = false;
-        if(begin != null && begin.length() > 0) {
+        if (begin != null && begin.length() > 0) {
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
             try {
@@ -136,11 +144,11 @@ public class BasicEventController {
                 ))
                 :
                 ok(
-                views.html.basic.timeline.render("Évènements de base",
-                        model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
-                        sortBy, order, filter, amount, begin, end,
-                        BasicEvent.all()
-                )
-        );
+                        views.html.basic.timeline.render("Évènements de base",
+                                model.BasicEventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
+                                sortBy, order, filter, amount, begin, end,
+                                BasicEvent.all()
+                        )
+                );
     }
 }

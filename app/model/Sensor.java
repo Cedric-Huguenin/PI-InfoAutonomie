@@ -94,7 +94,7 @@ public class Sensor extends Model {
     public String toString() {
         return "Sensor{" +
                 "id='" + getId() + '\'' +
-                "name='" + getName() + '\'' +
+                ", name='" + getName() + '\'' +
                 ", address='" + getAddress() + '\'' +
                 ", type=" + getType() +
                 ", location='" + getLocation() + '\'' +
