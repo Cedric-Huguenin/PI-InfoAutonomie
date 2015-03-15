@@ -27,7 +27,7 @@ GET           /basic/timeline                           controllers.BasicEventCo
 GET           /event/create                             controllers.EventController.create()
 # no link
 GET           /event/test                               controllers.EventController.test()
-GET           /event/timeline                           controllers.EventController.timeline()
+GET           /event/timeline                           controllers.EventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
 GET           /event/events                             controllers.EventController.events()
 GET           /event/edit/:id                           controllers.EventController.edit(id: String)
 POST          /event/save                               controllers.EventController.save()

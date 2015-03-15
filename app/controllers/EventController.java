@@ -13,7 +13,9 @@ import views.html.event.create;
 import views.html.event.events;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -177,7 +179,36 @@ public class EventController extends Controller {
      * Displays a list of more complex events (based on basic events) that occurred.
      * @return the result of the events occurred.
      */
-    public static Result timeline() {
-        return ok(views.html.event.timeline.render("Évènements", EventOccurrence.all()));
+    public static Result timeline(int page, String sortBy, String order, String filter, String amount, String begin, String end) {
+        long beginTmp = 0, endTmp = 0; // timestamps in seconds
+        boolean timeFilter = false;
+        if(begin != null && begin.length() > 0) {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
+            try {
+                cal.setTime(sdf.parse(begin));// all done
+                beginTmp = cal.getTimeInMillis() / 1000;
+                cal.setTime(sdf.parse(end));// all done
+                endTmp = cal.getTimeInMillis() / 1000;
+                timeFilter = true;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        //System.out.println("Timefiler : " + timeFilter + " begin " + beginTmp + begin + " end " + endTmp + end);
+        return timeFilter ?
+                ok(views.html.event.timeline.render("Évènements",
+                        model.EventOccurrence.pageTime(page, Integer.parseInt(amount), sortBy, order, filter, beginTmp, endTmp),
+                        sortBy, order, filter, amount, begin, end,
+                        Event.all()
+                ))
+                :
+                ok(
+                        views.html.event.timeline.render("Évènements",
+                                model.EventOccurrence.page(page, Integer.parseInt(amount), sortBy, order, filter),
+                                sortBy, order, filter, amount, begin, end,
+                                Event.all()
+                        )
+                );
     }
 }
