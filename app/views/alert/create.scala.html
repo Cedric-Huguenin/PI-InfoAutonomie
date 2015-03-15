@@ -1,0 +1,168 @@
+@(form: Form[model.Alert], events: List[model.Event])
+
+@import java.util.List;
+@main("Créer un évènement") {
+
+<script>
+// Bootstrap 3 Timepicker
+$(function () {
+    $('#datetimepicker1, #datetimepicker2').datetimepicker({
+        defaultDate: "01/01/2015 00:00:00",
+        format: 'HH:mm',
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-bullseye',
+            clear: 'fa fa-trash'
+        }
+    });
+});
+</script>
+
+<div id="wrapper">
+
+        @nav()
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Administration <small>Créer une alerte</small>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Créer une alerte</h3>
+                            </div>
+                            <div class="panel-body">
+                            @helper.form(action = routes.AlertController.save) {
+
+                                @if(form("id").value != null) {
+                                    <div class="form-group">
+                                        <input class="form-control" type="hidden" name="id" placeholder="Id" value="@form("id").value">
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input class="form-control" type="text" name="name" placeholder="Name" value="@form("name").value">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Expression</label>
+                                    <input id="expression" class="form-control" type="text" name="expression" placeholder="Description" value="@form("expression").value">
+                                    <p id="events">
+                                        <div class="btn-group associatedEvent">
+                                            <a type="button" class="btn btn-info btn-sm" title="(">(</a>
+                                            <a type="button" class="btn btn-info btn-sm" title=")">)</a>
+                                            <a type="button" class="btn btn-primary btn-sm" title="&&">ET</a>
+                                            <a type="button" class="btn btn-primary btn-sm" title="||">OU</a>
+                                            <a type="button" class="btn btn-primary btn-sm" title="!">NON</a>
+                                            <div class="btn-group">
+                                                @for(event <- events) {
+                                                        <a href="#" class="btn btn-default btn-sm" title="@event.getId">
+                                                            @event.getName
+                                                        </a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </p>
+                                    @if(form.hasGlobalErrors) {
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="sr-only">Error:</span>
+                                            @form.globalError.message
+                                        </div>
+                                    }
+                                </div>
+
+
+                                <!-- Color form -->
+                                <div class="form-group">
+                                    <label>Couleur</label>
+                                    <select id="colorselector" name="color">
+                                        <option value="primary" data-color="#337AB7" @if(form("color").value != null && form("color").value.contentEquals("primary")){selected}>Bleu</option>
+                                        <option value="success" data-color="#5CB85C" @if(form("color").value != null && form("color").value.contentEquals("success")){selected}>Vert</option>
+                                        <option value="info" data-color="#5BC0DE" @if(form("color").value != null && form("color").value.contentEquals("info")){selected}>Cyan</option>
+                                        <option value="warning" data-color="#F0AD4E" @if(form("color").value != null && form("color").value.contentEquals("warning")){selected}>Jaune</option>
+                                        <option value="danger" data-color="#D9534F" @if(form("color").value != null && form("color").value.contentEquals("danger")){selected}>Rouge</option>
+                                    </select>
+                                </div>
+
+                                <script>
+                                $('#colorselector').colorselector();
+                                </script>
+
+                                <style>
+                                .dropdown-colorselector>.dropdown-menu>li>.color-btn.selected:after {
+                                    content: "\f00c";
+                                    font-family: 'FontAwesome';
+                                }
+                                </style>
+                                <!-- /Color form -->
+
+                                <!-- Icon form -->
+                                <div class="form-group">
+                                    <label>Icône</label>
+                                    @if(form("icon").value != null) {
+                                        <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="@form("icon").value">
+                                    } else {
+                                        <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="fa-bug">
+                                    }
+
+                                    <p>
+                                        <div class="btn-group iconpicker">
+                                            <a class="btn btn-default"><i class="fa fa-bug"></i></a>
+                                            <a class="btn btn-default"><i class="fa fa-user"></i></a>
+                                        </div>
+                                    </p>
+
+                                    <script>
+                                    // $('.iconpicker').find('i').css( "color", "red" );
+                                    $('.myPicker').bind('click', function(event) {
+                                        $('#icon').val(event.target.className.replace('fa ', ''));
+                                    });
+                                    </script>
+                                </div>
+                                <!-- /Icon form -->
+
+                                <div>
+                                    <button class="btn btn-primary" type="submit">Créer</button>
+                                    <a href="@routes.AlertController.alerts()" class="btn btn-default">Retour</a>
+                                </div>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <script>
+                $('.associatedEvent').find('a').bind('click', function(event) {
+                    console.log(event);
+                    $('#expression').val($('#expression').val() + ' ' + event.target.title + ' ');
+                });
+                </script>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+}

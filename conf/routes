@@ -33,6 +33,14 @@ GET           /event/edit/:id                           controllers.EventControl
 POST          /event/save                               controllers.EventController.save()
 GET           /event/delete                             controllers.EventController.delete(id: String)
 
+# Alerts
+GET           /alert/create                             controllers.AlertController.create()
+GET           /alert/timeline                           controllers.AlertController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
+GET           /alert/alerts                             controllers.AlertController.alerts()
+GET           /alert/edit/:id                           controllers.AlertController.edit(id: String)
+POST          /alert/save                               controllers.AlertController.save()
+GET           /alert/delete                             controllers.AlertController.delete(id: String)
+
 # Map static resources from the /public folder to the /assets URL path
 GET           /assets/*file                             controllers.Assets.at(path="/public", file)
 
