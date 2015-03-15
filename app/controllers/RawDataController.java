@@ -19,9 +19,43 @@ public class RawDataController extends Controller {
      *
      * @return events results.
      */
-    public static Result graph() {
-        List<model.Data> dataList = model.Data.find.where().eq("mote", "153.111.LIGHT").findList();
-        return ok(views.html.raw.graph.render("Your new application is ready.", dataList));
+    public static Result graph(String filter, String begin, String end) {
+        List<Sensor> sensorList = Sensor.all();
+        if((filter == null || filter.length() == 0) && sensorList.size() > 0) {
+            filter = sensorList.get(0).getId();
+        }
+        long beginTmp = 0, endTmp = 0; // timestamps in seconds
+        boolean timeFilter = false;
+        if (begin != null && begin.length() > 0) {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.FRANCE);
+            try {
+                cal.setTime(sdf.parse(begin));// all done
+                beginTmp = cal.getTimeInMillis() / 1000;
+                cal.setTime(sdf.parse(end));// all done
+                endTmp = cal.getTimeInMillis() / 1000;
+                timeFilter = true;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<model.Data> dataList;
+
+        if(timeFilter) {
+            dataList = model.Data.find.where()
+                    .between("timestamp", beginTmp, endTmp)
+                    .ilike("mote", "%" + filter + "%").findList();
+        } else {
+            dataList = model.Data.find.where()
+                    .ilike("mote", "%" + filter + "%").findList();
+        }
+
+        String sensorName = Sensor.find.ref(filter).getName();
+        if(sensorName == null) {
+            sensorName = "";
+        }
+        return ok(views.html.raw.graph.render(sensorName, dataList, filter, begin, end, sensorList));
     }
 
     /**

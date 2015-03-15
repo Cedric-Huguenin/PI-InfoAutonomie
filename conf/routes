@@ -11,22 +11,23 @@ GET           /init                                     controllers.Application.
 
 # Raw values
 GET           /raw/data                                 controllers.RawDataController.list(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "10", begin ?= "", end ?= "")
-GET           /raw/graph                                controllers.RawDataController.graph()
+GET           /raw/graph                                controllers.RawDataController.graph(f ?= "", begin ?= "", end ?= "")
 GET           /raw/live                                 controllers.RawDataController.liveStream()
 
 # js
 GET           /assets.javascript.ws.js                  controllers.RawDataController.liveStreamJS()
 
 # Basic events
-GET           /basic/data                               controllers.BasicEventController.data()
-GET           /basic/graph                              controllers.BasicEventController.graph()
+GET           /basic/data                               controllers.BasicEventController.data(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
+GET           /basic/graphData                          controllers.BasicEventController.dataD3(f ?= "")
+GET           /basic/graph                              controllers.BasicEventController.graph(f ?= "")
 GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
 
 # Events
 GET           /event/create                             controllers.EventController.create()
 # no link
 GET           /event/test                               controllers.EventController.test()
-GET           /event/timeline                           controllers.EventController.timeline()
+GET           /event/timeline                           controllers.EventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
 GET           /event/events                             controllers.EventController.events()
 GET           /event/edit/:id                           controllers.EventController.edit(id: String)
 POST          /event/save                               controllers.EventController.save()

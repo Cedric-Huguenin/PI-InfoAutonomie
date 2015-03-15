@@ -1,5 +1,6 @@
 package model;
 
+import com.avaje.ebean.Page;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
@@ -65,5 +66,28 @@ public class EventOccurrence extends Model {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public static Page<EventOccurrence> page(int page, int pageSize, String sortBy, String order, String filter) {
+        return
+                find.where()
+                        .ilike("event_id", "%" + filter + "%")
+                        .orderBy(sortBy+ " " + order)
+                                //.fetch("company")
+                        .findPagingList(pageSize)
+                        .setFetchAhead(false)
+                        .getPage(page);
+    }
+
+    public static Page<EventOccurrence> pageTime(int page, int pageSize, String sortBy, String order, String filter, long beginTmp, long endTmp) {
+        return
+                find.where()
+                        .between("timestamp", beginTmp, endTmp)
+                        .ilike("event_id", "%" + filter + "%")
+                        .orderBy(sortBy+ " " + order)
+                                //.fetch("company")
+                        .findPagingList(pageSize)
+                        .setFetchAhead(false)
+                        .getPage(page);
     }
 }
