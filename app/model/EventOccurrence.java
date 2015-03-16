@@ -24,6 +24,9 @@ public class EventOccurrence extends Model {
     public long timestamp;
     public String date;
 
+    public EventOccurrence() {
+    }
+
     public EventOccurrence(Event event, long timestamp, String date) {
         this.event = event;
         this.timestamp = timestamp;
@@ -89,5 +92,18 @@ public class EventOccurrence extends Model {
                         .findPagingList(pageSize)
                         .setFetchAhead(false)
                         .getPage(page);
+    }
+
+    public static long occur(long[] t, Event event) {
+//        System.out.println("From " + t[0] + " to " + t[1]);
+//        System.out.println("SEARCHING FOR " + basicEvent.getId());
+
+        List<EventOccurrence> eventOccurrences = EventOccurrence.find.where()
+                .between("timestamp", t[0], t[1]).eq("basic_event_id", event.getId()).findList();
+
+//        System.out.println("Found " + basicsEventOccurrences.size() + " item(s) ------ ");
+
+
+        return eventOccurrences.size() > 0 ? eventOccurrences.get(0).getTimestamp() : -1;
     }
 }

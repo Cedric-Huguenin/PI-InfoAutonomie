@@ -33,8 +33,14 @@ public class Alert extends Model {
      */
     public String name;
 
+    @ManyToOne
+    public BasicEvent startBasicEvent;
+
+    @ManyToOne
+    public Event startEvent;
+
     /**
-     * The duration of the alert.
+     * The duration (in minutes) during which the expression has to be verified to trigger the alert.
      */
     public int duration;
 
@@ -72,9 +78,12 @@ public class Alert extends Model {
             id = id.trim();
             toEval = toEval.replace(id, "true");
             boolean eventExist = Event.find.where().eq("id", id).findRowCount() == 1;
+            if (!eventExist) {
+                eventExist = BasicEvent.find.where().eq("id", id).findRowCount() == 1;
+            }
             System.out.println("--- basicEventID: " + id + " " + eventExist + " ---");
             if (!eventExist) {
-                return false;
+                return false; // but continue if true
             }
         }
 
@@ -94,6 +103,87 @@ public class Alert extends Model {
         return true;
     }
 
+    public void check() {
+
+        long[] timeInterval = new long[2];
+        long mean = 0;
+        int cpt = 0;
+
+        if (startBasicEvent != null) {
+            try {
+                timeInterval[0] = BasicEventOccurrence.find.where()
+                        .eq("basic_event_id", startBasicEvent.getId())
+                        .orderBy("timestamp descending").
+                                findPagingList(1).getPage(1)
+                        .getList().get(0).getTimestamp();
+            } catch (Exception e) {
+                return;
+            }
+        } else if (startEvent != null) {
+            try {
+                timeInterval[0] = EventOccurrence.find.where()
+                        .eq("event_id", startEvent.getId())
+                        .orderBy("timestamp descending").
+                                findPagingList(1).getPage(1)
+                        .getList().get(0).getTimestamp();
+            } catch (Exception e) {
+                return;
+            }
+        } else {
+            return;
+        }
+
+        timeInterval[1] = timeInterval[0] + getDuration() * 60;
+        String toEval = expression;
+
+        Pattern p = Pattern.compile("\\w+");
+        Matcher m = p.matcher(toEval);
+
+        List<String> matches = new ArrayList<>();
+        while (m.find()) {
+            matches.add(m.group());
+        }
+        String[] ids = matches.toArray(new String[matches.size()]);
+
+        for (String id : ids) {
+            id = id.trim();
+            BasicEvent basic = BasicEvent.find.where().eq("id", id).findUnique();
+            long occurTime;
+            if (basic != null) {
+                occurTime = BasicEventOccurrence.occur(timeInterval, basic);
+                if (occurTime != -1) {
+                    cpt++;
+                    mean += occurTime;
+                }
+                toEval = toEval.replace(id, (occurTime != -1) + "");
+            } else { // it's an Event
+                Event event = Event.find.where().eq("id", id).findUnique();
+                occurTime = EventOccurrence.occur(timeInterval, event);
+                if (occurTime != -1) {
+                    cpt++;
+                    mean += occurTime;
+                }
+                toEval = toEval.replace(id, (occurTime != -1) + "");
+            }
+        }
+
+        BooleanExpression boolExpr;
+        try {
+            boolExpr = BooleanExpression.readLeftToRight(toEval);
+            boolean bool = boolExpr.booleanValue();
+//                System.out.println(boolExpr.toString() + " == " + bool);
+
+            if (bool && cpt > 0) {
+                AlertOccurrence alertOccurrence = new AlertOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:SS"));
+                if (AlertOccurrence.find.where().eq("timestamp", alertOccurrence.getTimestamp()).eq("alert_id", alertOccurrence.getAlert().getId()).findUnique() == null) {
+                    alertOccurrence.save();
+                }
+            }
+        } catch (MalformedBooleanException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * The list of all the existing alert.
      */
@@ -102,7 +192,7 @@ public class Alert extends Model {
     /**
      * Initializes the given alert with the given time interval and saves it.
      *
-     * @param alert        the Event to initialize.
+     * @param alert the Event to initialize.
      * @return the Event saved and initialized.
      */
     public static Alert create(Alert alert) {

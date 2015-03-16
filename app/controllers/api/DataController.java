@@ -2,6 +2,7 @@ package controllers.api;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.APISecured;
+import model.Alert;
 import model.BasicEvent;
 import model.Data;
 import model.Event;
@@ -105,7 +106,11 @@ public class DataController extends Controller {
             basic.check(); // check basic occurrence
             Event.find.where().ilike("expression", "%" + basic.getId() + "%").findList().stream().filter(event -> !eventsInvolved.contains(event)).forEach(eventsInvolved::add); // get Event containing this basic (check if already add)
         }
+
         eventsInvolved.forEach(model.Event::check); // check Event occurrence
+
+        // check all alerts
+        Alert.all().forEach(model.Alert::check);
         return created(Json.toJson(inserted));
     }
 

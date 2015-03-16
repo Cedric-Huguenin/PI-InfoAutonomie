@@ -1,6 +1,7 @@
 package model;
 
 import com.avaje.ebean.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 public class Data extends Model{
 
-    @EmbeddedId
+    @EmbeddedId @JsonIgnore
     public PrimKey primKey;
 
     /**

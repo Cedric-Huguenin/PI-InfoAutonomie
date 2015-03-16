@@ -24,10 +24,13 @@ public class AlertOccurrence extends Model {
     public long timestamp;
     public String date;
 
+    public boolean seen;
+
     public AlertOccurrence(Alert alert, long timestamp, String date) {
         this.alert = alert;
         this.timestamp = timestamp;
         this.date = date;
+        this.seen = false;
     }
 
     public static Finder<String, AlertOccurrence> find = new Finder<>(String.class, AlertOccurrence.class);
@@ -66,6 +69,14 @@ public class AlertOccurrence extends Model {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 
     public static Page<AlertOccurrence> page(int page, int pageSize, String sortBy, String order, String filter) {
