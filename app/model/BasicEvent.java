@@ -116,7 +116,7 @@ public class BasicEvent extends Model {
                 System.out.println(getName() + " " + dataList.size());
                 for (model.Data data : dataList) {
 //                    System.out.println("Value : " + data.getValue() + " min : " + detectionMethod.getMinValue() + " max : " + detectionMethod.getMaxValue());
-                    if (old != null && old.getValue() != data.getValue() && (data.getValue() >= detectionMethod.getMinValue() && data.getValue() <= detectionMethod.getMaxValue())) {
+                    if (old != null && old.getValue() != data.getValue() && (data.getValue() <= detectionMethod.getMinValue() && data.getValue() >= detectionMethod.getMaxValue())) {
                         BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
                                 data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
                         try {
