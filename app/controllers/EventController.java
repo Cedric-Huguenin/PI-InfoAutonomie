@@ -49,7 +49,6 @@ public class EventController extends Controller {
         eventForm.data().put("color", event.getColor());
         eventForm.data().put("icon", event.getIcon());
 
-        // TODO: template to edit an event
         return ok(create.render(eventForm, Sensor.all()));
     }
 
@@ -92,6 +91,7 @@ public class EventController extends Controller {
             event.setColor(eventForm.get().getColor());
             event.setIcon(eventForm.get().getIcon());
 
+            event.check();
             eventForm.get().update();
         } else {
             eventForm.get().save();

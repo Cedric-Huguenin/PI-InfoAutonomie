@@ -137,7 +137,40 @@
                                         <p><small class="text-muted"><i class="fa fa-clock-o"></i> @event.getDate </small>
                                     </div>
                                     <div class="timeline-body">
-                                        <p>@event.fromValue to @event.toValue @event.getBasicEvent.getSensor.getUnit</p>
+                                        @if(event.getBasicEvent.getSensor.getType() == model.SensorType.DOOR) {
+                                            <p>De
+                                                @if(event.fromValue == 0) {
+                                                    ouvert
+                                                } else {
+                                                    fermé
+                                                }
+                                                à
+                                                @if(event.toValue == 0) {
+                                                    ouvert
+                                                } else {
+                                                    fermé
+                                            }
+                                            </p>
+                                        } else {
+                                            @if(event.getBasicEvent.getSensor.getType() == model.SensorType.PRESENCE) {
+                                                <p>De
+                                                    @if(event.fromValue == 0) {
+                                                        absence de mouvement
+                                                    } else {
+                                                        mouvement
+                                                    }
+                                                    à
+                                                    @if(event.toValue == 0) {
+                                                        absence de mouvement
+                                                    } else {
+                                                        mouvement
+                                                }
+                                                </p>
+                                            } else {
+                                                <p>De @event.fromValue à @event.toValue @event.getBasicEvent.getSensor.getUnit</p>
+                                            }
+                                        }
+
                                     </div>
                                 </div>
                             </li>

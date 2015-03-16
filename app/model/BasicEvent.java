@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import play.db.ebean.Model;
 import utils.TimestampUtils;
 
@@ -81,15 +82,15 @@ public class BasicEvent extends Model {
         // TODO: select the correct range to retrieve data
 //            System.out.println("Checking " + this);
         model.Data old = null;
+        List<model.Data> dataList;
+        if(BasicEventOccurrence.find.where().eq("basic_event_id", getId()).findList().size() == 0) { // if it's the first computation for this basic event, use all available data
+            dataList = model.Data.find.where().eq("mote", this.getSensor().getId()).findList();
+        } else { // else only use a short time windows period
+            long now = System.currentTimeMillis()/1000; // current second timestamp
+            dataList = model.Data.find.where().eq("mote", this.getSensor().getId()).between("timestamp",now-3600,now).findList();
+        }
         switch (detectionMethod.getDetectionType()) {
             case DELTA:
-                List<model.Data> dataList;
-                if(BasicEventOccurrence.find.where().eq("basic_event_id", getId()).findList().size() == 0) { // if it's the first computation for this basic event, use all available data
-                    dataList = model.Data.find.where().eq("mote", this.getSensor().getId()).findList();
-                } else { // else only use a short time windows period
-                    long now = System.currentTimeMillis()/1000; // current second timestamp
-                    dataList = model.Data.find.where().eq("mote", this.getSensor().getId()).between("timestamp",now-3600,now).findList();
-                }
                 System.out.println(getName() + " " + dataList.size());
                 for (model.Data data : dataList) {
                     //System.out.println(data);
@@ -111,9 +112,30 @@ public class BasicEvent extends Model {
                     old = data;
                 }
                 break;
-            case SIMPLE_THRESHOLD: // TODO test this
-                for (model.Data data : model.Data.all()) {
-                    if (data.getValue() > detectionMethod.getSimpleThreshold()) {
+            case MIN_MAX_VALUES:
+                System.out.println(getName() + " " + dataList.size());
+                for (model.Data data : dataList) {
+//                    System.out.println("Value : " + data.getValue() + " min : " + detectionMethod.getMinValue() + " max : " + detectionMethod.getMaxValue());
+                    if (old != null && old.getValue() != data.getValue() && (data.getValue() >= detectionMethod.getMinValue() && data.getValue() <= detectionMethod.getMaxValue())) {
+                        BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
+                                data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
+                        try {
+                            if (BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
+                                occurrence.save();
+                                //System.out.println(occurrence);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+
+                        }
+                    }
+                    old = data;
+                }
+                break;
+            case SIMPLE_THRESHOLD:
+                System.out.println(getName() + " " + dataList.size());
+                for (model.Data data : dataList) {
+                    if (old != null && old.getValue() != data.getValue() && (data.getValue() > detectionMethod.getSimpleThreshold())) {
                         BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
                                 data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
                         try {
@@ -126,6 +148,8 @@ public class BasicEvent extends Model {
                         }
                     }
                     old = data;
+                    String test = "blabla";
+                    test.split("", 0);
                 }
                 break;
             // TODO: add other detection method

@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import model.Alert;
 import model.BasicEvent;
 import model.Event;
 import model.json.Data;
@@ -61,6 +62,7 @@ public class Global extends GlobalSettings {
                     // based on BasicEventOccurrences, check if Event occurs
                     Event.all().forEach(model.Event::check);
 
+                    Alert.all().forEach(model.Alert::check);
                 },
                 Akka.system().dispatcher()
         );

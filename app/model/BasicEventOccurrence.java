@@ -111,7 +111,7 @@ public class BasicEventOccurrence extends Model implements Comparable<BasicEvent
                 '}';
     }
 
-    public long occur(long[] t, BasicEvent basicEvent) {
+    public static long occur(long[] t, BasicEvent basicEvent) {
 //        System.out.println("From " + t[0] + " to " + t[1]);
 //        System.out.println("SEARCHING FOR " + basicEvent.getId());
 

@@ -12,30 +12,30 @@ import java.util.List;
  */
 
 @Entity
-public class EventOccurrence extends Model {
+public class AlertOccurrence extends Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
 
     @ManyToOne
-    public Event event;
+    public Alert alert;
 
     public long timestamp;
     public String date;
 
-    public EventOccurrence() {
-    }
+    public boolean seen;
 
-    public EventOccurrence(Event event, long timestamp, String date) {
-        this.event = event;
+    public AlertOccurrence(Alert alert, long timestamp, String date) {
+        this.alert = alert;
         this.timestamp = timestamp;
         this.date = date;
+        this.seen = false;
     }
 
-    public static Model.Finder<String,EventOccurrence> find = new Model.Finder<>(String.class, EventOccurrence.class);
+    public static Finder<String, AlertOccurrence> find = new Finder<>(String.class, AlertOccurrence.class);
 
-    public static List<EventOccurrence> all() {
+    public static List<AlertOccurrence> all() {
         return find.all();
     }
 
@@ -47,12 +47,12 @@ public class EventOccurrence extends Model {
         this.id = id;
     }
 
-    public Event getEvent() {
-        return event;
+    public Alert getAlert() {
+        return alert;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setAlert(Alert alert) {
+        this.alert = alert;
     }
 
     public long getTimestamp() {
@@ -71,10 +71,18 @@ public class EventOccurrence extends Model {
         this.date = date;
     }
 
-    public static Page<EventOccurrence> page(int page, int pageSize, String sortBy, String order, String filter) {
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
+    }
+
+    public static Page<AlertOccurrence> page(int page, int pageSize, String sortBy, String order, String filter) {
         return
                 find.where()
-                        .ilike("event_id", "%" + filter + "%")
+                        .ilike("alert_id", "%" + filter + "%")
                         .orderBy(sortBy+ " " + order)
                                 //.fetch("company")
                         .findPagingList(pageSize)
@@ -82,28 +90,15 @@ public class EventOccurrence extends Model {
                         .getPage(page);
     }
 
-    public static Page<EventOccurrence> pageTime(int page, int pageSize, String sortBy, String order, String filter, long beginTmp, long endTmp) {
+    public static Page<AlertOccurrence> pageTime(int page, int pageSize, String sortBy, String order, String filter, long beginTmp, long endTmp) {
         return
                 find.where()
                         .between("timestamp", beginTmp, endTmp)
-                        .ilike("event_id", "%" + filter + "%")
+                        .ilike("alert_id", "%" + filter + "%")
                         .orderBy(sortBy+ " " + order)
                                 //.fetch("company")
                         .findPagingList(pageSize)
                         .setFetchAhead(false)
                         .getPage(page);
-    }
-
-    public static long occur(long[] t, Event event) {
-//        System.out.println("From " + t[0] + " to " + t[1]);
-//        System.out.println("SEARCHING FOR " + basicEvent.getId());
-
-        List<EventOccurrence> eventOccurrences = EventOccurrence.find.where()
-                .between("timestamp", t[0], t[1]).eq("basic_event_id", event.getId()).findList();
-
-//        System.out.println("Found " + basicsEventOccurrences.size() + " item(s) ------ ");
-
-
-        return eventOccurrences.size() > 0 ? eventOccurrences.get(0).getTimestamp() : -1;
     }
 }

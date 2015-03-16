@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
@@ -11,7 +12,7 @@ import java.util.List;
  * Created by Mathieu on 31/01/2015.
  */
 
-@Entity
+@Entity @JsonIgnoreProperties({ "associatedBasicEvents", "typeAsString" })
 public class Sensor extends Model {
     // {"id":"1","name":"Light Sensor","address":"153.111","type":"LIGHT","location":"Bureau TN","description":"Sur la commode"}
     @Id

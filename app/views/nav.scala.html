@@ -234,10 +234,10 @@
 					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Valeurs brutes<span class="fa arrow"></span></a>
 					<ul aria-expanded="false" class="nav nav-second-level collapse">
 						<li>
-							<a href="@routes.RawDataController.list()">Données</a>
+							<a href="@routes.RawDataController.list()"><i class="fa fa-fw fa-list-alt"></i>Données</a>
 						</li>
 						<li>
-							<a href="@routes.RawDataController.graph()">Graphiques</a>
+							<a href="@routes.RawDataController.graph()"><i class="fa fa-fw fa-line-chart"></i>Graphiques</a>
 						</li>
 					</ul>
 					<!-- /.nav-second-level -->
@@ -246,16 +246,16 @@
 					<a href="#"><i class="fa fa-sitemap fa-fw"></i> Évènements de base<span class="fa arrow"></span></a>
 					<ul aria-expanded="false" class="nav nav-second-level collapse">
 						<li>
-							<a href="@routes.BasicEventController.basics()">Liste</a>
+							<a href="@routes.BasicEventController.basics()"><i class="fa fa-fw fa-list-alt"></i>Liste</a>
+                        </li>
+                        <li>
+                            <a href="@routes.BasicEventController.data()"><i class="fa fa-fw fa-table"></i>Occurrences</a>
+                        </li>
+						<li>
+							<a href="@routes.BasicEventController.graph()"><i class="fa fa-fw fa-bar-chart"></i>Graphiques</a>
 						</li>
 						<li>
-							<a href="@routes.BasicEventController.data()">Occurrences</a>
-						</li>
-						<li>
-							<a href="@routes.BasicEventController.graph()">Graphiques</a>
-						</li>
-						<li>
-							<a href="@routes.BasicEventController.timeline()">Timeline</a>
+							<a href="@routes.BasicEventController.timeline()"><i class="fa fa-fw fa-clock-o"></i>Timeline</a>
 						</li>
 					</ul>
 					<!-- /.nav-second-level -->
@@ -265,15 +265,29 @@
 					<ul aria-expanded="false" class="nav nav-second-level collapse">
                     @if("true".equals(session.get("admin"))) {
                         <li>
-                            <a href="@routes.EventController.events"><i class="fa fa-fw fa-file"></i>
+                            <a href="@routes.EventController.events"><i class="fa fa-fw fa-list-alt"></i>
                                 Liste des évènements</a>
                         </li>
                     }
 		                <li>
-		                    <a href="@routes.EventController.timeline()"><i class="fa fa-fw fa-file"></i> Timeline</a>
+		                    <a href="@routes.EventController.timeline()"><i class="fa fa-fw fa-clock-o"></i> Timeline</a>
 		                </li>
 					</ul>
 				</li>
+                <li>
+                    <a href="#"><i class="fa fa-bell-o fa-fw"></i> Alertes<span class="fa arrow"></span></a>
+                    <ul aria-expanded="false" class="nav nav-second-level collapse">
+                        @if("true".equals(session.get("admin"))) {
+                            <li>
+                                <a href="@routes.AlertController.alerts()"><i class="fa fa-fw fa-list-alt"></i>
+                                    Liste des alertes</a>
+                            </li>
+                        }
+                    <li>
+                        <a href="@routes.AlertController.timeline()"><i class="fa fa-fw fa-clock-o"></i> Timeline</a>
+                    </li>
+                    </ul>
+                </li>
                 <li>
                     <a href="#"><i class="fa fa-bug fa-fw"></i> Capteurs<span class="fa arrow"></span></a>
                     <ul aria-expanded="false" class="nav nav-second-level collapse">

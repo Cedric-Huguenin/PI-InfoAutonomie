@@ -1,4 +1,4 @@
-@(form: Form[model.Event], sensors: List[model.Sensor])
+@(form: Form[model.Alert], events: List[model.Event])
 
 @import java.util.List;
 @main("Créer un évènement") {
@@ -35,7 +35,7 @@ $(function () {
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Administration <small>Créer un évènement</small>
+                            Administration <small>Créer une alerte</small>
                         </h1>
                     </div>
                 </div>
@@ -45,10 +45,10 @@ $(function () {
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Créer un évènement</h3>
+                                <h3 class="panel-title">Créer une alerte</h3>
                             </div>
                             <div class="panel-body">
-                            @helper.form(action = routes.EventController.save) {
+                            @helper.form(action = routes.AlertController.save) {
 
                                 @if(form("id").value != null) {
                                     <div class="form-group">
@@ -63,29 +63,21 @@ $(function () {
 
                                 <div class="form-group">
                                     <label>Expression</label>
-                                    <input id="expression" class="form-control" type="text" name="expression" placeholder="Expression construite à l'aide des boutons ci-dessous" value="@form("expression").value">
-                                    <p id="basicEvents">
-                                        <div class="btn-group associatedBasicEvent">
+                                    <input id="expression" class="form-control" type="text" name="expression" placeholder="Description" value="@form("expression").value">
+                                    <p id="events">
+                                        <div class="btn-group associatedEvent">
                                             <a type="button" class="btn btn-info btn-sm" title="(">(</a>
                                             <a type="button" class="btn btn-info btn-sm" title=")">)</a>
                                             <a type="button" class="btn btn-primary btn-sm" title="&&">ET</a>
                                             <a type="button" class="btn btn-primary btn-sm" title="||">OU</a>
-                                            @for(sensor <- sensors) {
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                                        @sensor.getTypeAsString (@sensor.address) <span class="caret"></span>
-                                                    </button>
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        @if(sensor.getAssociatedBasicEvents.isEmpty) {
-                                                            <li><a href="#" title="">Aucun évènement</a></li>
-                                                        } else {
-                                                            @for(associatedBasicEvent <- sensor.getAssociatedBasicEvents) {
-                                                                <li><a href="#" title="@associatedBasicEvent.id">@associatedBasicEvent.name (@associatedBasicEvent.detectionMethod.getValueAsString @sensor.unit)</a></li>
-                                                            }
-                                                        }
-                                                    </ul>
-                                                </div>
-                                            }
+                                            <a type="button" class="btn btn-primary btn-sm" title="!">NON</a>
+                                            <div class="btn-group">
+                                                @for(event <- events) {
+                                                        <a href="#" class="btn btn-default btn-sm" title="@event.getId">
+                                                            @event.getName
+                                                        </a>
+                                                }
+                                            </div>
                                         </div>
                                     </p>
                                     @if(form.hasGlobalErrors) {
@@ -96,23 +88,6 @@ $(function () {
                                     }
                                 </div>
 
-                                <!-- Interval form -->
-                                <div class="form-group">
-                                    <label>Intervalle de temps</label>
-                                    <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" value="@form("beginTime").value" />
-                                        <span class="input-group-addon">
-                                            <span class="fa fa-calendar"></span>
-                                        </span>
-                                    </div>
-                                    <div class='input-group date' id='datetimepicker2'>
-                                        <input type='text' name="endTime" class="form-control" placeholder="HH:mm" value="@form("endTime").value" />
-                                        <span class="input-group-addon">
-                                            <span class="fa fa-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <!-- /Interval form -->
 
                                 <!-- Color form -->
                                 <div class="form-group">
@@ -156,7 +131,7 @@ $(function () {
 
                                     <script>
                                     // $('.iconpicker').find('i').css( "color", "red" );
-                                    $('.iconpicker').find('i').bind('click', function(event) {
+                                    $('.myPicker').bind('click', function(event) {
                                         $('#icon').val(event.target.className.replace('fa ', ''));
                                     });
                                     </script>
@@ -165,7 +140,7 @@ $(function () {
 
                                 <div>
                                     <button class="btn btn-primary" type="submit">Créer</button>
-                                    <a href="@routes.EventController.events()" class="btn btn-default">Retour</a>
+                                    <a href="@routes.AlertController.alerts()" class="btn btn-default">Retour</a>
                                 </div>
                             }
                             </div>
@@ -175,8 +150,8 @@ $(function () {
                 <!-- /.row -->
 
                 <script>
-                // $('.associatedBasicEvent').find('a').css( "color", "red" );
-                $('.associatedBasicEvent').find('a').bind('click', function(event) {
+                $('.associatedEvent').find('a').bind('click', function(event) {
+                    console.log(event);
                     $('#expression').val($('#expression').val() + ' ' + event.target.title + ' ');
                 });
                 </script>
