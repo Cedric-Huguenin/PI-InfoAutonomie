@@ -18,7 +18,7 @@ public class AlertOccurrence extends Model {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     public Alert alert;
 
     public long timestamp;

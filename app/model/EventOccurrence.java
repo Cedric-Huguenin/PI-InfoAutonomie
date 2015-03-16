@@ -18,7 +18,7 @@ public class EventOccurrence extends Model {
     @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     public Event event;
 
     public long timestamp;

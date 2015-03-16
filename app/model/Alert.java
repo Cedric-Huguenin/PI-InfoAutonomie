@@ -33,10 +33,10 @@ public class Alert extends Model {
      */
     public String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     public BasicEvent startBasicEvent;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     public Event startEvent;
 
     /**
