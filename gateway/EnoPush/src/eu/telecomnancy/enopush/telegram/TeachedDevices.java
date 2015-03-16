@@ -6,14 +6,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import eu.aleon.aleoncean.device.Device;
+import eu.aleon.aleoncean.device.DeviceParameterUpdatedInitiation;
+import eu.aleon.aleoncean.device.StandardDevice;
 import eu.aleon.aleoncean.device.remote.RemoteDeviceEEPA50205;
+import eu.aleon.aleoncean.device.remote.RemoteDeviceEEPD20108;
 import eu.aleon.aleoncean.packet.EnOceanId;
 import eu.aleon.aleoncean.packet.RadioChoice;
 import eu.aleon.aleoncean.packet.RadioPacket;
+import eu.aleon.aleoncean.packet.radio.RadioPacketUTE;
 import eu.aleon.aleoncean.packet.radio.userdata.UserData1BS;
 import eu.telecomnancy.enopush.Main;
+import eu.telecomnancy.enopush.Settings;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPA50701;
 import eu.telecomnancy.enopush.aleonceanext.RemoteDeviceEEPD50001;
 
@@ -30,6 +36,10 @@ public class TeachedDevices {
 	 * The Map of the devices saved.
 	 */
 	private static HashMap<String,Device> learntDevices = new HashMap<>();
+	/**
+	 * Address of the base.
+	 */
+	public static EnOceanId baseId = null;
 	
 	/**
 	 * Adds a new device to the list and saves it on the hard drive. If the device already exists and equals the new one
@@ -37,6 +47,8 @@ public class TeachedDevices {
 	 * @param radioPacket the radioPacket received. It will be determined if it is a TeachIn packet. If it is not, it will be ignored. 
 	 */
 	public static void addDevice(RadioPacket radioPacket) {
+		if(baseId == null)
+			baseId = Main.getBaseId();
 		switch(radioPacket.getChoice()) {
 		case RadioChoice.RORG_1BS:
 			UserData1BS userData1 = new UserData1BS(radioPacket.getData());
@@ -44,7 +56,7 @@ public class TeachedDevices {
 				if(radioPacket.getData()[1] == 0 && radioPacket.getData()[2] == 1) {
 					RemoteDeviceEEPD50001 device = new RemoteDeviceEEPD50001(Main.serialConnection,
 							radioPacket.getSenderId(),
-							radioPacket.getSenderId());
+							baseId);
 					put(radioPacket.getSenderId().toString(), device);
 				}
 			}
@@ -58,13 +70,13 @@ public class TeachedDevices {
 				if(func == 0x02 && type == 0x05) {
 					RemoteDeviceEEPA50205 device = new RemoteDeviceEEPA50205(Main.serialConnection,
 							radioPacket.getSenderId(),
-							radioPacket.getSenderId());
+							baseId);
 					put(radioPacket.getSenderId().toString(), device);
 				}
 				if(func == 0x07 && type == 0x01) {
 					RemoteDeviceEEPA50701 device = new RemoteDeviceEEPA50701(Main.serialConnection,
 							radioPacket.getSenderId(),
-							radioPacket.getSenderId());
+							baseId);
 					put(radioPacket.getSenderId().toString(), device);
 				}
 			}
@@ -76,6 +88,17 @@ public class TeachedDevices {
 		case RadioChoice.RORG_RPS:
 			break;
 		case RadioChoice.RORG_UTE:
+			RadioPacketUTE uteRadioPacket = new RadioPacketUTE();
+			uteRadioPacket.setData(radioPacket.getData());
+			if(learntDevices.containsKey(radioPacket.getSenderId().toString())) {
+				learntDevices.get(radioPacket.getSenderId().toString()).parseRadioPacket(uteRadioPacket);
+			} else {
+				RemoteDeviceEEPD20108 remoteDevice = new RemoteDeviceEEPD20108(Main.serialConnection, radioPacket.getSenderId(), baseId);
+				remoteDevice.parseRadioPacket(uteRadioPacket);
+				remoteDevice.switchOnOff(DeviceParameterUpdatedInitiation.SET_PARAMETER, true);
+				remoteDevice.stopDimming();
+				put(radioPacket.getSenderId().toString(), remoteDevice);
+			}
 			break;
 		case RadioChoice.RORG_VLD:
 			break;
@@ -111,7 +134,7 @@ public class TeachedDevices {
 	    ObjectOutputStream oos = null;
 
 	    try {
-	        final FileOutputStream file = new FileOutputStream("devices.enp");
+	        final FileOutputStream file = new FileOutputStream(Settings.getProperty("devices_file"));
 	        oos = new ObjectOutputStream(file);
 	        oos.writeObject(learntDevices);
 
@@ -138,13 +161,22 @@ public class TeachedDevices {
 	    ObjectInputStream ois = null;
 
 	    try {
-	        final FileInputStream file = new FileInputStream("devices.enp");
+	        final FileInputStream file = new FileInputStream(Settings.getProperty("devices_file"));
 	        ois = new ObjectInputStream(file);
 	        
 	        @SuppressWarnings("unchecked")
 			HashMap<String,Device> temp = (HashMap<String,Device>) ois.readObject();
 	        if(temp != null && temp.size() != 0) {
 	        	learntDevices = temp;
+	        	for(Entry<String, Device> entry : learntDevices.entrySet()) {
+	        		if(entry.getValue() instanceof StandardDevice)
+	        			((StandardDevice) entry.getValue()).setConn(Main.serialConnection);
+	        		if(entry.getValue() instanceof RemoteDeviceEEPD20108) {
+	        			((RemoteDeviceEEPD20108) entry.getValue()).sendConfiguration();
+	        			((RemoteDeviceEEPD20108) entry.getValue()).switchOnOff(DeviceParameterUpdatedInitiation.SET_PARAMETER, true);
+	        			((RemoteDeviceEEPD20108) entry.getValue()).stopDimming();
+	        		}
+	        	}
 	        	return learntDevices.size();
 	        }
 

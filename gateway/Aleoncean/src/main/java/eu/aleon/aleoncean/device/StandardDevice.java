@@ -37,7 +37,7 @@ public abstract class StandardDevice implements Device {
 
 	protected final DeviceParameterUpdatedSupport parameterChangedSupport;
 
-    private final transient ESP3Connector conn;
+    private transient ESP3Connector conn;
     private final EnOceanId addressRemote;
     private final EnOceanId addressLocal;
 
@@ -52,6 +52,10 @@ public abstract class StandardDevice implements Device {
 
     public ESP3Connector getConn() {
         return conn;
+    }
+    
+    public void setConn(ESP3Connector connection) {
+    	conn = connection;
     }
 
     @Override

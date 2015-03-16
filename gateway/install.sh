@@ -31,8 +31,8 @@ fi
 
 echo 'Installing tools to run EnOcean softwares'
 apt-get install gcc g++
-apt-get install perl libdevice-serialport-perl libio-socket-ssl-perl libwww-perl
-apt-get install –f
+# Uncomment if installing FHEM
+# apt-get install perl libdevice-serialport-perl libio-socket-ssl-perl libwww-perl
 apt-get install openjdk-7-jdk
 echo 'Make sure you choose the right JRE : openjdk-7-jre' 
 update-alternatives --config java
@@ -46,31 +46,62 @@ fi
 chmod +x ./serial.sh
 ./serial.sh disable
 
-echo 'Installing FHEM'
-if [[ -d "/opt/fhem" ]]
-then
-	echo "Warning : it seems that FHEM is already installed. If you continue, you could lose data."
-	echo "Would you like to continue anyway ? (yes/no)"
-	read choice
-	if [[ $choice != "yes" || $choice != "y" ]]
-	then
-		echo 'Note : A reboot could be necessary (for the serial access for example)'
-		exit 0
-	fi
-fi
-if [[ !( -f "./fhem-5.6.tar.gz" ) ]]
-then
-	wget http://fhem.de/fhem-5.6.tar.gz
-fi
-tar -xf ./fhem-5.6.tar.gz
-cd ./fhem-5.6
-make install
-cd /opt/fhem
-echo "define TCM310_0 TCM 310 /dev/ttyAMA0@57600" >> fhem.cfg
-perl fhem.pl fhem.cfg
+# echo 'Installing FHEM'
+# if [[ -d "/opt/fhem" ]]
+# then
+	# echo "Warning : it seems that FHEM is already installed. If you continue, you could lose data."
+	# echo "Would you like to continue anyway ? (yes/no)"
+	# read choice
+	# if [[ $choice != "yes" || $choice != "y" ]]
+	# then
+		# echo 'Note : A reboot could be necessary (for the serial access for example)'
+		# exit 0
+	# fi
+# fi
+# if [[ !( -f "./fhem-5.6.tar.gz" ) ]]
+# then
+	# wget http://fhem.de/fhem-5.6.tar.gz
+# fi
+# tar -xf ./fhem-5.6.tar.gz
+# cd ./fhem-5.6
+# make install
+# cd /opt/fhem
+# echo "define TCM310_0 TCM 310 /dev/ttyAMA0@57600" >> fhem.cfg
+# perl fhem.pl fhem.cfg
 
 echo 'Installing EnoPush'
-# TODO configure EnoPush
+if [[  -f "./EnoPush/EnoPush.jar" && -f "./EnoPush/start.sh" && -f "./EnoPush/stop.sh" && -f "./EnoPush/enopush" ]]
+then
+	installDir=/usr/local/bin/enopush
+	if [[ !( -d $installDir) ]]
+	then
+		mkdir $installDir
+	fi
+	cp ./EnoPush/EnoPush.jar $installDir
+	cp ./EnoPush/start.sh $installDir
+	cp ./EnoPush/stop.sh $installDir
+	cp ./EnoPush/enopush /etc/init.d
+	chmod 751 $installDir/stop.sh
+	chmod 751 $installDir/start.sh
+	chmod 751 /etc/init.d/enopush
+	chmod 777 $installDir
+	
+	echo '#---EnoPush properties---' > $installDir/config.properties
+	echo 'lib_path=/usr/lib/jni' >> $installDir/config.properties
+	echo 'devices_file=devices.enp' >> $installDir/config.properties
+	echo 'default_serial=/dev/ttyAMA0' >> $installDir/config.properties
+	echo 'api_path=http\://localhost/api' >> $installDir/config.properties
+	echo 'api_token=hj1456bsdg1bfsg846bg1sb125gfd' >> $installDir/config.properties
+	echo 'Entering EnoPush configuration...'
+	nano  $installDir/config.properties
+	
+	update-rc.d enopush defaults
+fi
 
-echo 'Note : A reboot could be necessary (for the serial access for example)'
+echo 'Note : A reboot could be necessary (for the serial access for example), do you want to reboot now? (yes/no)'
+read choice
 echo 'Installation finished'
+if [[ $choice == "yes" || $choice == "y" ]]
+then
+    reboot
+fi

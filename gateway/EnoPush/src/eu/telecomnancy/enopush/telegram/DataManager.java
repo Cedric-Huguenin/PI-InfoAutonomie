@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import eu.aleon.aleoncean.device.Device;
 import eu.aleon.aleoncean.device.DeviceParameter;
 import eu.aleon.aleoncean.device.IllegalDeviceParameterException;
+import eu.aleon.aleoncean.device.remote.RemoteDeviceEEPD20108;
 import eu.aleon.aleoncean.packet.RadioChoice;
 import eu.aleon.aleoncean.packet.RadioPacket;
 import eu.aleon.aleoncean.packet.radio.RadioPacket1BS;
@@ -27,6 +28,7 @@ import eu.aleon.aleoncean.packet.radio.RadioPacketMSC;
 import eu.aleon.aleoncean.packet.radio.RadioPacketRPS;
 import eu.aleon.aleoncean.packet.radio.RadioPacketUTE;
 import eu.aleon.aleoncean.packet.radio.RadioPacketVLD;
+import eu.telecomnancy.enopush.Settings;
 
 
 /**
@@ -51,14 +53,6 @@ public class DataManager {
 		SENSOR
 	}
 	
-	/**
-	 * The address of the platform API.
-	 */
-	public static final String platformAddress = "http://vps91071.ovh.net/api";
-	/**
-	 * The token used to connect to the platform.
-	 */
-	public static final String token = "hj1456bsdg1bfsg846bg1sb125gfd";
 	/**
 	 * The logger to do runtime logs.
 	 */
@@ -146,6 +140,9 @@ public class DataManager {
 				case POSITION_PERCENT:
 					break;
 				case POWER_W:
+					dataTransfert.put("value", valueObtained);
+					dataTransfert.put("label", "power");
+					type = "POWER";
 					break;
 				case SETPOINT_POSITION_PERCENT:
 					break;
@@ -155,12 +152,14 @@ public class DataManager {
 					// dataTransfert.put("supply_voltage", (Double) valueObtained);
 					break;
 				case SWITCH:
-					double temp2 = 0;
-					if((Boolean) valueObtained)
-						temp2 = 1;
-					dataTransfert.put("value", temp2);
-					dataTransfert.put("label", "door");
-					type = "DOOR";
+					if(!(device instanceof RemoteDeviceEEPD20108)) {
+						double temp2 = 0;
+						if((Boolean) valueObtained)
+							temp2 = 1;
+						dataTransfert.put("value", temp2);
+						dataTransfert.put("label", "door");
+						type = "DOOR";
+					}
 					break;
 				case TEMPERATURE_CELSIUS:
 					dataTransfert.put("value", (Double) valueObtained);
@@ -242,6 +241,7 @@ public class DataManager {
 				case POSITION_PERCENT:
 					break;
 				case POWER_W:
+					dataTransfert.put("type", "POWER");
 					break;
 				case SETPOINT_POSITION_PERCENT:
 					break;
@@ -250,7 +250,8 @@ public class DataManager {
 				case SUPPLY_VOLTAGE_V:
 					break;
 				case SWITCH:
-					dataTransfert.put("type", "DOOR");
+					if(!(entry instanceof RemoteDeviceEEPD20108))
+						dataTransfert.put("type", "DOOR");
 					break;
 				case TEMPERATURE_CELSIUS:
 					dataTransfert.put("type", "TEMP");
@@ -304,68 +305,70 @@ public class DataManager {
 	 * @param jsonData the data to be sent.
 	 * @param purpose sensor information or physical measurement.
 	 */
-	public static void sendData(String jsonData, DataPurpose purpose) {
-		System.out.println(jsonData);
-		URL url;
-	    HttpURLConnection connection = null;
+	public static void sendData(final String jsonData, final DataPurpose purpose) {
 	    
-	    try {
-	        //Create connection
-	    	switch(purpose) {
-			case DATA:
-				url = new URL(platformAddress+"/data");
-				break;
-			case SENSOR:
-				url = new URL(platformAddress+"/sensor");
-				break;
-			default:
-				url = new URL(platformAddress+"/data");
-				break;
+	    Thread newThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				URL url;
+			    HttpURLConnection connection = null;
+			    try {
+			        //Create connection
+			    	switch(purpose) {
+					case DATA:
+						url = new URL(Settings.getProperty("api_path")+"/data");
+						break;
+					case SENSOR:
+						url = new URL(Settings.getProperty("api_path")+"/sensor");
+						break;
+					default:
+						url = new URL(Settings.getProperty("api_path")+"/data");
+						break;
+			    	
+			    	}
+			        
+			        connection = (HttpURLConnection)url.openConnection();
+			        connection.setRequestMethod("POST");
+			        connection.setRequestProperty("Content-Type","application/json");
+			        connection.setRequestProperty("AUTH", Settings.getProperty("api_token"));
+			
+			        connection.setUseCaches (false);
+			        connection.setDoInput(true);
+			        connection.setDoOutput(true);
+			
+			        //Send request
+			        DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
+			        wr.writeBytes(jsonData);
+			        wr.flush ();
+			        wr.close ();
+			        
+			        if(connection.getResponseCode() >= 200 && connection.getResponseCode() <= 400) {
+			        	//Get Response    
+				        InputStream is = connection.getInputStream();
+				        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+				        String line;
+				        
+				        StringBuffer response = new StringBuffer(); 
+				        while((line = rd.readLine()) != null) {
+				        	response.append(line);
+				        	response.append('\n');
+				        }
+				        rd.close();
+			        } else {
+			        	if(purpose == DataPurpose.DATA)
+			        		LOGGER.info("Something went wrong with the server");
+			        }
+			   } catch (IOException e) {
+				   LOGGER.warn("Failed to send HTTP message. Verify server information.");
+				   e.printStackTrace();
+		       } finally {
+			       if(connection != null) {
+			    	   connection.disconnect(); 
+			       }
+		       }
+			}
 	    	
-	    	}
-	    	
-	    	System.out.println(url.toString());
-	        
-	        connection = (HttpURLConnection)url.openConnection();
-	        connection.setRequestMethod("POST");
-	        connection.setRequestProperty("Content-Type","application/json");
-	        connection.setRequestProperty("AUTH", token);
-	
-	        connection.setUseCaches (false);
-	        connection.setDoInput(true);
-	        connection.setDoOutput(true);
-	
-	        //Send request
-	        DataOutputStream wr = new DataOutputStream (connection.getOutputStream());
-	        wr.writeBytes(jsonData);
-	        wr.flush ();
-	        wr.close ();
-	        
-	        if(connection.getResponseCode() >= 200 && connection.getResponseCode() <= 400) {
-	        	//Get Response    
-		        InputStream is = connection.getInputStream();
-		        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-		        String line;
-		        
-		        StringBuffer response = new StringBuffer(); 
-		        while((line = rd.readLine()) != null) {
-		        	response.append(line);
-		        	response.append('\n');
-		        }
-		        rd.close();
-		        // TODO use this
-		        System.out.println(response.toString());
-	        } else {
-	        	if(purpose == DataPurpose.DATA)
-	        		LOGGER.info("Something went wrong with the server");
-	        }
-	   } catch (IOException e) {
-		   LOGGER.warn("Failed to send HTTP message. Verify server information.");
-		   e.printStackTrace();
-       } finally {
-	       if(connection != null) {
-	    	   connection.disconnect(); 
-	       }
-       }
+	    });
+	    newThread.start();
 	}
 }
