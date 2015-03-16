@@ -23,6 +23,10 @@ GET           /basic/graphData                          controllers.BasicEventCo
 GET           /basic/graph                              controllers.BasicEventController.graph(f ?= "")
 GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
 GET           /basic/basics                             controllers.BasicEventController.basics()
+GET           /basic/create                             controllers.BasicEventController.create()
+GET           /basic/edit/:id                           controllers.BasicEventController.edit(id: String)
+POST          /basic/save                               controllers.BasicEventController.save()
+GET           /basic/delete                             controllers.BasicEventController.delete(id: String)
 
 # Events
 GET           /event/create                             controllers.EventController.create()

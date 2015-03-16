@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.List;
 
 /**
  * Describes the method of detection of an event and its criteria.
@@ -42,6 +43,10 @@ public class Detection extends Model {
      * The list of the different detection methods.
      */
     public static Model.Finder<String,Detection> find = new Model.Finder<>(String.class, Detection.class);
+
+    public static List<Detection> all() {
+        return find.all();
+    }
 
     /**
      * Saves the new Detection object.
