@@ -87,7 +87,6 @@ then
 	chmod 777 $installDir
 	
 	echo '#---EnoPush properties---' > $installDir/config.properties
-	echo '#Tue Mar 10 15:51:03 CET 2015' >> $installDir/config.properties
 	echo 'lib_path=/usr/lib/jni' >> $installDir/config.properties
 	echo 'devices_file=devices.enp' >> $installDir/config.properties
 	echo 'default_serial=/dev/ttyAMA0' >> $installDir/config.properties
