@@ -1,11 +1,7 @@
 package controllers;
 
 import model.*;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import play.data.Form;
-import play.data.format.Formatters;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
@@ -43,9 +39,16 @@ public class AlertController extends Controller {
         alertForm.data().put("expression", alert.getExpression());
         alertForm.data().put("color", alert.getColor());
         alertForm.data().put("icon", alert.getIcon());
+        if(alert.getStartBasicEvent() != null) {
+            alertForm.data().put("trigger", alert.getStartBasicEvent().getId());
+        } else if(alert.getStartEvent() != null) {
+            alertForm.data().put("trigger", alert.getStartEvent().getId());
+        } else {
+            alertForm.data().put("trigger", "");
+        }
 
         // TODO: template to edit an event
-        return ok(create.render(alertForm, Event.all()));
+        return ok(create.render(alertForm, BasicEvent.all(), Event.all()));
     }
 
     @With(WebAuthorization.class)
@@ -60,10 +63,19 @@ public class AlertController extends Controller {
     public static Result save() {
         Form<Alert> alertForm = form(Alert.class).bindFromRequest();
 
+        String trigger = alertForm.bindFromRequest().data().get("trigger");
+        BasicEvent basic = BasicEvent.find.where().eq("id", trigger).findUnique();
+        Event event = Event.find.where().eq("id", trigger).findUnique();
+
         if (alertForm.hasErrors()) {
-            return badRequest(create.render(alertForm, Event.all()));
+            return badRequest(create.render(alertForm, BasicEvent.all(), Event.all()));
         } else if (Alert.find.where().eq("id", alertForm.get().getId()).findRowCount() == 1) {
             Alert alert = Alert.find.ref(alertForm.get().id);
+            if(basic != null) {
+                alert.setStartBasicEvent(basic);
+            } else if(event != null) {
+                alert.setStartEvent(event);
+            }
 
             alert.setName(alertForm.get().getName());
             alert.setExpression(alertForm.get().getExpression());
@@ -72,7 +84,13 @@ public class AlertController extends Controller {
 
             alertForm.get().update();
         } else {
-            alertForm.get().save();
+            Alert alert = alertForm.get();
+            if(basic != null) {
+                alert.setStartBasicEvent(basic);
+            } else if(event != null) {
+                alert.setStartEvent(event);
+            }
+            alert.save();
         }
 
         return redirect(controllers.routes.AlertController.alerts());
@@ -84,7 +102,9 @@ public class AlertController extends Controller {
      */
     @With(WebAuthorization.class)
     public static Result create() {
-        return ok(create.render(form(Alert.class), Event.all()));
+        Form<Alert> alertForm = form(Alert.class);
+        alertForm.data().put("trigger", "");
+        return ok(create.render(form(Alert.class), BasicEvent.all(), Event.all()));
     }
 
 

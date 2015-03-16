@@ -138,30 +138,31 @@ $(function () {
                                 </style>
                                 <!-- /Color form -->
 
-                                <!-- Icon form -->
+                                    <!-- Icon form -->
                                 <div class="form-group">
                                     <label>Icône</label>
-                                    @if(form("icon").value != null) {
-                                        <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="@form("icon").value">
-                                    } else {
-                                        <input id="icon" class="form-control" type="text" name="icon" placeholder="Icône" value="fa-bug">
-                                    }
 
-                                    <p>
-                                        <div class="btn-group iconpicker">
-                                            <a class="btn btn-default"><i class="fa fa-bug"></i></a>
-                                            <a class="btn btn-default"><i class="fa fa-user"></i></a>
-                                        </div>
-                                    </p>
+                                    <div class="input-group iconpicker-container">
+                                        <input id="my" data-placement="bottomRight" name="icon" class="form-control icp icp-auto iconpicker-element iconpicker-input"
+                                            @if(form("icon").value != null) {
+                                                value="@form("icon").value"
+                                            } else {
+                                                value=""
+                                            }
+                                        type="text">
+                                        <span class="input-group-addon"><i class="fa fa-archive"></i></span>
+                                        <script>
+                                        jQuery ( document ).ready ( function ( $ ) {
+                                        $ ( '#my' ).iconpicker ( {
+                                        placement : 'top'
+                                        } ) ;
+                                        } ) ;
 
-                                    <script>
-                                    // $('.iconpicker').find('i').css( "color", "red" );
-                                    $('.iconpicker').find('i').bind('click', function(event) {
-                                        $('#icon').val(event.target.className.replace('fa ', ''));
-                                    });
-                                    </script>
+                                        </script>
+                                    </div>
+
                                 </div>
-                                <!-- /Icon form -->
+                                    <!-- /Icon form -->
 
                                 <div>
                                     <button class="btn btn-primary" type="submit">Créer</button>

@@ -99,7 +99,7 @@ public class EventOccurrence extends Model {
 //        System.out.println("SEARCHING FOR " + basicEvent.getId());
 
         List<EventOccurrence> eventOccurrences = EventOccurrence.find.where()
-                .between("timestamp", t[0], t[1]).eq("basic_event_id", event.getId()).findList();
+                .between("timestamp", t[0], t[1]).eq("event_id", event.getId()).findList();
 
 //        System.out.println("Found " + basicsEventOccurrences.size() + " item(s) ------ ");
 

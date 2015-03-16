@@ -147,6 +147,7 @@ public class Alert extends Model {
 
         for (String id : ids) {
             id = id.trim();
+            System.out.println("SPLIT : " + id);
             BasicEvent basic = BasicEvent.find.where().eq("id", id).findUnique();
             long occurTime;
             if (basic != null) {
@@ -278,6 +279,21 @@ public class Alert extends Model {
         this.color = color;
     }
 
+    public BasicEvent getStartBasicEvent() {
+        return startBasicEvent;
+    }
+
+    public void setStartBasicEvent(BasicEvent startBasicEvent) {
+        this.startBasicEvent = startBasicEvent;
+    }
+
+    public Event getStartEvent() {
+        return startEvent;
+    }
+
+    public void setStartEvent(Event startEvent) {
+        this.startEvent = startEvent;
+    }
 
     /**
      * Returns the description of the object as JSON.
