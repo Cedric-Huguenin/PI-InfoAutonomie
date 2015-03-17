@@ -7,6 +7,7 @@ import play.mvc.Result;
 import play.mvc.With;
 import views.html.alert.create;
 import views.html.alert.alerts;
+import views.html.alert.timeline;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -105,6 +106,13 @@ public class AlertController extends Controller {
         Form<Alert> alertForm = form(Alert.class);
         alertForm.data().put("trigger", "");
         return ok(create.render(form(Alert.class), BasicEvent.all(), Event.all()));
+    }
+
+    public static Result toggleSeen(String id) {
+        AlertOccurrence alertOcc = AlertOccurrence.find.ref(id);
+        alertOcc.setSeen(!alertOcc.isSeen());
+        alertOcc.save();
+        return timeline(0, "", "", "", "15", "", "");
     }
 
 

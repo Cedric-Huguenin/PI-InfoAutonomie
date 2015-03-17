@@ -37,6 +37,8 @@
                                             <tr>
                                                 <th>Icône</th>
                                                 <th>Nom</th>
+                                                <th>Déclencheur</th>
+                                                <th>Fenêtre</th>
                                                 <th>Expression</th>
                                                 @if("true".equals(session.get("admin"))) {
                                                     <th></th>
@@ -48,6 +50,12 @@
                                                 <tr>
                                                     <td><button class="btn btn-@alert.color btn-xs"><i class="fa @alert.icon"></i></button></td>
                                                     <td>@alert.name</td>
+                                                    @if(alert.getStartEvent != null) {
+                                                        <td>@alert.getStartEvent.getName</td>
+                                                    } else {
+                                                        <td>@alert.getStartBasicEvent.getName</td>
+                                                    }
+                                                    <td>@alert.duration min</td>
                                                     <td>@alert.expression</td>
                                                     @if("true".equals(session.get("admin"))) {
                                                         <td>

@@ -56,7 +56,7 @@
                                 <form class="navbar-form navbar-left" action="@routes.AlertController.timeline(0, currentSortBy, currentOrder, currentFilter, currentAmount, currentBegin, currentEnd)" role="search">
                                     <div class="navbar-form navbar-left"> <!-- Element amount field -->
                                         <div class="form-group">
-                                            Éléments par page <input placeholder="Nbre" name="a" type="number" min="5" class="form-control" value="@currentAmount"/>
+                                            Éléments par alerte <input placeholder="Nbre" name="a" type="number" min="5" class="form-control" value="@currentAmount"/>
                                         </div>
                                         <button type="submit" class="btn btn-default">Valider</button>
                                     </div>
@@ -137,7 +137,7 @@
                                         <p><small class="text-muted"><i class="fa fa-clock-o"></i> @alert.getDate </small>
                                     </div>
                                     <div class="timeline-body">
-                                        <p>Event occurrence</p>
+                                        <a href="@routes.AlertController.toggleSeen(alert.getId)"><i class="fa @if(alert.isSeen) {fa-eye-slash} else {fa-eye}"></i> Marquée comme @if(alert.isSeen) { non } lue </a>
                                     </div>
                                 </div>
                             </li>
