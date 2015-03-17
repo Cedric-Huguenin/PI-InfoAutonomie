@@ -1,0 +1,106 @@
+# Sensor
+
+- &sensor1 !!model.Sensor
+    id:          153.111.LIGHT
+    name:        Light Sensor
+    address:     153.111
+    type:        LIGHT
+    location:    Bureau TN
+    description: Sur la commode
+    unit:        lux
+
+- &tempSensor !!model.Sensor
+    id:          153.111.TEMP
+    name:        Temp Sensor
+    address:     153.111
+    type:        TEMP
+    location:    Bureau TN
+    description: Sur la commode
+    unit:        °C
+
+# Detection
+
+- &delta_15 !!model.Detection
+    id:              delta_15
+    detectionType:   DELTA
+    simpleThreshold: 0
+    minValue:        0
+    maxValue:        0
+    delta:           10
+
+- &delta_0_11 !!model.Detection
+    id:              delta_0_11
+    detectionType:   DELTA
+    simpleThreshold: 0
+    minValue:        0
+    maxValue:        0
+    delta:           0.06
+
+# TimeInterval
+
+- &timeInterval1 !!model.TimeInterval
+    id:            timeInterval1
+    beginHour:    5
+    beginMinutes: 0
+    endHour:      12
+    endMinutes:   0
+
+
+# BasicEvent
+
+- &basicEvent1 !!model.BasicEvent
+    id:                 light_delta_15
+    name:               Saut de luminosité
+    sensor:             *sensor1
+    detectionMethod:    *delta_15
+    icon:               fa-lightbulb-o
+    color:              warning
+
+- &basicEvent2 !!model.BasicEvent
+    id:                 temp_delta_0_11
+    name:               Changement de température
+    sensor:             *tempSensor
+    detectionMethod:    *delta_0_11
+    icon:               fa-fire-extinguisher
+    color:              danger
+
+
+# BasicEventOccurrence
+
+- &basicEventOccurrence1 !!model.BasicEventOccurrence
+    id:         1
+    basicEvent: *basicEvent1
+    timestamp:  1424197435
+    date:       17/2/2015 19:23:55
+    fromValue:  150.05
+    toValue:    162.63
+
+# Event
+
+- &event !!model.Event
+    id:           1
+    name:         Petit dej
+    timeInterval: *timeInterval1
+    expression:   light_delta_15 || temp_delta_0_11
+    icon:         fa-coffee
+    color:        warning
+
+
+# Account
+
+- &accountAdmin !!model.Account
+    email:          cedric.huguenin@telecomnancy.eu
+    hashedPassword: 516626bf8a5006ecce1803eeb6a747182000d4f8
+    isAdmin:        true
+
+- &accountGuest !!model.Account
+    email:          cedric.huguenin@telecomnancy.net
+    hashedPassword: 516626bf8a5006ecce1803eeb6a747182000d4f8
+    isAdmin:        false
+
+# API
+
+- &token1 !!model.Token
+    id:    Token1
+    token: hj1456bsdg1bfsg846bg1sb125gfd
+

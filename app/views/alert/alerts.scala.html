@@ -1,0 +1,115 @@
+@(alerts: List[model.Alert])
+
+@import java.util.List;
+@import helper._;
+
+@main("Alertes") {
+
+<div id="wrapper">
+
+        @nav()
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Administration <small>Alertes</small>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-table fa-fw"></i> Liste des alertes</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <p><a class="btn btn-success" id="add" href="@routes.AlertController.create()">Ajouter une alerte</a></p>
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Icône</th>
+                                                <th>Nom</th>
+                                                <th>Déclencheur</th>
+                                                <th>Fenêtre</th>
+                                                <th>Expression</th>
+                                                @if("true".equals(session.get("admin"))) {
+                                                    <th></th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for(alert <- alerts) {
+                                                <tr>
+                                                    <td><button class="btn btn-@alert.color btn-xs"><i class="fa @alert.icon"></i></button></td>
+                                                    <td>@alert.name</td>
+                                                    @if(alert.getStartEvent != null) {
+                                                        <td>@alert.getStartEvent.getName</td>
+                                                    } else {
+                                                        <td>@alert.getStartBasicEvent.getName</td>
+                                                    }
+                                                    <td>@alert.duration min</td>
+                                                    <td>@alert.expression</td>
+                                                    @if("true".equals(session.get("admin"))) {
+                                                        <td>
+                                                            <a href="@routes.AlertController.edit(alert.id)" class="btn btn-primary btn-xs">
+                                                                Éditer</a>
+                                                            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal" data-id="@routes.AlertController.delete(alert.id)">
+                                                                Supprimer
+                                                            </button>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Attention</h4>
+                            </div>
+                            <div class="modal-body">
+                                Êtes-vous sûr de vouloir définitivement supprimer cet évènement ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <a href="" class="btn btn-danger">Supprimer définitivement</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                $('#myModal').on('show.bs.modal', function(e) {
+                    //get data-id attribute of the clicked element
+                    var eventId = $(e.relatedTarget).data('id');
+                    $(e.currentTarget).find('a').attr("href", eventId);
+                });
+                </script>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+}

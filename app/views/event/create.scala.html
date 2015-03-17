@@ -1,0 +1,194 @@
+@(form: Form[model.Event], sensors: List[model.Sensor])
+
+@import java.util.List;
+@main("Créer un évènement") {
+
+<script>
+// Bootstrap 3 Timepicker
+$(function () {
+    $('#datetimepicker1, #datetimepicker2').datetimepicker({
+        defaultDate: "01/01/2015 00:00:00",
+        format: 'HH:mm',
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-bullseye',
+            clear: 'fa fa-trash'
+        }
+    });
+});
+</script>
+
+<div id="wrapper">
+
+        @nav()
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Administration <small>Créer un évènement</small>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Créer un évènement</h3>
+                            </div>
+                            <div class="panel-body">
+                            @helper.form(action = routes.EventController.save) {
+
+                                @if(form("id").value != null) {
+                                    <div class="form-group">
+                                        <input class="form-control" type="hidden" name="id" placeholder="Id" value="@form("id").value">
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input class="form-control" type="text" name="name" placeholder="Name" value="@form("name").value">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Expression</label>
+                                    <input id="expression" class="form-control" type="text" name="expression" placeholder="Expression construite à l'aide des boutons ci-dessous" value="@form("expression").value">
+                                    <p id="basicEvents">
+                                        <div class="btn-group associatedBasicEvent">
+                                            <a type="button" class="btn btn-info btn-sm" title="(">(</a>
+                                            <a type="button" class="btn btn-info btn-sm" title=")">)</a>
+                                            <a type="button" class="btn btn-primary btn-sm" title="&&">ET</a>
+                                            <a type="button" class="btn btn-primary btn-sm" title="||">OU</a>
+                                            @for(sensor <- sensors) {
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                        @sensor.getTypeAsString (@sensor.address) <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        @if(sensor.getAssociatedBasicEvents.isEmpty) {
+                                                            <li><a href="#" title="">Aucun évènement</a></li>
+                                                        } else {
+                                                            @for(associatedBasicEvent <- sensor.getAssociatedBasicEvents) {
+                                                                <li><a href="#" title="@associatedBasicEvent.id">@associatedBasicEvent.name (@associatedBasicEvent.getValueAsString @sensor.unit)</a></li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            }
+                                        </div>
+                                    </p>
+                                    @if(form.hasGlobalErrors) {
+                                        <div class="alert alert-danger" role="alert">
+                                            <span class="sr-only">Error:</span>
+                                            @form.globalError.message
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Interval form -->
+                                <div class="form-group">
+                                    <label>Intervalle de temps</label>
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" value="@form("beginTime").value" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input type='text' name="endTime" class="form-control" placeholder="HH:mm" value="@form("endTime").value" />
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- /Interval form -->
+
+                                <!-- Color form -->
+                                <div class="form-group">
+                                    <label>Couleur</label>
+                                    <select id="colorselector" name="color">
+                                        <option value="primary" data-color="#337AB7" @if(form("color").value != null && form("color").value.contentEquals("primary")){selected}>Bleu</option>
+                                        <option value="success" data-color="#5CB85C" @if(form("color").value != null && form("color").value.contentEquals("success")){selected}>Vert</option>
+                                        <option value="info" data-color="#5BC0DE" @if(form("color").value != null && form("color").value.contentEquals("info")){selected}>Cyan</option>
+                                        <option value="warning" data-color="#F0AD4E" @if(form("color").value != null && form("color").value.contentEquals("warning")){selected}>Jaune</option>
+                                        <option value="danger" data-color="#D9534F" @if(form("color").value != null && form("color").value.contentEquals("danger")){selected}>Rouge</option>
+                                    </select>
+                                </div>
+
+                                <script>
+                                $('#colorselector').colorselector();
+                                </script>
+
+                                <style>
+                                .dropdown-colorselector>.dropdown-menu>li>.color-btn.selected:after {
+                                    content: "\f00c";
+                                    font-family: 'FontAwesome';
+                                }
+                                </style>
+                                <!-- /Color form -->
+
+                                    <!-- Icon form -->
+                                <div class="form-group">
+                                    <label>Icône</label>
+
+                                    <div class="input-group iconpicker-container">
+                                        <input id="my" data-placement="bottomRight" name="icon" class="form-control icp icp-auto iconpicker-element iconpicker-input"
+                                            @if(form("icon").value != null) {
+                                                value="@form("icon").value"
+                                            } else {
+                                                value=""
+                                            }
+                                        type="text">
+                                        <span class="input-group-addon"><i class="fa fa-archive"></i></span>
+                                        <script>
+                                        jQuery ( document ).ready ( function ( $ ) {
+                                        $ ( '#my' ).iconpicker ( {
+                                        placement : 'top'
+                                        } ) ;
+                                        } ) ;
+
+                                        </script>
+                                    </div>
+
+                                </div>
+                                    <!-- /Icon form -->
+
+                                <div>
+                                    <button class="btn btn-primary" type="submit">Créer</button>
+                                    <a href="@routes.EventController.events()" class="btn btn-default">Retour</a>
+                                </div>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <script>
+                // $('.associatedBasicEvent').find('a').css( "color", "red" );
+                $('.associatedBasicEvent').find('a').bind('click', function(event) {
+                    $('#expression').val($('#expression').val() + ' ' + event.target.title + ' ');
+                });
+                </script>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+}

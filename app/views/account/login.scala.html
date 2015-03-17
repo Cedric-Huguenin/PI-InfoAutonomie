@@ -1,0 +1,43 @@
+@(form: Form[model.Login])
+
+@main("Welcome to Play") {
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Veuillez renseigner vos identifiants</h3>
+                    </div>
+                    <div class="panel-body">
+                    @helper.form(action = routes.LoginController.authenticate) {
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Mot de passe" name="password" type="password" value="">
+                                </div>
+                                @if(form.hasGlobalErrors) {
+                                    <p style="color: #c70300">
+                                        @form.globalError.message
+                                    </p>
+                                }
+                                @if(flash.contains("success")) {
+                                    <p style="color: #029000">
+                                    @flash.get("success")
+                                    </p>
+                                }
+                                @if(flash.contains("warning")) {
+                                    <p style="color: #c70300">
+                                    @flash.get("warning")
+                                    </p>
+                                }
+                                <button class="btn btn-lg btn-success btn-block" type="submit">Login</button>
+                            </fieldset>
+                    }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -6,3 +6,16 @@ the License. You may obtain a copy of the License at http://www.apache.org/licen
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
 "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
 language governing permissions and limitations under the License.
+
+=============================================
+
+
+This project uses the following other projects :
+
+- [SB Admin 2](http://startbootstrap.com/template-overviews/sb-admin-2/)
+- [fontawesome-iconpicker](https://github.com/mjolnic/fontawesome-iconpicker)
+- [JBooleanExpression](http://jboolexpr.sourceforge.net/)
+- [bootstrap-datetimepicker](https://github.com/Eonasdan/bootstrap-datetimepicker)
+- [bootstrap-colorselector](https://github.com/flaute/bootstrap-colorselector)
+- [morris.js](http://morrisjs.github.io/morris.js/)
+- [aleoncean-openhab-binding](https://github.com/aleon-GmbH/aleoncean-openhab-binding)

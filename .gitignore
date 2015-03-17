@@ -13,3 +13,12 @@ dist
 /.project
 /RUNNING_PID
 /.settings
+
+gateway/EnoPush/bin/
+
+doc/API/DOC-API.aux
+doc/API/DOC-API.dvi
+doc/API/DOC-API.hst
+doc/API/DOC-API.log
+doc/API/DOC-API.out
+doc/API/DOC-API.ver

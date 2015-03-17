@@ -3,10 +3,77 @@
 # ~~~~
 
 # Home page
-GET         /                        controllers.Application.index()
+GET           /                                         controllers.Application.index()
 
-# Tasks
-GET         /data                   controllers.Application.data()
+# Pages
+# no link
+GET           /init                                     controllers.Application.init()
+
+# Raw values
+GET           /raw/data                                 controllers.RawDataController.list(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "10", begin ?= "", end ?= "")
+GET           /raw/graph                                controllers.RawDataController.graph(f ?= "", begin ?= "", end ?= "")
+GET           /raw/live                                 controllers.RawDataController.liveStream()
+
+# js
+GET           /assets.javascript.ws.js                  controllers.RawDataController.liveStreamJS()
+
+# Basic events
+GET           /basic/data                               controllers.BasicEventController.data(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
+GET           /basic/graphData                          controllers.BasicEventController.dataD3(f ?= "")
+GET           /basic/graph                              controllers.BasicEventController.graph(f ?= "")
+GET           /basic/timeline                           controllers.BasicEventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
+GET           /basic/basics                             controllers.BasicEventController.basics()
+GET           /basic/create                             controllers.BasicEventController.create()
+GET           /basic/edit/:id                           controllers.BasicEventController.edit(id: String)
+POST          /basic/save                               controllers.BasicEventController.save()
+GET           /basic/delete                             controllers.BasicEventController.delete(id: String)
+
+# Events
+GET           /event/create                             controllers.EventController.create()
+# no link
+GET           /event/test                               controllers.EventController.test()
+GET           /event/timeline                           controllers.EventController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
+GET           /event/events                             controllers.EventController.events()
+GET           /event/edit/:id                           controllers.EventController.edit(id: String)
+POST          /event/save                               controllers.EventController.save()
+GET           /event/delete                             controllers.EventController.delete(id: String)
+
+# Alerts
+GET           /alert/create                             controllers.AlertController.create()
+GET           /alert/timeline                           controllers.AlertController.timeline(p:Int ?= 0, s ?= "timestamp", o ?= "desc", f ?= "", a ?= "15", begin ?= "", end ?= "")
+GET           /alert/alerts                             controllers.AlertController.alerts()
+GET           /alert/edit/:id                           controllers.AlertController.edit(id: String)
+POST          /alert/save                               controllers.AlertController.save()
+GET           /alert/delete                             controllers.AlertController.delete(id: String)
+GET           /alert/toggleSeen/:id                     controllers.AlertController.toggleSeen(id: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file            controllers.Assets.at(path="/public", file)
+GET           /assets/*file                             controllers.Assets.at(path="/public", file)
+
+# Sensor
+
+GET           /sensor/sensors                           controllers.SensorController.sensors
+GET           /sensor/editSensor/:id                    controllers.SensorController.sensor(id: String)
+GET           /sensor/resetSensor/:id                   controllers.SensorController.resetSensor(id: String)
+POST          /sensor/update                            controllers.SensorController.updateSensor()
+
+# Login
+
+GET           /login                                    controllers.LoginController.login()
+POST          /login                                    controllers.LoginController.authenticate()
+GET           /logout                                   controllers.LoginController.logout()
+
+# API
+## Data
+GET           /api/data                                 controllers.api.DataController.getAllData
+GET           /api/data/:timestamp/:mote/:label         controllers.api.DataController.getData(timestamp: Long, mote: String, label: String)
+GET           /api/data/:begin/:end/:mote/:label        controllers.api.DataController.getDataRange(begin: Long, end: Long, mote: String, label: String)
+POST          /api/data                                 controllers.api.DataController.createData
+DELETE        /api/data/:timestamp/:mote/:label         controllers.api.DataController.deleteData(timestamp: Long, mote: String, label: String)
+
+## Sensor
+
+GET           /api/sensors                              controllers.api.SensorController.getMotes
+GET           /api/sensor/:sensorId                     controllers.api.SensorController.getMote(sensorId: String)
+POST          /api/sensor                               controllers.api.SensorController.createSensor
+DELETE        /api/sensor/:sensorId                     controllers.api.SensorController.deleteSensor(sensorId: String)
