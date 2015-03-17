@@ -31,7 +31,9 @@
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
-                                    <p><a class="btn btn-success" id="add" href="@routes.BasicEventController.create()">Ajouter un BasicEvent</a></p>
+                                    @if("true".equals(session.get("admin"))) {
+                                        <p><a class="btn btn-success" id="add" href="@routes.BasicEventController.create()">Ajouter un BasicEvent</a></p>
+                                    }
 
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
