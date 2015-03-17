@@ -1,10 +1,13 @@
 package controllers;
 
-import model.BasicEvent;
-import model.BasicEventOccurrence;
+import model.*;
+import play.mvc.Controller;
 import play.mvc.Result;
+import play.data.Form;
+import play.mvc.With;
 import utils.TimestampUtils;
 import views.html.basic.basics;
+import views.html.basic.create;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,14 +15,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import static play.mvc.Controller.request;
-import static play.mvc.Results.ok;
+import static play.data.Form.form;
 
 /**
  * Controller to handle and display BasicEvent objects.
  * Created by Mathieu on 07/02/2015.
  */
-public class BasicEventController {
+public class BasicEventController extends Controller {
 
     public static Result basics() {
         List<BasicEvent> allBasicEvents = BasicEvent.all();
@@ -151,4 +153,97 @@ public class BasicEventController {
                         )
                 );
     }
+
+    @With(WebAuthorization.class)
+    public static Result create() {
+        Form<BasicEvent> form = form(BasicEvent.class);
+        form.data().put("sensor", "");
+        form.data().put("type", "");
+        return ok(create.render(form, Sensor.all()));
+    }
+
+    @With(WebAuthorization.class)
+    public static Result delete(String id) {
+        Event event = Event.find.byId(id);
+        event.delete();
+
+        return redirect(controllers.routes.EventController.events());
+    }
+
+    @With(WebAuthorization.class)
+    public static Result edit(String id) {
+        Form<BasicEvent> eventForm = Form.form(BasicEvent.class);
+        BasicEvent event = BasicEvent.find.byId(id);
+        eventForm.data().put("id", event.getId());
+        eventForm.data().put("name", event.getName());
+        eventForm.data().put("color", event.getColor());
+        eventForm.data().put("icon", event.getIcon());
+        eventForm.data().put("sensor", event.getSensor().getId());
+
+        switch (event.getDetectionType()) {
+            case DELTA:
+                eventForm.data().put("type", "delta");
+                eventForm.data().put("delta", event.getDelta() + "");
+                break;
+            case SIMPLE_THRESHOLD:
+                eventForm.data().put("type", "threshold");
+                eventForm.data().put("threshold", event.getSimpleThreshold() + "");
+                break;
+            case MIN_MAX_VALUES:
+                eventForm.data().put("type", "min_max");
+                eventForm.data().put("min", event.getMinValue() + "");
+                eventForm.data().put("max", event.getMaxValue() + "");
+                break;
+        }
+
+        return ok(create.render(eventForm, Sensor.all()));
+    }
+
+    @With(WebAuthorization.class)
+    public static Result save() {
+
+        Form<BasicEvent> eventForm = form(BasicEvent.class).bindFromRequest();
+        for(String key : eventForm.data().keySet()) {
+            System.out.println(key + " : " + eventForm.data().get(key));
+        }
+
+        BasicEvent basic;
+        if (eventForm.data().containsKey("id")) {
+            basic = BasicEvent.find.ref(eventForm.get().id);
+        } else {
+            basic = new BasicEvent();
+        }
+
+        switch (eventForm.data().get("type")) {
+            case "delta":
+                basic.setDetectionType(DetectionType.DELTA);
+                basic.setDelta(Double.parseDouble(eventForm.data().get("delta")));
+                break;
+            case "simple_threshold":
+                basic.setDetectionType(DetectionType.SIMPLE_THRESHOLD);
+                basic.setSimpleThreshold(Double.parseDouble(eventForm.data().get("threshold")));
+                break;
+            case "min_max":
+                basic.setDetectionType(DetectionType.MIN_MAX_VALUES);
+                basic.setMinValue(Double.parseDouble(eventForm.data().get("min")));
+                basic.setMaxValue(Double.parseDouble(eventForm.data().get("max")));
+                break;
+        }
+
+        basic.setName(eventForm.data().get("data"));
+        basic.setColor(eventForm.data().get("color"));
+        basic.setIcon(eventForm.data().get("icon"));
+        basic.setSensor(Sensor.find.ref(eventForm.data().get("sensor")));
+
+        if (eventForm.data().containsKey("id")) {
+            eventForm.get().update();
+        } else {
+            BasicEvent.create(basic, eventForm.data().get("sensor"));
+        }
+
+        basic.check();
+
+        return redirect(controllers.routes.BasicEventController.basics());
+    }
+
 }
