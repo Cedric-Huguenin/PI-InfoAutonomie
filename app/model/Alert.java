@@ -106,8 +106,8 @@ public class Alert extends Model {
     public void check() {
 
         long[] timeInterval = new long[2];
-        long mean = 0;
-        int cpt = 0;
+
+        long now = System.currentTimeMillis() / 1000;
 
         if (startBasicEvent != null) {
             try {
@@ -136,6 +136,13 @@ public class Alert extends Model {
         timeInterval[1] = timeInterval[0] + getDuration() * 60;
         String toEval = expression;
 
+        if(expression.contains("!")) { // alert based on the absence of event occurrence
+            // must wait for the duration to detect if actually, the event does not occur
+            if(now < timeInterval[1]) {
+                return;
+            }
+        }
+
         Pattern p = Pattern.compile("\\w+");
         Matcher m = p.matcher(toEval);
 
@@ -150,19 +157,12 @@ public class Alert extends Model {
             BasicEvent basic = BasicEvent.find.where().eq("id", id).findUnique();
             long occurTime;
             if (basic != null) {
+                //System.out.println("TimetoCheck alert : " + TimestampUtils.formatToString(timeInterval[0], "dd-MM-yyyy HH:mm:ss") + "->" + TimestampUtils.formatToString(timeInterval[1], "dd-MM-yyyy HH:mm:ss") );
                 occurTime = BasicEventOccurrence.occur(timeInterval, basic);
-                if (occurTime != -1) {
-                    cpt++;
-                    mean += occurTime;
-                }
                 toEval = toEval.replace(id, (occurTime != -1) + "");
             } else { // it's an Event
                 Event event = Event.find.where().eq("id", id).findUnique();
                 occurTime = EventOccurrence.occur(timeInterval, event);
-                if (occurTime != -1) {
-                    cpt++;
-                    mean += occurTime;
-                }
                 toEval = toEval.replace(id, (occurTime != -1) + "");
             }
         }
@@ -171,10 +171,10 @@ public class Alert extends Model {
         try {
             boolExpr = BooleanExpression.readLeftToRight(toEval);
             boolean bool = boolExpr.booleanValue();
-//                System.out.println(boolExpr.toString() + " == " + bool);
+                System.out.println("Alerte : " + boolExpr.toString() + " == " + bool);
 
-            if (bool && cpt > 0) {
-                AlertOccurrence alertOccurrence = new AlertOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:ss"));
+            if (bool) {
+                AlertOccurrence alertOccurrence = new AlertOccurrence(this, now, TimestampUtils.formatToString(now, "dd-MM-yyyy HH:mm:ss"));
                 if (AlertOccurrence.find.where().eq("timestamp", alertOccurrence.getTimestamp()).eq("alert_id", alertOccurrence.getAlert().getId()).findUnique() == null) {
                     alertOccurrence.save();
                 }
