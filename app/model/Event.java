@@ -229,7 +229,7 @@ public class Event extends Model {
     public long[] getActualTimeInterval() {
         long[] res = new long[2];
         res[0] = getTimestampStart();
-        res[1] = getTimestampEnd();
+        res[1] = getTimestampEnd(res[0]);
         return res;
     }
 
@@ -244,14 +244,8 @@ public class Event extends Model {
     }
 
 
-    public long getTimestampEnd() {
-        GregorianCalendar end = setCalWithLocalTime(endTime);
-
-        if (end.getTimeInMillis() > System.currentTimeMillis()) { // it's 1:00 and event begin at 6 for example
-            return end.getTimeInMillis() / 1000 - 24 * 3600; // subtract on day in second
-        } else {
-            return end.getTimeInMillis() / 1000;
-        }
+    public long getTimestampEnd(long begin) {
+        return begin + (getEndTime().getMillis() - getBeginTime().getMillis()) / 1000;
     }
 
     private GregorianCalendar setCalWithLocalTime(DateTime localTime) {

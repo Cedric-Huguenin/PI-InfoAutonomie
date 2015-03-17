@@ -1,7 +1,7 @@
 @(sensorName: String, dataList: List[model.Data], currentFilter: String, currentBegin: String, currentEnd: String, sensorList: List[model.Sensor])
 
 @import java.util.List;
-@main("Events") {
+@main("Données brutes") {
 
 <div id="wrapper">
 
@@ -27,7 +27,6 @@
 						<div class="panel-heading">
 							<h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Valeurs brutes de @sensorName</h3>
 						</div>
-                        @if(dataList.size() > 0) {
                             <div class="panel-body">
                                 <nav class="navbar navbar-default" role="navigation">
                                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -94,6 +93,7 @@
                                     </div>
 
                                 </nav>
+                                @if(dataList.size() > 0) {
                                 <div id="myfirstchart"></div>
                                 <script>
                                     new Morris.Line({
@@ -120,12 +120,10 @@
                                         smooth: false
                                     });
                                 </script>
+                                } else {
+                                        Aucune valeur à afficher
+                                }
                             </div>
-                        } else {
-                            <div class="panel-body">
-                                Aucune valeur à afficher
-                            </div>
-                        }
 					</div>
 				</div>
 			</div>
