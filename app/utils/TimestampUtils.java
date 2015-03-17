@@ -28,7 +28,7 @@ public class TimestampUtils {
 	/**
 	 * Take a timestamp, and turn it into a string with the specified format.
 	 * @param timestamp the given unix timestamp
-	 * @param datePattern the date pattern (for example "dd-MM-yyyy HH:mm:SS")
+	 * @param datePattern the date pattern (for example "dd-MM-yyyy HH:mm:ss")
 	 * @return the formatted date as a string
 	 */
 	public static String formatToString(long timestamp, String datePattern) {

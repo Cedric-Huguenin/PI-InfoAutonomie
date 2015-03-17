@@ -215,7 +215,7 @@ public class Event extends Model {
 //                System.out.println(boolExpr.toString() + " == " + bool);
 
                 if (bool && cpt > 0) {
-                    EventOccurrence eventOccurrence = new EventOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:SS"));
+                    EventOccurrence eventOccurrence = new EventOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:ss"));
                     if (EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
                         eventOccurrence.save();
                     }

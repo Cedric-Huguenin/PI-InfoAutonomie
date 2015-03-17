@@ -174,7 +174,7 @@ public class Alert extends Model {
 //                System.out.println(boolExpr.toString() + " == " + bool);
 
             if (bool && cpt > 0) {
-                AlertOccurrence alertOccurrence = new AlertOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:SS"));
+                AlertOccurrence alertOccurrence = new AlertOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:ss"));
                 if (AlertOccurrence.find.where().eq("timestamp", alertOccurrence.getTimestamp()).eq("alert_id", alertOccurrence.getAlert().getId()).findUnique() == null) {
                     alertOccurrence.save();
                 }

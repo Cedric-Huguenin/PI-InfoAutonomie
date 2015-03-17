@@ -97,7 +97,7 @@ public class BasicEvent extends Model {
                     if (old != null) {
                         //System.out.println(getName() + " " + Math.abs(data.getValue() - old.getValue()));
                         if (Math.abs(data.getValue() - old.getValue()) > detectionMethod.getDelta()) {
-                            BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
+                            BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:ss"),
                                     data.getTimestamp(), old.getValue(), data.getValue());
                             try {
                                 if (BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
@@ -117,7 +117,7 @@ public class BasicEvent extends Model {
                 for (model.Data data : dataList) {
 //                    System.out.println("Value : " + data.getValue() + " min : " + detectionMethod.getMinValue() + " max : " + detectionMethod.getMaxValue());
                     if (old != null && old.getValue() != data.getValue() && (data.getValue() <= detectionMethod.getMinValue() || data.getValue() >= detectionMethod.getMaxValue())) {
-                        BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
+                        BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:ss"),
                                 data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
                         try {
                             if (BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
@@ -136,7 +136,7 @@ public class BasicEvent extends Model {
                 System.out.println(getName() + " " + dataList.size());
                 for (model.Data data : dataList) {
                     if (old != null && old.getValue() != data.getValue() && (data.getValue() > detectionMethod.getSimpleThreshold())) {
-                        BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:SS"),
+                        BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:ss"),
                                 data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
                         try {
                             if (BasicEventOccurrence.find.where().eq("timestamp", occurrence.getTimestamp()).eq("basic_event_id", occurrence.getBasicEvent().getId()).findUnique() == null) {
