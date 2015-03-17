@@ -127,9 +127,10 @@
                         </a>
 					</div>
 				</div>
-			<!-- /.row -->
-            @Locale.setDefault(Locale.US)
+                <!-- /.row -->
+                @Locale.setDefault(Locale.US)
 				<div class="col-lg-6">
+
 					<!-- /.panel -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -182,15 +183,51 @@
 						<!-- /.panel-body -->
 					</div>
 					<!-- /.panel -->
+
+                    <!-- /.panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-database fa-fw"></i> Derniers évènements
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <ul class="timeline">
+                            @for(event <- latestEvent) {
+                                @if(i % 2 == 0) {
+                                    <li>
+                                    } else {
+                                    <li class="timeline-inverted">
+                                    }
+                                <div class="timeline-badge @event.getEvent.getColor"><i class="fa @event.getEvent.getIcon "></i>
+                                </div>
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h4 class="timeline-title">@event.getEvent.getName</h4>
+                                        <p><small class="text-muted"><i class="fa fa-clock-o"></i> @event.getDate </small>
+                                    </div>
+                                </div>
+                            </li>
+                                @{i = i + 1}
+                            }
+                            </ul>
+                            <!-- /.alert -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+
 				</div>
+                <!-- /.col-lg-6 -->
+
 				<!-- /.col-lg-6 -->
                 <div class="col-lg-6">
-                        <!-- /.panel -->
+
+                    <!-- /.panel -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-database fa-fw"></i> Derniers BasicEvents
                         </div>
-                            <!-- /.panel-heading -->
+                        <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="timeline">
                             @for(basic <- latestBasic) {
@@ -250,61 +287,15 @@
                             }
                             </ul>
                         </div>
-                            <!-- /.panel-body -->
+                        <!-- /.panel-body -->
                     </div>
-                        <!-- /.panel -->
-                </div>
-                    <!-- /.col-lg-6 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                @{
-                    i = 1
-                }
-                <div class="col-lg-6">
-                        <!-- /.panel -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-database fa-fw"></i> Dernières évènements
-                        </div>
-                            <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <ul class="timeline">
-                            @for(event <- latestEvent) {
-                                @if(i % 2 == 0) {
-                                    <li>
-                                    } else {
-                                    <li class="timeline-inverted">
-                                    }
-                                <div class="timeline-badge @event.getEvent.getColor"><i class="fa @event.getEvent.getIcon "></i>
-                                </div>
-                                <div class="timeline-panel">
-                                    <div class="timeline-heading">
-                                        <h4 class="timeline-title">@event.getEvent.getName</h4>
-                                        <p><small class="text-muted"><i class="fa fa-clock-o"></i> @event.getDate </small>
-                                    </div>
-                                </div>
-                            </li>
-                                @{i = i + 1}
-                            }
-                            </ul>
-                                <!-- /.alert -->
-                        </div>
-                            <!-- /.panel-body -->
-                    </div>
-                        <!-- /.panel -->
-                </div>
-                    <!-- /.col-lg-6 -->
-                @{
-                    i = 1
-                }
-                <div class="col-lg-6">
-                        <!-- /.panel -->
+                    <!-- /.panel -->
+
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-database fa-fw"></i> Dernières alertes
                         </div>
-                            <!-- /.panel-heading -->
+                        <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="timeline">
                             @for(alert <- alertOccurrences) {
@@ -328,15 +319,18 @@
                                 @{i = i + 1}
                             }
                             </ul>
-                                <!-- /.timeline -->
+                            <!-- /.timeline -->
                         </div>
-                            <!-- /.panel-body -->
+                        <!-- /.panel-body -->
                     </div>
-                        <!-- /.panel -->
+                    <!-- /.panel -->
+
                 </div>
-                    <!-- /.col-lg-6 -->
-			</div>
-			<!-- /.row -->
+                <!-- /.col-lg-6 -->
+
+            </div>
+            <!-- /.row -->
+
 		</div>
 		<!-- /#page-wrapper -->
 
