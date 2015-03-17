@@ -171,7 +171,7 @@ public class Alert extends Model {
         try {
             boolExpr = BooleanExpression.readLeftToRight(toEval);
             boolean bool = boolExpr.booleanValue();
-                System.out.println("Alerte : " + boolExpr.toString() + " == " + bool);
+//                System.out.println("Alerte : " + boolExpr.toString() + " == " + bool);
 
             if (bool) {
                 AlertOccurrence alertOccurrence = new AlertOccurrence(this, now, TimestampUtils.formatToString(now, "dd-MM-yyyy HH:mm:ss"));
