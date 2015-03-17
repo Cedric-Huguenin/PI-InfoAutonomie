@@ -1,4 +1,6 @@
-@(message: String, moteToConfNumber: Integer)
+@(message: String, moteToConfNumber: Integer, alertOccurrences: List[model.AlertOccurrence], newAlert: Integer, basicCount: Integer, eventCount: Integer)
+
+@import java.util.List;
 
 @main("Welcome to Play") {
 
@@ -34,7 +36,7 @@
 						</div>
 						<a href="@routes.SensorController.sensors()">
 							<div class="panel-footer">
-								<span class="pull-left">View Details</span>
+								<span class="pull-left">Voir les détails</span>
 								<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 								<div class="clearfix"></div>
 							</div>
@@ -46,17 +48,22 @@
 						<div class="panel-heading">
 							<div class="row">
 								<div class="col-xs-3">
-									<i class="fa fa-tasks fa-5x"></i>
+									<i class="fa fa-heartbeat fa-5x"></i>
 								</div>
 								<div class="col-xs-9 text-right">
-									<div class="huge">12</div>
-									<div>New Tasks!</div>
+									<div class="huge">@basicCount</div>
+									<div>@if(basicCount > 1) {
+                                        BasicEvents
+                                    } else {
+                                        BasicEvent
+                                    }
+                                    ces dernières 24 heures</div>
 								</div>
 							</div>
 						</div>
-						<a href="#">
-							<div class="panel-footer">
-								<span class="pull-left">View Details</span>
+                        <a href="@routes.BasicEventController.timeline()">
+                            <div class="panel-footer">
+								<span class="pull-left">Voir les détails</span>
 								<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 								<div class="clearfix"></div>
 							</div>
@@ -68,17 +75,22 @@
 						<div class="panel-heading">
 							<div class="row">
 								<div class="col-xs-3">
-									<i class="fa fa-shopping-cart fa-5x"></i>
+									<i class="fa fa-heartbeat fa-5x"></i>
 								</div>
 								<div class="col-xs-9 text-right">
-									<div class="huge">124</div>
-									<div>New Orders!</div>
+									<div class="huge">@eventCount</div>
+                                    <div>@if(eventCount > 1) {
+                                        Events
+                                    } else {
+                                        Event
+                                    }
+                                    ces dernières 24 heures</div>
 								</div>
 							</div>
 						</div>
-						<a href="#">
+                        <a href="@routes.EventController.timeline()">
 							<div class="panel-footer">
-								<span class="pull-left">View Details</span>
+								<span class="pull-left">Voir les détails</span>
 								<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 								<div class="clearfix"></div>
 							</div>
@@ -90,21 +102,26 @@
 						<div class="panel-heading">
 							<div class="row">
 								<div class="col-xs-3">
-									<i class="fa fa-support fa-5x"></i>
+									<i class="fa fa-bullhorn fa-5x"></i>
 								</div>
 								<div class="col-xs-9 text-right">
-									<div class="huge">13</div>
-									<div>Support Tickets!</div>
+									<div class="huge">@newAlert</div>
+									<div>@if(newAlert>1) {
+                                        Nouvelles alertes
+                                    } else {
+                                        Nouvelle alerte
+                                    }
+                                    </div>
 								</div>
 							</div>
 						</div>
-						<a href="#">
-							<div class="panel-footer">
-								<span class="pull-left">View Details</span>
-								<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-								<div class="clearfix"></div>
-							</div>
-						</a>
+                        <a href="@routes.AlertController.timeline()">
+                            <div class="panel-footer">
+                                <span class="pull-left">Voir les détails</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
 					</div>
 				</div>
 			</div>

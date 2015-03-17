@@ -18,6 +18,7 @@ public class WebAuthentication extends Security.Authenticator {
         if(context.session().get("email") != null) {
             return context.session().get("email");
         }
+        context.flash().put("warning","Veuillez vous connecter");
         return null;
     }
 

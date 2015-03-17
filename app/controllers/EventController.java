@@ -8,6 +8,7 @@ import play.data.Form;
 import play.data.format.Formatters;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import play.mvc.With;
 import views.html.event.create;
 import views.html.event.events;
@@ -28,6 +29,7 @@ import static play.mvc.Results.*;
  * Controller to manage and display more complex events.
  * Created by Ced on 31/01/2015.
  */
+@Security.Authenticated(WebAuthentication.class)
 public class EventController extends Controller {
 
     static Form<Event> eventForm = Form.form(Event.class);

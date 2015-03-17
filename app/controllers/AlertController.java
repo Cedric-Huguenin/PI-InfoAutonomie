@@ -4,6 +4,7 @@ import model.*;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import play.mvc.With;
 import views.html.alert.create;
 import views.html.alert.alerts;
@@ -21,6 +22,7 @@ import static play.data.Form.form;
  * Controller to manage and display alert.
  * Created by Ced on 31/01/2015.
  */
+@Security.Authenticated(WebAuthentication.class)
 public class AlertController extends Controller {
 
     static Form<Alert> alertForm = Form.form(Alert.class);

@@ -4,6 +4,7 @@ import model.*;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.data.Form;
+import play.mvc.Security;
 import play.mvc.With;
 import utils.TimestampUtils;
 import views.html.basic.basics;
@@ -21,6 +22,7 @@ import static play.data.Form.form;
  * Controller to handle and display BasicEvent objects.
  * Created by Mathieu on 07/02/2015.
  */
+@Security.Authenticated(WebAuthentication.class)
 public class BasicEventController extends Controller {
 
     public static Result basics() {

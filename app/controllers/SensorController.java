@@ -7,6 +7,7 @@ import static play.data.Form.*;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import play.mvc.With;
 import views.html.sensor.sensors;
 import views.html.sensor.editSensor;
@@ -18,6 +19,7 @@ import java.util.List;
  * Controller to manage and display more complex events.
  * Created by Ced on 31/01/2015.
  */
+@Security.Authenticated(WebAuthentication.class)
 public class SensorController extends Controller {
 
     public static Result sensors() {

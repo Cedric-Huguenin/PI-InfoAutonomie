@@ -3,6 +3,7 @@ package controllers;
 import model.Sensor;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.*;
  * Controller to handle and display raw data.
  * Created by Mathieu on 05/03/2015.
  */
+@Security.Authenticated(WebAuthentication.class)
 public class RawDataController extends Controller {
 
     /**
