@@ -41,6 +41,10 @@ public class Application extends Controller {
         int eventCount = EventOccurrence.find.where().between("timestamp",now - 24 * 3600, now).findRowCount();
         int basicCount = BasicEventOccurrence.find.where().between("timestamp",now - 24 * 3600, now).findRowCount();
 
+        List<BasicEventOccurrence> latestBasic = BasicEventOccurrence.find.where().orderBy("timestamp descending").setMaxRows(6).findList();
+        List<EventOccurrence> latestEvent = EventOccurrence.find.where().orderBy("timestamp descending").setMaxRows(6).findList();
+        List<Data> latestData = Data.find.where().orderBy("timestamp descending").setMaxRows(12).findList();
+
         for(AlertOccurrence al : AlertOccurrence.all()) {
             if(!al.isSeen()) {
                 newAlert++;
@@ -51,6 +55,6 @@ public class Application extends Controller {
                 newSensor++;
             }
         }
-        return ok(index.render("Your new application is ready.", newSensor, AlertOccurrence.all(), newAlert, basicCount, eventCount));
+        return ok(index.render("Your new application is ready.", newSensor, AlertOccurrence.all(), newAlert, basicCount, eventCount, latestData, latestBasic, latestEvent));
     }
 }
