@@ -67,11 +67,6 @@ public class DataManager {
 	 * The logger to do runtime logs.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataManager.class);
-	
-	/**
-	 * To verify if we have to deactivate cert verifications
-	 */
-	private static boolean verifyCertDeactivated = false;
 
 	/**
 	 * Processes the received data to adapt it to the platform and sends it.
@@ -343,8 +338,7 @@ public class DataManager {
 			    	}
 			        
 			    	// Deactivation of the certification chain validation if requested
-			    	if(!verifyCertDeactivated && Settings.getProperty("check_certificate").equals("false")) {
-			        	verifyCertDeactivated = true;
+			    	if(Settings.getProperty("check_certificate").equals("false")) {
 			    		// Create a trust manager that does not validate certificate chains
 			            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
 			                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
