@@ -7,9 +7,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -327,7 +337,39 @@ public class DataManager {
 			    	
 			    	}
 			        
+			    	// Deactivation of the certification chain validation if requested
+			    	if(Settings.getProperty("check_certificate").equals("false")) {
+			    		// Create a trust manager that does not validate certificate chains
+			            TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+			                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			                        return null;
+			                    }
+			                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+			                    }
+			                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+			                    }
+			                }
+			            };
+			     
+			            // Install the all-trusting trust manager
+			            SSLContext sc = SSLContext.getInstance("SSL");
+			            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+			     
+			            // Create all-trusting host name verifier
+			            HostnameVerifier allHostsValid = new HostnameVerifier() {
+							@Override
+							public boolean verify(String arg0, SSLSession arg1) {
+								return true;
+							}
+			            };
+			     
+			            // Install the all-trusting host verifier
+			            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+			        }
+			    	
 			        connection = (HttpURLConnection)url.openConnection();
+			        
 			        connection.setRequestMethod("POST");
 			        connection.setRequestProperty("Content-Type","application/json");
 			        connection.setRequestProperty("AUTH", Settings.getProperty("api_token"));
@@ -361,7 +403,11 @@ public class DataManager {
 			   } catch (IOException e) {
 				   LOGGER.warn("Failed to send HTTP message. Verify server information.");
 				   e.printStackTrace();
-		       } finally {
+		       } catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} catch (KeyManagementException e) {
+				e.printStackTrace();
+			} finally {
 			       if(connection != null) {
 			    	   connection.disconnect(); 
 			       }
