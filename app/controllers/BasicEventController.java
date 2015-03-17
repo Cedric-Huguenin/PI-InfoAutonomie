@@ -166,10 +166,13 @@ public class BasicEventController extends Controller {
 
     @With(WebAuthorization.class)
     public static Result delete(String id) {
-        Event event = Event.find.byId(id);
-        event.delete();
+        BasicEvent basic = BasicEvent.find.byId(id);
+        System.out.println("Basic count : " + BasicEvent.find.findRowCount());
+        basic.delete();
 
-        return redirect(controllers.routes.EventController.events());
+        System.out.println("Basic count : " + BasicEvent.find.findRowCount());
+
+        return redirect(controllers.routes.BasicEventController.basics());
     }
 
     @With(WebAuthorization.class)
@@ -211,7 +214,7 @@ public class BasicEventController extends Controller {
 
         BasicEvent basic;
         if (eventForm.data().containsKey("id")) {
-            basic = BasicEvent.find.ref(eventForm.get().id);
+            basic = BasicEvent.find.ref(eventForm.data().get("id"));
         } else {
             basic = new BasicEvent();
         }
@@ -232,13 +235,13 @@ public class BasicEventController extends Controller {
                 break;
         }
 
-        basic.setName(eventForm.data().get("data"));
+        basic.setName(eventForm.data().get("name"));
         basic.setColor(eventForm.data().get("color"));
         basic.setIcon(eventForm.data().get("icon"));
         basic.setSensor(Sensor.find.ref(eventForm.data().get("sensor")));
 
         if (eventForm.data().containsKey("id")) {
-            eventForm.get().update();
+            basic.update();
         } else {
             BasicEvent.create(basic, eventForm.data().get("sensor"));
         }
