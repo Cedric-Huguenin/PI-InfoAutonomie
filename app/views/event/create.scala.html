@@ -80,7 +80,7 @@ $(function () {
                                                             <li><a href="#" title="">Aucun évènement</a></li>
                                                         } else {
                                                             @for(associatedBasicEvent <- sensor.getAssociatedBasicEvents) {
-                                                                <li><a href="#" title="@associatedBasicEvent.id">@associatedBasicEvent.name (@associatedBasicEvent.detectionMethod.getValueAsString @sensor.unit)</a></li>
+                                                                <li><a href="#" title="@associatedBasicEvent.id">@associatedBasicEvent.name (@associatedBasicEvent.getValueAsString @sensor.unit)</a></li>
                                                             }
                                                         }
                                                     </ul>

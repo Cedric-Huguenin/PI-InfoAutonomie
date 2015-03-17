@@ -155,7 +155,7 @@ public class EventController extends Controller {
 //
         BasicEvent basicEvent = new BasicEvent();
         basicEvent.setId("My first Basic Event");
-        BasicEvent.create(basicEvent, retrieveDetection.getId(), retrieveSensor.getName());
+        BasicEvent.create(basicEvent, retrieveSensor.getName());
 //
         System.out.println(basicEvent.toString());
         BasicEvent retrieveBasicEvent = BasicEvent.find.byId("My first Basic Event");

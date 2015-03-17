@@ -49,7 +49,7 @@
                                                     <td>@basicEvent.id</td>
                                                     <td>@basicEvent.name</td>
                                                     <td>@basicEvent.sensor</td>
-                                                    <td style="text-transform:capitalize">@basicEvent.detectionMethod.getValueAsString</td>
+                                                    <td style="text-transform:capitalize">@basicEvent.getValueAsString</td>
                                                     @if("true".equals(session.get("admin"))) {
                                                         <!-- <td>
                                                             <a href="" class="btn btn-primary btn-xs">

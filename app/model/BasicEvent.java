@@ -30,11 +30,6 @@ public class BasicEvent extends Model {
      */
     @ManyToOne
     public Sensor sensor;
-    /**
-     * The method and criteria chosen to detect the event.
-     */
-    @ManyToOne
-    public Detection detectionMethod;
 
     /**
      * Icon name to display the correct icon
@@ -43,18 +38,34 @@ public class BasicEvent extends Model {
 
     public String color;
 
+    public DetectionType detectionType;
+    /**
+     * The threshold which triggers the event.
+     */
+    public double simpleThreshold;
+    /**
+     * The minimum value of the measure.
+     */
+    public double minValue;
+    /**
+     * The maximum value of the measure.
+     */
+    public double maxValue;
+    /**
+     * The delta of the 2 last values.
+     */
+    public double delta;
+
     public static Model.Finder<String, BasicEvent> find = new Model.Finder<>(String.class, BasicEvent.class);
 
     /**
      * Creates a new BasicEvent and saves it in the database.
      *
      * @param basicEvent      the BasicEvent that must be initialized.
-     * @param detectionMethod the method of detection of the event.
      * @param sensor          the identifier of the sensor used.
      * @return the BasicEvent given updated and saved.
      */
-    public static BasicEvent create(BasicEvent basicEvent, String detectionMethod, String sensor) {
-        basicEvent.setDetectionMethod(Detection.find.byId(detectionMethod));
+    public static BasicEvent create(BasicEvent basicEvent, String sensor) {
         basicEvent.setSensor(Sensor.find.byId(sensor));
         basicEvent.save();
         return basicEvent;
@@ -89,14 +100,14 @@ public class BasicEvent extends Model {
             long now = System.currentTimeMillis()/1000; // current second timestamp
             dataList = model.Data.find.where().eq("mote", this.getSensor().getId()).between("timestamp",now-3600,now).findList();
         }
-        switch (detectionMethod.getDetectionType()) {
+        switch (getDetectionType()) {
             case DELTA:
                 System.out.println(getName() + " " + dataList.size());
                 for (model.Data data : dataList) {
                     //System.out.println(data);
                     if (old != null) {
                         //System.out.println(getName() + " " + Math.abs(data.getValue() - old.getValue()));
-                        if (Math.abs(data.getValue() - old.getValue()) > detectionMethod.getDelta()) {
+                        if (Math.abs(data.getValue() - old.getValue()) > getDelta()) {
                             BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:ss"),
                                     data.getTimestamp(), old.getValue(), data.getValue());
                             try {
@@ -116,7 +127,7 @@ public class BasicEvent extends Model {
                 System.out.println(getName() + " " + dataList.size());
                 for (model.Data data : dataList) {
 //                    System.out.println("Value : " + data.getValue() + " min : " + detectionMethod.getMinValue() + " max : " + detectionMethod.getMaxValue());
-                    if (old != null && old.getValue() != data.getValue() && (data.getValue() <= detectionMethod.getMinValue() || data.getValue() >= detectionMethod.getMaxValue())) {
+                    if (old != null && old.getValue() != data.getValue() && (data.getValue() <= getMinValue() || data.getValue() >= getMaxValue())) {
                         BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:ss"),
                                 data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
                         try {
@@ -135,7 +146,7 @@ public class BasicEvent extends Model {
             case SIMPLE_THRESHOLD:
                 System.out.println(getName() + " " + dataList.size());
                 for (model.Data data : dataList) {
-                    if (old != null && old.getValue() != data.getValue() && (data.getValue() > detectionMethod.getSimpleThreshold())) {
+                    if (old != null && old.getValue() != data.getValue() && (data.getValue() > getSimpleThreshold())) {
                         BasicEventOccurrence occurrence = new BasicEventOccurrence(this, TimestampUtils.formatToString(data.getTimestamp(), "dd-MM-yyyy HH:mm:ss"),
                                 data.getTimestamp(), old == null ? -1 : old.getValue(), data.getValue());
                         try {
@@ -158,6 +169,27 @@ public class BasicEvent extends Model {
         }
     }
 
+    public String getValueAsString() {
+        String valueAsString;
+
+        switch (detectionType) {
+            case DELTA:
+                valueAsString = "delta : " + delta;
+                break;
+            case MIN_MAX_VALUES:
+                valueAsString = "min/max : " + minValue + "/" + maxValue;
+                break;
+            case SIMPLE_THRESHOLD:
+                valueAsString = "seuil : " + simpleThreshold;
+                break;
+            default:
+                valueAsString = "divers : pas de valeur";
+                break;
+        }
+
+        return valueAsString;
+    }
+
     /**
      * Returns the characteristics of the BasicEvent in JSON.
      *
@@ -166,11 +198,16 @@ public class BasicEvent extends Model {
     @Override
     public String toString() {
         return "BasicEvent{" +
-                "id='" + getId() + '\'' +
-                ", name='" + getName() + '\'' +
-                ", sensor=" + getSensor() +
-                ", detectionMethod=" + getDetectionMethod() +
-                ", icon='" + getIcon() + '\'' +
+                "name='" + name + '\'' +
+                ", sensor=" + sensor +
+                ", icon='" + icon + '\'' +
+                ", color='" + color + '\'' +
+                ", detectionType=" + detectionType +
+                ", simpleThreshold=" + simpleThreshold +
+                ", minValue=" + minValue +
+                ", maxValue=" + maxValue +
+                ", delta=" + delta +
+                ", id='" + id + '\'' +
                 '}';
     }
 
@@ -210,24 +247,6 @@ public class BasicEvent extends Model {
         this.sensor = sensor;
     }
 
-    /**
-     * Returns the method used to detect the Event.
-     *
-     * @return the method used to detect the Event.
-     */
-    public Detection getDetectionMethod() {
-        return detectionMethod;
-    }
-
-    /**
-     * Sets the method used for the detection of the Event.
-     *
-     * @param detectionMethod the new method.
-     */
-    public void setDetectionMethod(Detection detectionMethod) {
-        this.detectionMethod = detectionMethod;
-    }
-
     public String getIcon() {
         return icon;
     }
@@ -250,5 +269,45 @@ public class BasicEvent extends Model {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public DetectionType getDetectionType() {
+        return detectionType;
+    }
+
+    public void setDetectionType(DetectionType detectionType) {
+        this.detectionType = detectionType;
+    }
+
+    public double getSimpleThreshold() {
+        return simpleThreshold;
+    }
+
+    public void setSimpleThreshold(double simpleThreshold) {
+        this.simpleThreshold = simpleThreshold;
+    }
+
+    public double getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(double minValue) {
+        this.minValue = minValue;
+    }
+
+    public double getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(double maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public double getDelta() {
+        return delta;
+    }
+
+    public void setDelta(double delta) {
+        this.delta = delta;
     }
 }
