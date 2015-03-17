@@ -41,6 +41,7 @@ public class Settings {
 		props.setProperty("lib_path", "/usr/lib/jni");
 		props.setProperty("default_serial", "/dev/ttyAMA0");
 		props.setProperty("devices_file", "devices.enp");
+		props.setProperty("check_certificate", "true");
 		saveProperties();
 	}
 	
