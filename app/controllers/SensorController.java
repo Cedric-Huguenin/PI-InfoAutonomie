@@ -1,5 +1,6 @@
 package controllers;
 
+import model.Event;
 import model.Sensor;
 
 import static play.data.Form.*;
@@ -76,6 +77,14 @@ public class SensorController extends Controller {
         sensor.setName(null);
         sensor.setLocation(null);
         sensor.update();
+
+        return redirect(controllers.routes.SensorController.sensors());
+    }
+
+    @With(WebAuthorization.class)
+    public static Result delete(String id) {
+        Sensor sensor = Sensor.find.byId(id);
+        sensor.delete();
 
         return redirect(controllers.routes.SensorController.sensors());
     }
