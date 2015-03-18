@@ -245,7 +245,8 @@ public class Event extends Model {
 
 
     public long getTimestampEnd(long begin) {
-        return begin + (getEndTime().getMillis() - getBeginTime().getMillis()) / 1000;
+        long end = begin + (getEndTime().getMillis() - getBeginTime().getMillis()) / 1000;
+        return end > begin ? end : end + 3600*24;
     }
 
     private GregorianCalendar setCalWithLocalTime(DateTime localTime) {
