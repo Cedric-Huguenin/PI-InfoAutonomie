@@ -82,7 +82,7 @@
                                                 checked
                                             }
                                             />
-                                            <label>Delta</label>
+                                            <label>Delta <i class="fa fa-question-circle" style="cursor: default;" rel="tooltip" title="Basic déclenché quand deux valeurs consécutives sont séparées d'au moins la valeur du delta" id="blah"></i></label>
                                         </span>
                                         <input id="prependedcheckbox" name="delta" class="form-control" type="number" step="0.01" placeholder="Delta" @if(form.data.get("type").equals("delta")) { value="@form.data.get("delta")" }>
                                     </div>
@@ -92,7 +92,7 @@
                                             @if(form.data.get("type").equals("threshold")) {
                                                 checked
                                             }>
-                                            <label>Seuil simple</label>
+                                            <label>Seuil simple <i class="fa fa-question-circle" style="cursor: default;" rel="tooltip" title="Basic déclenché quand la valeur dépasse la valeur du seuil" id="blah"></i></label>
                                         </span>
                                         <input id="prependedcheckbox" name="threshold" class="form-control" type="number" step="0.01" placeholder="Seuil" @if(form.data.get("type").equals("threshold")) { value="@form.data.get("threshold")" }>
                                     </div>
@@ -102,7 +102,7 @@
                                             @if(form.data.get("type").equals("min_max")) {
                                                 checked
                                             }>
-                                            <label>Intervalle de valeur</label>
+                                            <label>Intervalle de valeur <i class="fa fa-question-circle" style="cursor: default;" rel="tooltip" title="Basic déclenché quand la valeur sort de l'intervalle id="blah"></i></label>
                                         </span>
                                         <input id="prependedcheckbox" name="min" class="form-control" type="number" step="0.01" placeholder="Min" @if(form.data.get("type").equals("min_max")) { value="@form.data.get("min")" }>
                                         <input id="prependedcheckbox2" name="max" class="form-control" type="number" step="0.01" placeholder="Max" @if(form.data.get("type").equals("min_max")) { value="@form.data.get("max")" }>
