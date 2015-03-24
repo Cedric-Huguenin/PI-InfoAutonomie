@@ -29,7 +29,7 @@
     delta:           10
 
 - &delta_0_11 !!model.Detection
-    id:              delta_0_11
+    id:              delta_0_06
     detectionType:   DELTA
     simpleThreshold: 0
     minValue:        0
@@ -39,7 +39,7 @@
 # TimeInterval
 
 - &timeInterval1 !!model.TimeInterval
-    id:            timeInterval1
+    id:           timeInterval1
     beginHour:    5
     beginMinutes: 0
     endHour:      12
@@ -52,15 +52,17 @@
     id:                 light_delta_15
     name:               Saut de luminosité
     sensor:             *sensor1
-    detectionMethod:    *delta_15
+    detectionType:      DELTA
+    delta:              10
     icon:               fa-lightbulb-o
     color:              warning
 
 - &basicEvent2 !!model.BasicEvent
-    id:                 temp_delta_0_11
+    id:                 temp_delta_0_06
     name:               Changement de température
     sensor:             *tempSensor
-    detectionMethod:    *delta_0_11
+    detectionType:      DELTA
+    delta:              0.06
     icon:               fa-fire-extinguisher
     color:              danger
 
@@ -80,7 +82,6 @@
 - &event !!model.Event
     id:           1
     name:         Petit dej
-    timeInterval: *timeInterval1
     expression:   light_delta_15 || temp_delta_0_11
     icon:         fa-coffee
     color:        warning

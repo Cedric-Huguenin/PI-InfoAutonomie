@@ -99,70 +99,101 @@ $(function () {
                                 <!-- Interval form -->
                                 <div class="form-group">
                                     <label>Intervalle de temps</label>
-                                    <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" value="@form("beginTime").value" />
-                                        <span class="input-group-addon">
-                                            <span class="fa fa-calendar"></span>
-                                        </span>
-                                    </div>
-                                    <div class='input-group date' id='datetimepicker2'>
-                                        <input type='text' name="endTime" class="form-control" placeholder="HH:mm" value="@form("endTime").value" />
-                                        <span class="input-group-addon">
-                                            <span class="fa fa-calendar"></span>
-                                        </span>
-                                    </div>
+
+                                            <div class="row">
+
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>Début</label>
+                                                        <div class='input-group date' id='datetimepicker1'>
+                                                            <input type='text' name="beginTime" class="form-control" placeholder="HH:mm" value="@form("beginTime").value" />
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label>Fin</label>
+                                                        <div class='input-group date' id='datetimepicker2'>
+                                                            <input type='text' name="endTime" class="form-control" placeholder="HH:mm" value="@form("endTime").value" />
+                                                            <span class="input-group-addon">
+                                                                <span class="fa fa-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <!-- /.row -->
+
                                 </div>
                                 <!-- /Interval form -->
 
-                                <!-- Color form -->
-                                <div class="form-group">
-                                    <label>Couleur</label>
-                                    <select id="colorselector" name="color">
-                                        <option value="primary" data-color="#337AB7" @if(form("color").value != null && form("color").value.contentEquals("primary")){selected}>Bleu</option>
-                                        <option value="success" data-color="#5CB85C" @if(form("color").value != null && form("color").value.contentEquals("success")){selected}>Vert</option>
-                                        <option value="info" data-color="#5BC0DE" @if(form("color").value != null && form("color").value.contentEquals("info")){selected}>Cyan</option>
-                                        <option value="warning" data-color="#F0AD4E" @if(form("color").value != null && form("color").value.contentEquals("warning")){selected}>Jaune</option>
-                                        <option value="danger" data-color="#D9534F" @if(form("color").value != null && form("color").value.contentEquals("danger")){selected}>Rouge</option>
-                                    </select>
-                                </div>
+                                <div class="row">
 
-                                <script>
-                                $('#colorselector').colorselector();
-                                </script>
+                                    <div class="col-lg-2">
 
-                                <style>
-                                .dropdown-colorselector>.dropdown-menu>li>.color-btn.selected:after {
-                                    content: "\f00c";
-                                    font-family: 'FontAwesome';
-                                }
-                                </style>
-                                <!-- /Color form -->
+                                        <!-- Color form -->
+                                        <div class="form-group">
+                                            <label>Couleur</label>
+                                            <select id="colorselector" name="color">
+                                                <option value="primary" data-color="#337AB7" @if(form("color").value != null && form("color").value.contentEquals("primary")){selected}>Bleu</option>
+                                                <option value="success" data-color="#5CB85C" @if(form("color").value != null && form("color").value.contentEquals("success")){selected}>Vert</option>
+                                                <option value="info" data-color="#5BC0DE" @if(form("color").value != null && form("color").value.contentEquals("info")){selected}>Cyan</option>
+                                                <option value="warning" data-color="#F0AD4E" @if(form("color").value != null && form("color").value.contentEquals("warning")){selected}>Jaune</option>
+                                                <option value="danger" data-color="#D9534F" @if(form("color").value != null && form("color").value.contentEquals("danger")){selected}>Rouge</option>
+                                            </select>
+                                        </div>
 
-                                    <!-- Icon form -->
-                                <div class="form-group">
-                                    <label>Icône</label>
-
-                                    <div class="input-group iconpicker-container">
-                                        <input id="my" data-placement="bottomRight" name="icon" class="form-control icp icp-auto iconpicker-element iconpicker-input"
-                                            @if(form("icon").value != null) {
-                                                value="@form("icon").value"
-                                            } else {
-                                                value=""
-                                            }
-                                        type="text">
-                                        <span class="input-group-addon"><i class="fa fa-archive"></i></span>
                                         <script>
-                                        jQuery ( document ).ready ( function ( $ ) {
-                                        $ ( '#my' ).iconpicker ( {
-                                        placement : 'top'
-                                        } ) ;
-                                        } ) ;
-
+                                        $('#colorselector').colorselector();
                                         </script>
+
+                                        <style>
+                                        .dropdown-colorselector>.dropdown-menu>li>.color-btn.selected:after {
+                                            content: "\f00c";
+                                            font-family: 'FontAwesome';
+                                        }
+                                        </style>
+                                        <!-- /Color form -->
+
+                                    </div>
+
+                                    <div class="col-lg-10">
+
+                                        <!-- Icon form -->
+                                        <div class="form-group">
+                                            <label>Icône</label>
+
+                                            <div class="input-group iconpicker-container">
+                                                <input id="my" data-placement="bottomRight" name="icon" class="form-control icp icp-auto iconpicker-element iconpicker-input"
+                                                    @if(form("icon").value != null) {
+                                                        value="@form("icon").value"
+                                                    } else {
+                                                        value=""
+                                                    }
+                                                type="text">
+                                                <span class="input-group-addon"><i class="fa fa-archive"></i></span>
+                                                <script>
+                                                jQuery ( document ).ready ( function ( $ ) {
+                                                $ ( '#my' ).iconpicker ( {
+                                                placement : 'top'
+                                                } ) ;
+                                                } ) ;
+
+                                                </script>
+                                            </div>
+
+                                        </div>
+                                        <!-- /Icon form -->
+
                                     </div>
 
                                 </div>
-                                    <!-- /Icon form -->
+                                <!-- /.row -->
 
                                 <div>
                                     <button class="btn btn-primary" type="submit">Créer</button>
