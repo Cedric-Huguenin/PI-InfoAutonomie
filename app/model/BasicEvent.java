@@ -5,6 +5,7 @@ import play.db.ebean.Model;
 import utils.TimestampUtils;
 
 import javax.persistence.*;
+import java.text.Normalizer;
 import java.util.List;
 
 /**
@@ -67,7 +68,14 @@ public class BasicEvent extends Model {
      */
     public static BasicEvent create(BasicEvent basicEvent, String sensor) {
         basicEvent.setSensor(Sensor.find.byId(sensor));
-        basicEvent.setId(basicEvent.getName().replaceAll(" ", "_").toLowerCase());
+
+        // set the id to something meaningful
+        String meaningfulId = basicEvent.getName().replaceAll(" ", "_").toLowerCase();
+        // delete all the accents
+        meaningfulId = Normalizer.normalize(meaningfulId, Normalizer.Form.NFD);
+        meaningfulId = meaningfulId.replaceAll("[^\\p{ASCII}]", "");
+        basicEvent.setId(meaningfulId);
+
         basicEvent.save();
         return basicEvent;
     }

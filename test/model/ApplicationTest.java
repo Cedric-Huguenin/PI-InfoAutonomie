@@ -1,7 +1,6 @@
 package model;
 
 import com.avaje.ebean.Ebean;
-import play.db.ebean.*;
 import model.BasicEvent;
 import models.*;
 import org.junit.*;
