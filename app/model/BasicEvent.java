@@ -67,6 +67,7 @@ public class BasicEvent extends Model {
      */
     public static BasicEvent create(BasicEvent basicEvent, String sensor) {
         basicEvent.setSensor(Sensor.find.byId(sensor));
+        basicEvent.setId(basicEvent.getName().replaceAll(" ", "_").toLowerCase());
         basicEvent.save();
         return basicEvent;
     }

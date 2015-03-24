@@ -96,6 +96,7 @@ public class EventController extends Controller {
             event.check();
             eventForm.get().update();
         } else {
+            eventForm.get().setId(eventForm.get().getName().replaceAll(" ", "_").toLowerCase());
             eventForm.get().save();
         }
 

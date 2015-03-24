@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 public class Event extends Model {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public String id;
 
     /**
@@ -114,6 +113,7 @@ public class Event extends Model {
      */
     public static Event create(Event event, String timeInterval) {
 //        event.timeInterval = TimeInterval.find.byId(timeInterval);
+        event.setId(event.getName().replaceAll(" ", "_").toLowerCase());
         event.save();
         event.saveManyToManyAssociations("basicEvents");
         event.save();
