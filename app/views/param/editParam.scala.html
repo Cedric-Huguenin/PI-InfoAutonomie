@@ -1,0 +1,56 @@
+@(form: Form[model.Param])
+
+@main("Capteurs") {
+
+<div id="wrapper">
+
+        @nav()
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Capteur
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Modifier un paramètre</h3>
+                            </div>
+                            <div class="panel-body">
+                            @helper.form(action = routes.ParamController.save()) {
+                                <div class="form-group">
+                                    <input class="form-control" type="hidden" name="paramKey" placeholder="paramKey" value="@form.data.get("paramKey")">
+                                </div>
+                                <div class="form-group">
+                                    <label>Valeur de @form.data.get("paramKey")</label>
+                                    <input class="form-control" type="text" name="paramValue" placeholder="paramValue" value="@form.data.get("paramValue")">
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary" type="submit">Modifier</button>
+                                    <a href="@routes.ParamController.params()" class="btn btn-default">Retour</a>
+                                </div>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+}

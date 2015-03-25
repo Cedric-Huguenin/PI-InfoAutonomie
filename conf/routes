@@ -64,6 +64,12 @@ GET           /login                                    controllers.LoginControl
 POST          /login                                    controllers.LoginController.authenticate()
 GET           /logout                                   controllers.LoginController.logout()
 
+# Param
+
+GET           /param/params                             controllers.ParamController.params()
+GET           /param/edit/:id                           controllers.ParamController.edit(id: String)
+POST          /param/save                               controllers.ParamController.save()
+
 # API
 ## Data
 GET           /api/data                                 controllers.api.DataController.getAllData

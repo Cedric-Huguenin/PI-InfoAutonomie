@@ -188,4 +188,26 @@ public class Data extends Model{
                 ", value=" + getValue() +
                 '}';
     }
+
+    public static void deleteOldData() {
+        // delete data according to retention delay in parameters
+        Param param;
+        try {
+            param = Param.find.ref("dataRetention");
+            // param exists
+            int retention = Integer.parseInt(param.getParamValue());
+            if(retention > 1) { // erase data
+                long now = System.currentTimeMillis() / 1000; // in seconds
+                long endErase = now - retention * 24 * 3600;
+                for(Data data : Data.find.where().between("timestamp", 0, endErase).findList()) {
+                    data.delete();
+                }
+            }
+        } catch(EntityNotFoundException e) { // param does not exist
+            param = new Param();
+            param.setParamKey("dataRetention");
+            param.setParamValue("-1");
+            param.save();
+        }
+    }
 }

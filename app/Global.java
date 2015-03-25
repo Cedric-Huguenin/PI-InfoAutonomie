@@ -2,6 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Alert;
 import model.BasicEvent;
 import model.Event;
+import model.Param;
 import model.json.Data;
 import model.json.DataNode;
 import org.joda.time.DateTime;
@@ -12,6 +13,7 @@ import play.Logger;
 import play.libs.Akka;
 import scala.concurrent.duration.Duration;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -63,6 +65,8 @@ public class Global extends GlobalSettings {
                     Event.all().forEach(model.Event::check);
 
                     Alert.all().forEach(model.Alert::check);
+
+                    model.Data.deleteOldData();
                 },
                 Akka.system().dispatcher()
         );
