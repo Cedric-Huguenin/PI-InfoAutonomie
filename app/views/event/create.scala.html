@@ -196,7 +196,7 @@ $(function () {
                                 <!-- /.row -->
 
                                 <div>
-                                    <button class="btn btn-primary" type="submit">Créer</button>
+                                    <button class="btn btn-primary" type="submit">@if(form("id").value == null) { Créer } else { Modifier }</button>
                                     <a href="@routes.EventController.events()" class="btn btn-default">Retour</a>
                                 </div>
                             }

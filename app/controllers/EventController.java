@@ -13,6 +13,7 @@ import play.mvc.With;
 import views.html.event.create;
 import views.html.event.events;
 
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -96,7 +97,12 @@ public class EventController extends Controller {
             event.check();
             eventForm.get().update();
         } else {
-            eventForm.get().setId(eventForm.get().getName().replaceAll(" ", "_").toLowerCase());
+            // set the id to something meaningful
+            String meaningfulId = eventForm.get().getName().replaceAll(" ", "_").toLowerCase();
+            // delete all the accents
+            meaningfulId = Normalizer.normalize(meaningfulId, Normalizer.Form.NFD);
+            meaningfulId = meaningfulId.replaceAll("[^\\p{ASCII}]", "");
+            eventForm.get().setId(meaningfulId);
             eventForm.get().save();
         }
 

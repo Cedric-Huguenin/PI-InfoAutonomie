@@ -102,7 +102,7 @@
                                             @if(form.data.get("type").equals("min_max")) {
                                                 checked
                                             }>
-                                            <label>Intervalle de valeur <i class="fa fa-question-circle" style="cursor: default;" rel="tooltip" title="Basic déclenché quand la valeur sort de l'intervalle id="blah"></i></label>
+                                            <label>Intervalle de valeur <i class="fa fa-question-circle" style="cursor: default;" rel="tooltip" title="Basic déclenché quand la valeur sort de l'intervalle" id="blah"></i></label>
                                         </span>
                                         <input id="prependedcheckbox" name="min" class="form-control" type="number" step="0.01" placeholder="Min" @if(form.data.get("type").equals("min_max")) { value="@form.data.get("min")" }>
                                         <input id="prependedcheckbox2" name="max" class="form-control" type="number" step="0.01" placeholder="Max" @if(form.data.get("type").equals("min_max")) { value="@form.data.get("max")" }>
@@ -161,7 +161,7 @@
                                     <!-- /Icon form -->
 
                                 <div>
-                                    <button class="btn btn-primary" type="submit">Créer</button>
+                                    <button class="btn btn-primary" type="submit">@if(form("id").value == null) { Créer } else { Modifier }</button>
                                     <a href="@routes.BasicEventController.basics()" class="btn btn-default">Retour</a>
                                 </div>
                             }

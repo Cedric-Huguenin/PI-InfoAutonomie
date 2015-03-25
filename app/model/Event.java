@@ -9,6 +9,7 @@ import play.db.ebean.Model;
 import utils.TimestampUtils;
 
 import javax.persistence.*;
+import java.text.Normalizer;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -113,7 +114,14 @@ public class Event extends Model {
      */
     public static Event create(Event event, String timeInterval) {
 //        event.timeInterval = TimeInterval.find.byId(timeInterval);
-        event.setId(event.getName().replaceAll(" ", "_").toLowerCase());
+
+        // set the id to something meaningful
+        String meaningfulId = event.getName().replaceAll(" ", "_").toLowerCase();
+        // delete all the accents
+        meaningfulId = Normalizer.normalize(meaningfulId, Normalizer.Form.NFD);
+        meaningfulId = meaningfulId.replaceAll("[^\\p{ASCII}]", "");
+        event.setId(meaningfulId);
+
         event.save();
         event.saveManyToManyAssociations("basicEvents");
         event.save();
