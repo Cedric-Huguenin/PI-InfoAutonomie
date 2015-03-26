@@ -203,6 +203,7 @@ public class Event extends Model {
             // replace the ids by true or false
             toEval = expression;
             cpt = 0;
+            mean = 0;
 //            System.out.println("\n\nSTRING : " + toEval);
             for (String id : basicEventIds) {
                 id = id.trim();
