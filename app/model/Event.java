@@ -191,9 +191,10 @@ public class Event extends Model {
                 timeIntervals.add(timeInterval);
             }
 
-            // DEBUG
+//            DEBUG
 //            for(int i = 0; i<timeIntervals.size(); i++) {
-//                System.out.println(timeIntervals.get(i)[0] + " " + TimestampUtils.formatToString(timeIntervals.get(i)[0], "dd-MM-yyyy HH:mm:SS"));
+//                System.out.println(timeIntervals.get(i)[0] + " " + TimestampUtils.formatToString(timeIntervals.get(i)[0], "dd-MM-yyyy HH:mm:ss"));
+//                System.out.println(timeIntervals.get(i)[1] + " " + TimestampUtils.formatToString(timeIntervals.get(i)[1], "dd-MM-yyyy HH:mm:ss")+"\n");
 //            }
 
         }
@@ -201,6 +202,7 @@ public class Event extends Model {
         for (long[] timeInterval : timeIntervals) {
             // replace the ids by true or false
             toEval = expression;
+            cpt = 0;
 //            System.out.println("\n\nSTRING : " + toEval);
             for (String id : basicEventIds) {
                 id = id.trim();
@@ -222,8 +224,8 @@ public class Event extends Model {
                 boolean bool = boolExpr.booleanValue();
 //                System.out.println(boolExpr.toString() + " == " + bool);
 
-                if (bool && cpt > 0) {
-                    EventOccurrence eventOccurrence = new EventOccurrence(this, mean / cpt, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:ss"));
+                if (bool) {
+                    EventOccurrence eventOccurrence = new EventOccurrence(this, cpt > 0 ? mean / cpt : System.currentTimeMillis() / 1000, TimestampUtils.formatToString(mean / cpt, "dd-MM-yyyy HH:mm:ss"));
                     if (EventOccurrence.find.where().eq("timestamp", eventOccurrence.getTimestamp()).eq("event_id", eventOccurrence.getEvent().getId()).findUnique() == null) {
                         eventOccurrence.save();
                     }

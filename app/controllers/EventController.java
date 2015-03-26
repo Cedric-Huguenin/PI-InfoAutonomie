@@ -104,6 +104,7 @@ public class EventController extends Controller {
             meaningfulId = meaningfulId.replaceAll("[^\\p{ASCII}]", "");
             eventForm.get().setId(meaningfulId);
             eventForm.get().save();
+            eventForm.get().check();
         }
 
         return redirect(controllers.routes.EventController.events());
